@@ -11,6 +11,6 @@ import com.example.entity.Recruiter;
 
 @Repository
 public interface RecruiterRepository extends JpaRepository<Recruiter, Long> {
-   Optional< Recruiter> findByEmail(String email);
-  Optional< Recruiter> findByEmail(Long id);
+  Optional<Recruiter>findByEmail(String email);
+  Optional< Recruiter> findById(Long id);
 }

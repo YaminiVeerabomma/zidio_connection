@@ -8,11 +8,9 @@ import org.springframework.stereotype.Repository;
 import com.example.entity.JobPost;
 
 @Repository
-public interface JobPostRepository extends JpaRepository<JobPost,Long> {
-	List<JobPost>findByPostedyEmail(String email);
-	List<JobPost>findByJobTitle(String jobtitle);
-	List<JobPost>findByJobType(String jobType);
-	List<JobPost>findByCompanyName(String comapanyName);
-	
-
+public interface JobPostRepository extends JpaRepository<JobPost, Long> {
+    List<JobPost> findByPostedByEmail(String email);
+    List<JobPost> findByJobTitle(String jobTitle);
+    List<JobPost> findByJobType(String jobType);
+    List<JobPost> findByCompanyName(String companyName);
 }

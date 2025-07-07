@@ -8,13 +8,13 @@ public class JobPostDTO {
 	public String jobType;
 	public String jobLocation;
 	public String jobDescription;
-	public String comapanyName;
+	public String companyName;
 	public String postedByEmail;
 	public Date postedDate;
 	
 public JobPostDTO() {}
 	
-	public JobPostDTO(Long id, String jobtitle, String jobDescription, String jobLocation, String jobType,
+	public JobPostDTO(Long id, String jobTitle, String jobDescription, String jobLocation, String jobType,
 			String companyName, String postByEmail, Date postedDate) {
 		
 		this.id = id;
@@ -22,7 +22,7 @@ public JobPostDTO() {}
 		this.jobDescription = jobDescription;
 		this.jobLocation = jobLocation;
 		this.jobType = jobType;
-		this.comapanyName = companyName;
+		this.companyName = companyName;
 		this.postedByEmail = postByEmail;
 		this.postedDate = postedDate;
 	}

@@ -32,7 +32,7 @@ public class AuthController {
     
     
     @PostMapping(value="/login", produces = MediaType.APPLICATION_JSON_VALUE)
-	//  @PostMapping("/login")
+	
 	    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
 	        return ResponseEntity.ok(authService.login(request));
 	    }

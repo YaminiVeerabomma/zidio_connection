@@ -3,6 +3,7 @@ package com.example.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,22 +24,23 @@ public class JobPostController {
 	
 	@PostMapping
 	public ResponseEntity<JobPostDTO>createJob(@RequestBody JobPostDTO dto){
+		  System.out.println("Received job post: " + dto.jobTitle); // Debug
 		return ResponseEntity.ok(jobPostService.postJob(dto));
 	}
-	@GetMapping("/recruiter")
+	@GetMapping(value="/recruiter" ,produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<JobPostDTO>>getByPostedEmail(@RequestParam String email){
 		return ResponseEntity.ok(jobPostService.getByPostedByEmail(email));
 	}
-	@GetMapping("/jobTitle")
+	@GetMapping(value="/jobTitle", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<JobPostDTO>>getByJobTitle(@RequestParam String jobTitle){
 		return ResponseEntity.ok(jobPostService.getByJobTitle(jobTitle));
 	}
-	@GetMapping("/jobType")
+	@GetMapping(value="/jobType", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<JobPostDTO>>getByJobType(@RequestParam String jobType){
 		return ResponseEntity.ok(jobPostService.getByJobType(jobType));
 	}
 	
-	@GetMapping("/comanyName")
+	@GetMapping(value="/companyName", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<JobPostDTO>>getByCompanyName(@RequestParam String companyName){
 		return ResponseEntity.ok(jobPostService.getByCompanyName(companyName));
 	}
