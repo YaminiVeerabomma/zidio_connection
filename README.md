@@ -88,4 +88,20 @@ Creating a REST API
 
 Configuring JWT Security
 ...................................................................................................................................
+| Command                   | Description                                            		
+| ------------------------- | ------------------------------------------------------ 		
+| `git init`                 Initialize a new Git repository                        		
+| `git clone <repo_url>`  Clone an existing repository from GitHub or elsewhere 	
+| `git status`              Show the status of files (tracked, untracked, staged) 		
+| `git add <file>`          Stage changes of a specific file                      	
+| `git add .`               Stage all changes in the current directory             	
+| `git commit -m "message"` | Commit staged changes with a descriptive message       
+| `git push`                | Push committed changes to the remote repository       		 
+| `git pull`                | Fetch and merge changes from the remote repository    		 
+| `git branch`              | List branches                                          
+| `git checkout <branch>`   | Switch to another branch                               
+| `git merge <branch>`      | Merge a branch into the current branch                 
+| `git log`                 | View commit history                                    
+| `git diff`                | Show changes between working directory and last commit 
+
 
