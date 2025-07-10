@@ -6,9 +6,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.example.Enum.Role;
-import com.example.entity.SystemUser;
+import com.example.entity.AdminUser;
+
+
 @Repository
-public interface SystemUserRepository extends JpaRepository<SystemUser, Long> {
-    SystemUser findByEmail(String email);
-    List<SystemUser> findByRole(Role role);
+public interface AdminUserRepository extends JpaRepository<AdminUser,Long>{
+	AdminUser findByEmail(String email);
+	List<AdminUser> findByRole(Role role);
+
 }
