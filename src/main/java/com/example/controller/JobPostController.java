@@ -25,7 +25,6 @@ public class JobPostController {
 	
 	@PostMapping
 	public ResponseEntity<JobPostDTO>createJob(@RequestBody JobPostDTO dto){
-		
 		return ResponseEntity.ok(jobPostService.postJob(dto));
 	}
 	@GetMapping(value="/recruiter" ,produces = MediaType.APPLICATION_JSON_VALUE)
