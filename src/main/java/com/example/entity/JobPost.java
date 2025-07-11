@@ -4,6 +4,8 @@ import java.util.Date;
 
 import javax.persistence.*;
 
+import com.example.Enum.JobType;
+
 @Entity
 @Table(name = "jobPosts")
 public class JobPost {
@@ -15,14 +17,14 @@ public class JobPost {
     private String jobTitle;
     private String jobDescription;
     private String jobLocation;
-    private String jobType;
+    private JobType jobType;
     private String companyName;
     private String postedByEmail;
     private Date postedDate;
 
     public JobPost() {}
 
-    public JobPost(Long id, String jobTitle, String jobDescription, String jobLocation, String jobType,
+    public JobPost(Long id, String jobTitle, String jobDescription, String jobLocation,JobType jobType,
                    String companyName, String postedByEmail, Date postedDate) {
         this.id = id;
         this.jobTitle = jobTitle;
@@ -66,11 +68,11 @@ public class JobPost {
         this.jobLocation = jobLocation;
     }
 
-    public String getJobType() {
+    public JobType getJobType() {
         return jobType;
     }
 
-    public void setJobType(String jobType) {
+    public void setJobType(JobType jobType) {
         this.jobType = jobType;
     }
 

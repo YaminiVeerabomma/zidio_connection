@@ -7,66 +7,77 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.DTO.JobPostDTO;
+import com.example.Enum.JobType;
 import com.example.entity.JobPost;
 import com.example.repository.JobPostRepository;
 
 @Service
 public class JobPostService {
-	
-	@Autowired
-	private JobPostRepository jobPostRepository;
-	
-	public JobPostDTO postJob(JobPostDTO dto){
-		JobPost jobPost = new JobPost(
-			dto.id,
-			dto.jobTitle,
-			dto.jobType,
-			dto.jobLocation,
-			dto.jobDescription,
-			dto.companyName,
-			dto.postedByEmail,
-			dto.postedDate
-		);
-		JobPost saved = jobPostRepository.save(jobPost);
-		return mapToDTO(saved);
-	}
 
-	public List<JobPostDTO> getByPostedByEmail(String email) {
-		return jobPostRepository.findByPostedByEmail(email)
-			.stream().map(this::mapToDTO)
-			.collect(Collectors.toList());
-	}
+    @Autowired
+    private JobPostRepository jobPostRepository;
 
-	public List<JobPostDTO> getByJobTitle(String jobtitle) {
-		return jobPostRepository.findByJobTitle(jobtitle)
-			.stream().map(this::mapToDTO)
-			.collect(Collectors.toList());
-	}
+    // ✅ Save job post
+    public JobPostDTO postJob(JobPostDTO dto) {
+        JobPost jobPost = new JobPost();
+        jobPost.setJobTitle(dto.getJobTitle());
+        jobPost.setJobType(dto.getJobType());
+        jobPost.setJobLocation(dto.getJobLocation());
+        jobPost.setJobDescription(dto.getJobDescription());
+        jobPost.setCompanyName(dto.getCompanyName());
+        jobPost.setPostedByEmail(dto.getPostedByEmail());
+        jobPost.setPostedDate(dto.getPostedDate());
 
-	public List<JobPostDTO> getByJobType(String jobtype) {
-		return jobPostRepository.findByJobType(jobtype)
-			.stream().map(this::mapToDTO)
-			.collect(Collectors.toList());
-	}
+        JobPost saved = jobPostRepository.save(jobPost);
+        return mapToDTO(saved);
+    }
 
-	public List<JobPostDTO> getByCompanyName(String companyName) {
-		return jobPostRepository.findByCompanyName(companyName)
-			.stream().map(this::mapToDTO)
-			.collect(Collectors.toList());
-	}
+    // ✅ Get jobs by email
+    public List<JobPostDTO> getByPostedByEmail(String email) {
+        return jobPostRepository.findByPostedByEmail(email)
+                .stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
+    }
 
-	private JobPostDTO mapToDTO(JobPost jobPost) {
-		return new JobPostDTO(
-			jobPost.getId(),
-			jobPost.getJobTitle(),
-			jobPost.getJobType(),
-			jobPost.getJobLocation(),
-			jobPost.getJobDescription(),
-			jobPost.getCompanyName(),
-			jobPost.getPostedByEmail(),
-			jobPost.getPostedDate()
-		);
-	}
+    // ✅ Get jobs by title
+    public List<JobPostDTO> getByJobTitle(String jobTitle) {
+        return jobPostRepository.findByJobTitle(jobTitle)
+                .stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
+    }
+
+    // ✅ Get jobs by job type
+    public List<JobPostDTO> getByJobType(JobType jobType) {
+        return jobPostRepository.findByJobType(jobType)
+                .stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
+    }
+
+    // ✅ Get jobs by company name
+    public List<JobPostDTO> getByCompanyName(String companyName) {
+        return jobPostRepository.findByCompanyName(companyName)
+                .stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
+    }
+
+    // ✅ Convert Entity to DTO
+    private JobPostDTO mapToDTO(JobPost job) {
+        return new JobPostDTO(
+                job.getId(),
+                job.getJobTitle(),
+                job.getJobType(),
+                job.getJobLocation(),
+                job.getJobDescription(),
+                job.getCompanyName(),
+                job.getPostedByEmail(),
+                job.getPostedDate()
+        );
+    }
 }
+
 
 

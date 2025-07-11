@@ -24,10 +24,10 @@ public class AuthService {
 	
 	 public AuthResponse register(RegisterRequest request) {
 		 User user = new User();
-		 user.setName(request.name);
-		 user.setEmail(request.email);
+		 user.setName(request.getName());
+		 user.setEmail(request.getEmail());
 		 user.setPassword(passwordEncoder.encode(request.getPassword()));
-		 user.setRole(request.role);
+		 user.setRole(request.getRole());
 		 userRepository.save(user);
 		 
 		 String token = jwtUtil.generateToken( user.getEmail(),user.getRole().name());

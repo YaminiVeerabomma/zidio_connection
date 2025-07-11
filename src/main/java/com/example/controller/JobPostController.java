@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.DTO.JobPostDTO;
+import com.example.Enum.JobType;
 import com.example.service.JobPostService;
 
 @RestController
@@ -24,7 +25,7 @@ public class JobPostController {
 	
 	@PostMapping
 	public ResponseEntity<JobPostDTO>createJob(@RequestBody JobPostDTO dto){
-		  System.out.println("Received job post: " + dto.jobTitle); // Debug
+		
 		return ResponseEntity.ok(jobPostService.postJob(dto));
 	}
 	@GetMapping(value="/recruiter" ,produces = MediaType.APPLICATION_JSON_VALUE)
@@ -36,7 +37,7 @@ public class JobPostController {
 		return ResponseEntity.ok(jobPostService.getByJobTitle(jobTitle));
 	}
 	@GetMapping(value="/jobType", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<JobPostDTO>>getByJobType(@RequestParam String jobType){
+	public ResponseEntity<List<JobPostDTO>>getByJobType(@RequestParam JobType jobType){
 		return ResponseEntity.ok(jobPostService.getByJobType(jobType));
 	}
 	
