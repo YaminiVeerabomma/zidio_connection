@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,7 +15,7 @@ public class FileUploadController {
     @Autowired
     private FileUploadService fileUploadService;
 
-    @PostMapping("/resume")
+    @PostMapping(value="/resume",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> uploadResume(@RequestParam("file") MultipartFile file) {
         try {
             String filePath = fileUploadService.uploadFile(file);

@@ -23,20 +23,20 @@ public class AdminController {
 	private AdminUserService adminUserService;
 
 	
-	@GetMapping("/users")
+	@GetMapping(value="/users",produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<AdminUserDTO>>getAllUsers(){
 		return ResponseEntity.ok(adminUserService.getAllUsers());
 	}
-	@GetMapping("/role/{role}")
+	@GetMapping(value="/role/{role}",produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<AdminUserDTO>>getByRole(@PathVariable Role role){
 		return ResponseEntity.ok(adminUserService.getUserByRole(role));
 	}
 	
-	@PutMapping("/{id}/status")
+	@PutMapping(value="/{id}/status",produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<AdminUserDTO>updateUserStatus(@RequestParam Long id, @RequestParam boolean active){
 		return ResponseEntity.ok(adminUserService.upadateStatus(id, active));
 	}
-	@PutMapping("/{id}/block")
+	@PutMapping (value="/{id}/block",produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<AdminUserDTO>blockUser(@PathVariable Long id){
 		AdminUserDTO dto=adminUserService.blockUser(id);
 		if(dto==null) {
@@ -45,7 +45,7 @@ public class AdminController {
 		return ResponseEntity.ok(dto);
 	}
 	
-	@PutMapping("/{id}/unBlock")
+	@PutMapping(value="/{id}/unBlock",produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<AdminUserDTO>unBlockUser(@PathVariable Long id){
 		AdminUserDTO dto=adminUserService.blockUser(id);
 		if(dto==null) {
