@@ -31,7 +31,7 @@ public class SecurityConfig {
                 .antMatchers(
                     "/api/auth/**",
                     "/api/students/**",
-                    "/api/recruiters/**",
+                    "/api/recruiter/**",
                     "/api/jobPosts/**",
                     "/api/email/**",
                     "/api/upload/**",
