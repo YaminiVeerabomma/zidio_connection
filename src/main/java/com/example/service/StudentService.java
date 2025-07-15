@@ -15,7 +15,7 @@ private StudentRepository studentRepository;
 	public StudentDTO createOrUpdateStudent(StudentDTO dto) {
 		
 		Student student = new Student(
-				dto.id,dto.name,dto.email,dto.phone,dto.qualification,dto.resumeURL);
+				dto.id,dto.name,dto.email,dto.phone,dto.qualification,dto.resumeURL,dto.skills,dto.githubURL,dto.linkdenURL,dto.experienceLevel);
 			
 		Student saved = (Student) studentRepository.save(student);
 		return mapToDTO(saved);
@@ -39,7 +39,11 @@ private StudentRepository studentRepository;
 				student.getEmail(),
 				student.getPhone(),
 				student.getQualification(),
-				student.getResumeURL());
+				student.getResumeURL(),
+				student.getSkills(),
+				student.getGithubURL(),
+				student.getLinkdenURL(),
+				student.getExperienceLevel()				);
 				
 		
 	}

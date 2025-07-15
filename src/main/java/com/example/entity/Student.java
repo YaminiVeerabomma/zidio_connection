@@ -1,6 +1,10 @@
 package com.example.entity;
 
+import java.util.List;
+
 import javax.persistence.*;
+
+import com.example.Enum.ExperienceLevel;
 
 @Entity
 @Table(name="Student")
@@ -15,18 +19,30 @@ public class Student {
 	private String qualification;
 	private  String resumeURL;
 	
+	@Enumerated(EnumType.STRING)
+    private ExperienceLevel experienceLevel;
+    @ElementCollection
+    private List<String> skills;
+    private String githubURL;
+    private String linkdenURL;
+	
 	public Student() {}
 	
-	public Student(Long id,String name,String email,String phone,String qualification,String resumeURL) {
+	public Student(Long id,String name,String email,String phone,String qualification,String resumeURL,List<String> skills, String githubURL, String linkdenURL, ExperienceLevel experienceLevel) {
 		this.id=id;
 		this.name=name;
 		this.email=email;
 		this.phone=phone;
 		this.qualification=qualification;
 		this.resumeURL=resumeURL;
+		this.skills = skills;
+		this.githubURL = githubURL;
+		this.linkdenURL = linkdenURL;
+		this.experienceLevel=experienceLevel;
 		
 		
 	}
+
 
 	public Long getId() {
 		return id;
@@ -75,6 +91,39 @@ public class Student {
 	public void setResumeURL(String resumeURL) {
 		this.resumeURL = resumeURL;
 	}
+
+	public List<String> getSkills() {
+		return skills;
+	}
+
+	public void setSkills(List<String> skills) {
+		this.skills = skills;
+	}
+
+	public String getGithubURL() {
+		return githubURL;
+	}
+
+	public void setGithubURL(String githubURL) {
+		this.githubURL = githubURL;
+	}
+
+	public String getLinkdenURL() {
+		return linkdenURL;
+	}
+
+	public void setLinkdenURL(String linkdenURL) {
+		this.linkdenURL = linkdenURL;
+	}
+
+	public ExperienceLevel getExperienceLevel() {
+		return experienceLevel;
+	}
+
+	public void setExperienceLevel(ExperienceLevel experienceLevel) {
+		this.experienceLevel = experienceLevel;
+	}
+	
 	
 	
 }

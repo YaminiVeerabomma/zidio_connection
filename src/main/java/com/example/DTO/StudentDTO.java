@@ -1,5 +1,8 @@
 package com.example.DTO;
 
+import java.util.List;
+
+import com.example.Enum.ExperienceLevel;
 
 public class StudentDTO {
 	
@@ -9,14 +12,22 @@ public class StudentDTO {
 	public String phone;
 	public String qualification;
 	public String resumeURL;
+	public List<String> skills;
+	public String githubURL;
+	public String linkdenURL;
+	public ExperienceLevel experienceLevel;
 	
-	public StudentDTO(Long id2,String name2,String email2,String phone2,String qualification2,String resumeURL2) {
+	public StudentDTO(Long id,String name,String email,String phone,String qualification,String resumeURL,List<String> skills, String githubURL, String linkdenURL,    ExperienceLevel experienceLevel) {
 	this.id=id;
 	this.name=name;
 	this.email=email;
 	this.phone=phone;
 	this.qualification=qualification;
 	this.resumeURL=resumeURL;
+	this.skills = skills;
+	this.githubURL = githubURL;
+	this.linkdenURL = linkdenURL;
+	this. experienceLevel=experienceLevel;
 
 	}
 
@@ -66,7 +77,42 @@ public class StudentDTO {
 
 	public void setResumeURL(String resumeURL) {
 		this.resumeURL = resumeURL;
+		
 	}
+
+	public List<String> getSkills() {
+		return skills;
+	}
+
+	public void setSkills(List<String> skills) {
+		this.skills = skills;
+	}
+
+	public String getGithubURL() {
+		return githubURL;
+	}
+
+	public void setGithubURL(String githubURL) {
+		this.githubURL = githubURL;
+	}
+
+	public String getLinkdenURL() {
+		return linkdenURL;
+	}
+
+	public void setLinkdenURL(String linkdenURL) {
+		this.linkdenURL = linkdenURL;
+	}
+
+	public ExperienceLevel getExperienceLevel() {
+		return experienceLevel;
+	}
+
+	public void setExperienceLevel(ExperienceLevel experienceLevel) {
+		this.experienceLevel = experienceLevel;
+	}
+	
+	
 	
 	
 }
