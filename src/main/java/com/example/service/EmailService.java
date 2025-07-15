@@ -14,15 +14,19 @@ public class EmailService {
 	@Autowired
 	private JavaMailSender mailSender;
 	
-	public void sendEmail(EmailRequest request) {
+	public String sendEmail(EmailRequest request) {
+		try {
 		SimpleMailMessage message =  new SimpleMailMessage();
 		message.setTo(request.to);
 		message.setSubject(request.subject);
 		message.setText(request.body);
 		
 		mailSender.send(message);
+		return "Email sent to"+request.to;
+		}catch(Exception e) {
+			return "Failed to send email"+e.getMessage();
+		}
 	}
 
 }
-
 

@@ -1,3 +1,4 @@
+
 package com.example.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,20 +8,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.DTO.AnalysticsResponse;
-import com.example.service.AnalysticsService;
+import com.example.service.AnalyticsService;
 
 @RestController
-@RequestMapping("/api/Analystics")
-public class AnalysticsController {
+@RequestMapping("/api/analystics")
+public class AnalyticsController {
 	
 	@Autowired
-	private  AnalysticsService  analysticsService;
+	private AnalyticsService analyticsService;
 	
-	@GetMapping(value="/summery")
-	public ResponseEntity< AnalysticsResponse> getSummery(){
-		return  ResponseEntity.ok(null);
+	@GetMapping("/summery")
+	public ResponseEntity<AnalysticsResponse> getSummey(){
+	return ResponseEntity.ok(analyticsService.collectData());
 	}
-	
-	
 
 }
