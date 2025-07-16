@@ -1,10 +1,13 @@
 package com.example.service;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.DTO.RecruiterDTO;
+import com.example.Enum.Designation;
 import com.example.entity.Recruiter;
 import com.example.repository.RecruiterRepository;
 
@@ -40,6 +43,14 @@ public class RecruiterService {
         if (!optionalRecruiter.isPresent()) return null;
         return mapToDTO(optionalRecruiter.get());
     }
+    public List<RecruiterDTO> getRecruitersByDesignation(Designation designation) {
+        List<Recruiter> recruiters = recruiterRepository.findByDesignation(designation);
+        return recruiters.stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
+    }
+
+ 
 
     private RecruiterDTO mapToDTO(Recruiter recruiter) {
         return new RecruiterDTO(

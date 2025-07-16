@@ -1,5 +1,7 @@
 package com.example.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.DTO.RecruiterDTO;
 import com.example.DTO.StudentDTO;
+import com.example.Enum.Designation;
 import com.example.service.RecruiterService;
 
 @RestController
@@ -33,6 +36,10 @@ public class RecruiterController {
     @GetMapping(value="/id/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<RecruiterDTO> getStudentById(@PathVariable Long id) {
         return ResponseEntity.ok(recruiterService.getRecruiterById(id));
+    }
+    @GetMapping(value="/designation/{designation}",produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<RecruiterDTO> getRecruitersByDesignation(@PathVariable Designation designation) {
+        return recruiterService.getRecruitersByDesignation(designation);
     }
     
 }
