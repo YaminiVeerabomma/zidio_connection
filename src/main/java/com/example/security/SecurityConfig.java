@@ -36,7 +36,14 @@ public class SecurityConfig {
                     "/api/email/**",
                     "/api/upload/**",
                     "/api/admins/**",
-                    "/api/notifify/**"
+                    "/api/notifify/**",
+                    "/api/analystics**",
+                "/api/analystics**",
+                "/api/upload**",
+                "/ap/payments**",
+                "/api/subscription**",
+                "/api/user_subscrptions_tatus**"
+                
                    // "/eureka/**"
                 ).permitAll()
                 // All others need authentication

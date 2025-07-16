@@ -22,6 +22,9 @@ public class AnalyticsService {
 		Long admins=restTemplate.getForObject("http://admin-service/internal/count", Long.class);
 		String email=restTemplate.getForObject("http://email-service/internal/count", String.class);
 		String fileUpload=restTemplate.getForObject("http://admin-service/internal/count", String.class);
+		Long  payments=restTemplate.getForObject("http://payment-service/internal/count",Long.class);
+		Long  subscriptionPlans=restTemplate.getForObject("http://subscriptionPlan-service/internal/count",Long.class);
+		Long  userPaymentStatus=restTemplate.getForObject("http://sserPaymentStatus-service/internal/count",Long.class);
 		return new AnalysticsResponse(students,recruiters,jobPosts,applications,admins,email,fileUpload);
 	}
 }
