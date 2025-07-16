@@ -22,7 +22,8 @@ public class RecruiterService {
             dto.companyName,
             dto.phone,
             dto.companydiscription,
-            dto.companyWebsite
+            dto.companyWebsite,
+            dto.designation
         );
         recruiter = recruiterRepository.save(recruiter);
         return mapToDTO(recruiter);
@@ -48,7 +49,8 @@ public class RecruiterService {
             recruiter.getCompanyName(),
             recruiter.getPhone(),
             recruiter.getCompanydescription(),
-            recruiter.getCompanyWebsit()
+            recruiter.getCompanyWebsit(),
+            recruiter.getDesignation()
         );
     }
 }

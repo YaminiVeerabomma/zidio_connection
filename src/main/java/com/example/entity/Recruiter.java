@@ -1,10 +1,14 @@
 package com.example.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import com.example.Enum.Designation;
 
 @Entity
 @Table(name = "recruiters")
@@ -19,11 +23,13 @@ public class Recruiter {
     private String phone;
     private String companydescription;
     private String companyWebsit;
+     @Enumerated(EnumType.STRING)
+    private Designation designation;
     
     public Recruiter() {}
 
 	public Recruiter(Long id, String name, String email, String companyName, String phone, String companydescription,
-			String companyWebsit) {
+			String companyWebsit, Designation designation) {
 		
 		this.id = id;
 		this.name = name;
@@ -32,6 +38,7 @@ public class Recruiter {
 		this.phone = phone;
 		this.companydescription = companydescription;
 		this.companyWebsit = companyWebsit;
+		this. designation =designation;
 	}
 
 	public Long getId() {
@@ -89,6 +96,15 @@ public class Recruiter {
 	public void setCompanyWebsit(String companyWebsit) {
 		this.companyWebsit = companyWebsit;
 	}
+
+	public Designation getDesignation() {
+		return designation;
+	}
+
+	public void setDesignation(Designation designation) {
+		this.designation = designation;
+	}
+	
     
 }
 
