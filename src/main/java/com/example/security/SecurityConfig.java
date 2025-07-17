@@ -36,11 +36,10 @@ public class SecurityConfig {
                     "/api/email/**",
                     "/api/upload/**",
                     "/api/admins/**",
-                    "/api/notifify/**",
+                    "/api/notify/**",
                     "/api/analystics**",
-                "/api/analystics**",
                 "/api/upload**",
-                "/ap/payments**",
+                "/api/payments**",
                 "/api/subscription**",
                 "/api/user_subscrptions_tatus**"
                 

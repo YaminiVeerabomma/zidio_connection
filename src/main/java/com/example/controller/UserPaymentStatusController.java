@@ -3,6 +3,7 @@ package com.example.controller;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,7 +28,7 @@ public class UserPaymentStatusController {
 		return ResponseEntity.ok(userPaymentStatusService.assignSubscriptionPlan(dto));
 	}
 
-	@GetMapping("{userId}")
+	@GetMapping(value="{userId}",produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Optional<UserPaymentStatusDTO>> getStatus(@PathVariable Long userId){
 		return ResponseEntity.ok(userPaymentStatusService.getStatusByUserId(userId));
 	}

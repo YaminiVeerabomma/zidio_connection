@@ -3,6 +3,7 @@ package com.example.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,7 +16,7 @@ import com.example.DTO.PaymentDTO;
 import com.example.service.PaymentService;
 
 @RestController
-@RequestMapping("/ap/payments")
+@RequestMapping("/api/payments")
 public class PaymentController {
 	
 	@Autowired
@@ -31,7 +32,7 @@ public class PaymentController {
 		return ResponseEntity.ok(paymentService.getAllPayments());
 	}
 
-	  @GetMapping("/user/{userId}")
+	  @GetMapping(value="/user/{userId}",produces = MediaType.APPLICATION_JSON_VALUE)
 	    public List<PaymentDTO> getPaymentsByUser(@PathVariable Long userId) {
 	        return paymentService.getPaymentsByUserId(userId);
 	    }
