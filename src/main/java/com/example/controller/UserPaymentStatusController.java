@@ -16,7 +16,7 @@ import com.example.DTO.UserPaymentStatusDTO;
 import com.example.service.UserPaymentStatusService;
 
 @RestController
-@RequestMapping("/api/user_subscrptions_tatus")
+@RequestMapping("/api/user_subscrptions_Status")
 public class UserPaymentStatusController {
 	
 	@Autowired

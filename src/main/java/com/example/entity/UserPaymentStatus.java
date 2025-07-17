@@ -19,15 +19,17 @@ public class UserPaymentStatus {
 	private LocalDate subscriptionStart;
 	private LocalDate subscriptionEnd;
 	private PaidStatus status;
+	private String transactionId;
 
 	public UserPaymentStatus(){} 
-	public UserPaymentStatus(Long id,Long planId,Long userId,LocalDate subscriptionStart,LocalDate subscriptionEnd,PaidStatus status) {
+	public UserPaymentStatus(Long id,Long planId,Long userId,LocalDate subscriptionStart,LocalDate subscriptionEnd,PaidStatus status,String transactionId) {
 		this.id=id;
 		this.planId=planId;
 		this.userId=userId;
 		this.subscriptionStart=subscriptionStart;
 		this.subscriptionEnd=subscriptionEnd;
 		this.status=status;
+		this.transactionId=transactionId;
 		
 	}
 	
@@ -68,6 +70,12 @@ public class UserPaymentStatus {
 	}
 	public void setSubscriptionEnd(LocalDate subscriptionEnd) {
 		this.subscriptionEnd = subscriptionEnd;
+	}
+	public String getTransactionId() {
+		return transactionId;
+	}
+	public void setTransactionId(String transactionId) {
+		this.transactionId = transactionId;
 	}
 	
 	

@@ -41,7 +41,7 @@ public class SecurityConfig {
                 "/api/upload**",
                 "/api/payments**",
                 "/api/subscription**",
-                "/api/user_subscrptions_tatus**"
+                "/api/user_subscrptions_Status**"
                 
                    // "/eureka/**"
                 ).permitAll()

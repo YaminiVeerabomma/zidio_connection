@@ -18,10 +18,11 @@ public class UserPaymentStatusService {
 	
 	public UserPaymentStatusDTO assignSubscriptionPlan(UserPaymentStatusDTO dto) {
 		UserPaymentStatus paymentStatus  = new UserPaymentStatus();
-		paymentStatus.setUserId(dto.id);
+		paymentStatus.setUserId(dto.userId);
 		paymentStatus.setPlanId(dto.planId);
 		paymentStatus.setSubscriptionStart(dto.subscriptionStart);
 		paymentStatus.setSubscriptionEnd(dto.subscriptionEnd);
+		paymentStatus.setTransactionId(dto.transactionId);
 		paymentStatus.setStatus(dto.status);
 		
 //		userPaymentStatusRepository.save(paymentStatus);
@@ -30,6 +31,7 @@ public class UserPaymentStatusService {
 		dto.id=saved.getId();
 		dto.subscriptionStart=saved.getSubscriptionStart();
 		dto.subscriptionEnd=saved.getSubscriptionEnd();
+		dto.transactionId=saved.getTransactionId();
 		dto.status=saved.getStatus();
 		return dto;
 	}
@@ -43,6 +45,7 @@ public class UserPaymentStatusService {
 			dto.subscriptionStart=status.getSubscriptionStart();
 			dto.subscriptionEnd=status.getSubscriptionEnd();
 			dto.status=status.getStatus();
+			dto.transactionId=status.getTransactionId();
 			return dto;
 			
 		});

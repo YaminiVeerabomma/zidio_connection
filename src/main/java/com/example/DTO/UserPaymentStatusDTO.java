@@ -13,16 +13,18 @@ public class UserPaymentStatusDTO {
 	public LocalDate subscriptionStart;
 	public LocalDate subscriptionEnd;
 	public PaidStatus status;
+	  public String transactionId;
 	
 
 	public UserPaymentStatusDTO() {}
-	public UserPaymentStatusDTO(Long id,Long planId,Long userId,LocalDate subscriptionStart,LocalDate subscriptionEnd,PaidStatus status) {
+	public UserPaymentStatusDTO(Long id,Long planId,Long userId,LocalDate subscriptionStart,LocalDate subscriptionEnd,PaidStatus status,   String transactionId) {
 		this.id=id;
 		this.planId=planId;
 		this.userId=userId;
 		this.subscriptionStart=subscriptionStart;
 		this.subscriptionEnd=subscriptionEnd;
 		this.status=status;
+		this.transactionId=transactionId;
 		
 	}
 	public Long getId() {
@@ -60,6 +62,12 @@ public class UserPaymentStatusDTO {
 	}
 	public void setStatus(PaidStatus status) {
 		this.status = status;
+	}
+	public String getTransactionId() {
+		return transactionId;
+	}
+	public void setTransactionId(String transactionId) {
+		this.transactionId = transactionId;
 	}
 	
 
