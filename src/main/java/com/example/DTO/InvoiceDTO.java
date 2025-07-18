@@ -21,6 +21,42 @@ public class InvoiceDTO {
 		this.status = status;
 		this.purchaseDate = purchaseDate;
 	}
-	  
+	public String getUserEmail() {
+		return userEmail;
+	}
+	public void setUserEmail(String userEmail) {
+		this.userEmail = userEmail;
+	}
+	public String getServiceType() {
+		return serviceType;
+	}
+	public void setServiceType(String serviceType) {
+		this.serviceType = serviceType;
+	}
+	public double getAmount() {
+		return amount;
+	}
+	public void setAmount(double amount) {
+		this.amount = amount;
+	}
+	public String getPaymentMethod() {
+		return paymentMethod;
+	}
+	public void setPaymentMethod(String paymentMethod) {
+		this.paymentMethod = paymentMethod;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	public LocalDateTime getPurchaseDate() {
+		return purchaseDate;
+	}
+	public void setPurchaseDate(LocalDateTime purchaseDate) {
+		this.purchaseDate = purchaseDate;
+	}
+  
 
 }
