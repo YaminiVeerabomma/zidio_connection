@@ -26,7 +26,7 @@ public class BillingService {
 	}
 
 	public List<Invoice>getInvoice(String userEmail){
-		return invoiceRepository.getByUserEmail(userEmail);
+		return invoiceRepository.findByUserEmail(userEmail);
 	}
 		
 	}

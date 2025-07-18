@@ -24,11 +24,13 @@ public class Invoice {
 
     private LocalDateTime purchaseDate = LocalDateTime.now();
 
-	
+	private String invoiceNumber;
+	private String invoiceDownloadURL;
+	private SubscriptionPlan subscriptionPlan;
 	public Invoice() {}
 
 	public Invoice(Long id, String userEmail, String serviceType, double amount, String paymentMethod, String status,
-			LocalDateTime purchaseDate) {
+			LocalDateTime purchaseDate,String invoiceNumber,String invoiceDownloadURL,SubscriptionPlan subscriptionPlan) {
 		
 		this.id = id;
 		this.userEmail = userEmail;
@@ -37,6 +39,9 @@ public class Invoice {
 		this.paymentMethod = paymentMethod;
 		this.status = status;
 		this.purchaseDate = purchaseDate;
+		this.invoiceNumber=invoiceNumber;
+		this.invoiceDownloadURL=invoiceNumber;
+		this.subscriptionPlan=subscriptionPlan;
 	}
 
 	public Long getId() {
@@ -94,6 +99,31 @@ public class Invoice {
 	public void setPurchaseDate(LocalDateTime purchaseDate) {
 		this.purchaseDate = purchaseDate;
 	}
+
+	public String getInvoiceNumber() {
+		return invoiceNumber;
+	}
+
+	public void setInvoiceNumber(String invoiceNumber) {
+		this.invoiceNumber = invoiceNumber;
+	}
+
+	public String getInvoiceDownloadURL() {
+		return invoiceDownloadURL;
+	}
+
+	public void setInvoiceDownloadURL(String invoiceDownloadURL) {
+		this.invoiceDownloadURL = invoiceDownloadURL;
+	}
+
+	public SubscriptionPlan getSubscriptionPlan() {
+		return subscriptionPlan;
+	}
+
+	public void setSubscriptionPlan(SubscriptionPlan subscriptionPlan) {
+		this.subscriptionPlan = subscriptionPlan;
+	}
+	
     
 
    

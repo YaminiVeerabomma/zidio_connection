@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
-public class RazorPayService {
+public class RozorPayService {
 
     @Value("${razorpay.key}")
     private String key;

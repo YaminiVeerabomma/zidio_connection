@@ -26,6 +26,8 @@ public class SubscriptionPlanService {
 			dto.price=sub.getPrice();
 			dto.description=sub.getDescription();
 			dto.durationInDays=sub.getDurationInDays();
+			dto.rozorpayorderId=sub.getRozorpayorderId();
+			dto.rozorpayPaymentId=sub.getRozorpayPaymentId();
 			return dto;
 		}).collect(Collectors.toList());
 	}
@@ -37,6 +39,8 @@ public class SubscriptionPlanService {
 		subcription.setPrice(dto.price);
 		subcription.setDescription(dto.description);
 		subcription.setDurationInDays(dto.durationInDays);
+		subcription.setRozorpayorderId(dto.rozorpayorderId);
+		subcription.setRozorpayPaymentId(dto.rozorpayPaymentId);
 		
 		SubscriptionPlan saved = subscriptionPlanRepository.save(subcription);
 		dto.id= saved.getId();

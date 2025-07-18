@@ -2,6 +2,8 @@ package com.example.DTO;
 
 import java.time.LocalDateTime;
 
+import com.example.entity.SubscriptionPlan;
+
 public class InvoiceDTO {
 	  public String userEmail;
 	  public String serviceType;
@@ -10,9 +12,12 @@ public class InvoiceDTO {
 	  public String status;
 
 	  public LocalDateTime purchaseDate = LocalDateTime.now();
+	  public String invoiceId;
+	  public String invoiceDownloadURL;
+	   public SubscriptionPlan subscriptionPlan;
 		public InvoiceDTO() {}
 	public InvoiceDTO(String userEmail, String serviceType, double amount, String paymentMethod, String status,
-			LocalDateTime purchaseDate) {
+			LocalDateTime purchaseDate,String invoiceId,String invoiceDownloadURL ,SubscriptionPlan subscriptionPlan) {
 		
 		this.userEmail = userEmail;
 		this.serviceType = serviceType;
@@ -20,6 +25,9 @@ public class InvoiceDTO {
 		this.paymentMethod = paymentMethod;
 		this.status = status;
 		this.purchaseDate = purchaseDate;
+		this.invoiceId=invoiceId;
+		this.invoiceDownloadURL=invoiceDownloadURL;
+		this.subscriptionPlan=subscriptionPlan;
 	}
 	public String getUserEmail() {
 		return userEmail;
@@ -57,6 +65,25 @@ public class InvoiceDTO {
 	public void setPurchaseDate(LocalDateTime purchaseDate) {
 		this.purchaseDate = purchaseDate;
 	}
+	public String getInvoiceId() {
+		return invoiceId;
+	}
+	public void setInvoiceId(String invoiceId) {
+		this.invoiceId = invoiceId;
+	}
+	public String getInvoiceDownloadUrl() {
+		return invoiceDownloadURL;
+	}
+	public void setInvoiceDownloadUrl(String invoiceDownloadUrl) {
+		this.invoiceDownloadURL = invoiceDownloadURL;
+	}
+	public SubscriptionPlan getSubscriptionPlan() {
+		return subscriptionPlan;
+	}
+	public void setSubscriptionPlan(SubscriptionPlan subscriptionPlan) {
+		this.subscriptionPlan = subscriptionPlan;
+	}
+	
   
 
 }

@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
 
-	List<Invoice> getByUserEmail(String userEmail);
+	List<Invoice> findByUserEmail(String userEmail);
 	
 	
 }

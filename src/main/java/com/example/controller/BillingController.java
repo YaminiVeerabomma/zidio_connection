@@ -3,7 +3,7 @@ package com.example.controller;
 import com.example.DTO.InvoiceDTO;
 import com.example.entity.Invoice;
 import com.example.service.BillingService;
-import com.example.service.RazorPayService;
+import com.example.service.RozorPayService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +19,7 @@ public class BillingController {
     private BillingService billingService;
 
     @Autowired
-    private RazorPayService razorPayService;
+    private RozorPayService razorPayService;
 
     // 1. Create an invoice
     @PostMapping(value="/pay",produces = MediaType.APPLICATION_JSON_VALUE)

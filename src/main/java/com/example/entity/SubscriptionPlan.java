@@ -13,16 +13,19 @@ public class SubscriptionPlan {
 	private Double price;
 	private String description;
 	private Integer durationInDays;
-	
+	private String rozorpayorderId;
+	private String rozorpayPaymentId;
 	
 	public SubscriptionPlan() {}
 	
-	public SubscriptionPlan(Long id,String name,String description,Double price,Integer durationInDays) {
+	public SubscriptionPlan(Long id,String name,String description,Double price,Integer durationInDays,String rozorpayorderId,String rozorpayPaymentId) {
 		this.id=id;
 		this.name=name;
 		this.description=description;
 		this.price=price;
 		this.durationInDays=durationInDays;
+		this. rozorpayorderId=rozorpayorderId;
+		this.rozorpayPaymentId=rozorpayPaymentId;
 	}
 	public Long getId() {
 		return id;
@@ -58,6 +61,22 @@ public class SubscriptionPlan {
 
 	public void setDurationInDays(Integer durationInDays) {
 		this.durationInDays = durationInDays;
+	}
+
+	public String getRozorpayorderId() {
+		return rozorpayorderId;
+	}
+
+	public void setRozorpayorderId(String rozorpayorderId) {
+		this.rozorpayorderId = rozorpayorderId;
+	}
+
+	public String getRozorpayPaymentId() {
+		return rozorpayPaymentId;
+	}
+
+	public void setRozorpayPaymentId(String rozorpayPaymentId) {
+		this.rozorpayPaymentId = rozorpayPaymentId;
 	}
 	
 	

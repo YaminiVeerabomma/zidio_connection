@@ -8,16 +8,20 @@ public class SubscriptionPlanDTO {
 	public Double price;
 	public String description;
 	public Integer durationInDays;
+	public String rozorpayorderId;
+	public String rozorpayPaymentId;
 	
 	
 	public SubscriptionPlanDTO() {}
 	
-	public SubscriptionPlanDTO(Long id,String name,String description,Double price,Integer durationInDays) {
+	public SubscriptionPlanDTO(Long id,String name,String description,Double price,Integer durationInDays,String rozorpayorderId, String  rozorpayPaymentId) {
 		this.id=id;
 		this.name=name;
 		this.description=description;
 		this.price=price;
 		this.durationInDays=durationInDays;
+		this.rozorpayorderId=rozorpayorderId;
+		this. rozorpayPaymentId= rozorpayPaymentId;
 	}
 
 	public Long getId() {
@@ -58,6 +62,22 @@ public class SubscriptionPlanDTO {
 
 	public void setDurationInDays(Integer durationInDays) {
 		this.durationInDays = durationInDays;
+	}
+
+	public String getRozorpayorderId() {
+		return rozorpayorderId;
+	}
+
+	public void setRozorpayorderId(String rozorpayorderId) {
+		this.rozorpayorderId = rozorpayorderId;
+	}
+
+	public String getRozorpayPaymentId() {
+		return rozorpayPaymentId;
+	}
+
+	public void setRozorpayPaymentId(String rozorpayPaymentId) {
+		this.rozorpayPaymentId = rozorpayPaymentId;
 	}
 	
 }
