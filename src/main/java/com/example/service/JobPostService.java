@@ -27,6 +27,12 @@ public class JobPostService {
         jobPost.setCompanyName(dto.getCompanyName());
         jobPost.setPostedByEmail(dto.getPostedByEmail());
         jobPost.setPostedDate(dto.getPostedDate());
+        jobPost.setSalaryMin(dto.getSalaryMin());
+        jobPost.setSalaryMax(dto.getSalaryMax());
+        jobPost.setEducation(dto.getEducation());
+        jobPost.setSkills(dto.getSkills());
+        jobPost.setExperienceLevel(dto.getExperienceLevel());
+        jobPost.setActive(dto.isActive());
 
         JobPost saved = jobPostRepository.save(jobPost);
         return mapToDTO(saved);
@@ -63,6 +69,15 @@ public class JobPostService {
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
     }
+ // Get all active jobs
+    public List<JobPostDTO> getActiveJobs() {
+        return jobPostRepository.findByIsActiveTrue()
+                .stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
+    }
+
+
 
     // ✅ Convert Entity to DTO
     private JobPostDTO mapToDTO(JobPost job) {
@@ -74,8 +89,14 @@ public class JobPostService {
                 job.getJobDescription(),
                 job.getCompanyName(),
                 job.getPostedByEmail(),
-                job.getPostedDate()
-        );
+                job.getPostedDate(),
+                job.getExperienceLevel(),
+                job.getSalaryMin(),
+                job.getSalaryMax() ,
+                job.getEducation(),
+                job.getSkills(),
+                job.isActive()
+               );
     }
 }
 

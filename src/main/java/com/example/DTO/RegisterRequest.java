@@ -1,21 +1,25 @@
 package com.example.DTO;
 
+
 import com.example.Enum.Role;
 
 public class RegisterRequest {
 
-    private String name;
-    private String email;
-    private String password;
-    private Role role;
+	public String name;
+    public String email;
+    public String password;
+    public Role role;
+
+
 
     public RegisterRequest() {}
-
-    public RegisterRequest(String name, String email, String password, Role role) {
+    
+    public RegisterRequest(String name, String email, String password, Role roler) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.role = role;
+    
     }
 
 
@@ -50,4 +54,6 @@ public class RegisterRequest {
     public void setRole(Role role) {
         this.role = role;
     }
+
+	
 }

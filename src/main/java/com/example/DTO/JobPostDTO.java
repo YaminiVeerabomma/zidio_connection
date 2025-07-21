@@ -5,19 +5,27 @@ import java.util.Date;
 import com.example.Enum.JobType;
 
 public class JobPostDTO {
-    private Long id;
-    private String jobTitle;
-    private JobType jobType;
-    private String jobLocation;
-    private String jobDescription;
-    private String companyName;
-    private String postedByEmail;
-    private Date postedDate;
 
+    public Long id;
+    public String jobTitle;
+    public JobType jobType;
+    public String jobLocation;
+    public String jobDescription;
+    public String companyName;
+    public String postedByEmail;
+    public Date postedDate;
+    public String experienceLevel;
+    public Double salaryMin;
+    public Double salaryMax;
+    public String education;
+    public String skills;
+    public boolean isActive = true;
     public JobPostDTO() {}
 
-    public JobPostDTO(Long id, String jobTitle, JobType jobType, String jobLocation,
-                      String jobDescription, String companyName, String postedByEmail, Date postedDate) {
+    // ✅ Add this constructor
+    public JobPostDTO(Long id, String jobTitle, JobType jobType, String jobLocation, String jobDescription,
+                      String companyName, String postedByEmail, Date postedDate, String experienceLevel,
+                      Double salaryMin, Double salaryMax, String education, String skills, boolean isActive) {
         this.id = id;
         this.jobTitle = jobTitle;
         this.jobType = jobType;
@@ -26,7 +34,16 @@ public class JobPostDTO {
         this.companyName = companyName;
         this.postedByEmail = postedByEmail;
         this.postedDate = postedDate;
+        this.experienceLevel = experienceLevel;
+        this.salaryMin = salaryMin;
+        this.salaryMax = salaryMax;
+        this.education = education;
+        this.skills = skills;
+        this.isActive = isActive;
     }
+
+  
+
 
   
     public Long getId() {
@@ -92,5 +109,79 @@ public class JobPostDTO {
     public void setPostedDate(Date postedDate) {
         this.postedDate = postedDate;
     }
+
+
+
+	public Double getSalaryMin() {
+		return salaryMin;
+	}
+
+
+
+	public void setSalaryMin(Double salaryMin) {
+		this.salaryMin = salaryMin;
+	}
+
+
+
+	public Double getSalaryMax() {
+		return salaryMax;
+	}
+
+
+
+	public void setSalaryMax(Double salaryMax) {
+		this.salaryMax = salaryMax;
+	}
+
+
+
+	public String getEducation() {
+		return education;
+	}
+
+
+
+	public void setEducation(String education) {
+		this.education = education;
+	}
+
+
+
+	public String getSkills() {
+		return skills;
+	}
+
+
+
+	public void setSkills(String skills) {
+		this.skills = skills;
+	}
+
+
+
+	public boolean isActive() {
+		return isActive;
+	}
+
+
+
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
+	}
+
+
+
+	public String getExperienceLevel() {
+		return experienceLevel;
+	}
+
+
+
+	public void setExperienceLevel(String experienceLevel) {
+		this.experienceLevel = experienceLevel;
+	}
+	
+    
 }
 

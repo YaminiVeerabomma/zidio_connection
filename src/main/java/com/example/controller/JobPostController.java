@@ -44,6 +44,11 @@ public class JobPostController {
 	public ResponseEntity<List<JobPostDTO>>getByCompanyName(@RequestParam String companyName){
 		return ResponseEntity.ok(jobPostService.getByCompanyName(companyName));
 	}
+	   // ✅ Get all active jobs
+    @GetMapping(value="/active", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<JobPostDTO> getActiveJobs() {
+        return jobPostService.getActiveJobs();
+    }
 	
 	
 	

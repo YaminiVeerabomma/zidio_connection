@@ -17,15 +17,23 @@ public class JobPost {
     private String jobTitle;
     private String jobDescription;
     private String jobLocation;
+    @Enumerated(EnumType.STRING)
     private JobType jobType;
     private String companyName;
     private String postedByEmail;
     private Date postedDate;
+    private String experienceLevel; 
+    private Double salaryMin;          
+    private Double salaryMax;           
+
+    private String education;         
+    private String skills; 
+    private boolean isActive = true; 
 
     public JobPost() {}
 
     public JobPost(Long id, String jobTitle, String jobDescription, String jobLocation,JobType jobType,
-                   String companyName, String postedByEmail, Date postedDate) {
+                   String companyName, String postedByEmail, Date postedDate, String experienceLevel, Double salaryMin, Double salaryMax, String education, String skills, boolean isActive) {
         this.id = id;
         this.jobTitle = jobTitle;
         this.jobDescription = jobDescription;
@@ -33,10 +41,18 @@ public class JobPost {
         this.jobType = jobType;
         this.companyName = companyName;
         this.postedByEmail = postedByEmail;
+      this. experienceLevel=experienceLevel; 
         this.postedDate = postedDate;
+    	this.salaryMin = salaryMin;
+		this.salaryMax = salaryMax;
+		this.education = education;
+		this.skills = skills;
+		this.isActive = isActive;
     }
 
-    public Long getId() {
+
+
+	public Long getId() {
         return id;
     }
 
@@ -99,5 +115,56 @@ public class JobPost {
     public void setPostedDate(Date postedDate) {
         this.postedDate = postedDate;
     }
+
+	public Double getSalaryMin() {
+		return salaryMin;
+	}
+
+	public void setSalaryMin(Double salaryMin) {
+		this.salaryMin = salaryMin;
+	}
+
+	public Double getSalaryMax() {
+		return salaryMax;
+	}
+
+	public void setSalaryMax(Double salaryMax) {
+		this.salaryMax = salaryMax;
+	}
+
+	public String getEducation() {
+		return education;
+	}
+
+	public void setEducation(String education) {
+		this.education = education;
+	}
+
+	public String getSkills() {
+		return skills;
+	}
+
+	public void setSkills(String skills) {
+		this.skills = skills;
+	}
+
+	public boolean isActive() {
+		return isActive;
+	}
+
+	public void setActive(boolean isActive) {
+		
+		this.isActive = isActive;
+	}
+
+	public String getExperienceLevel() {
+		return experienceLevel;
+	}
+
+	public void setExperienceLevel(String experienceLevel) {
+		this.experienceLevel = experienceLevel;
+	}
+	
+    
 }
 

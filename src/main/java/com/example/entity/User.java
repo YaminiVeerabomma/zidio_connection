@@ -2,6 +2,8 @@ package com.example.entity;
 
 
 import javax.persistence.*;
+
+
 import com.example.Enum.Role;
 
 
@@ -22,6 +24,7 @@ public class User {
 	
 	@Enumerated(EnumType.STRING)
 	private Role role;
+
 	
 	public User() {}
 	
@@ -30,6 +33,7 @@ public class User {
 		this.email=email;
 		this.password=password;
 		this.role=role;
+	
 	}
 
 	public Long getId() {
@@ -71,7 +75,8 @@ public class User {
 	public void setRole(Role role) {
 		this.role = role;
 	}
-	
+
+
 	
 	
 	

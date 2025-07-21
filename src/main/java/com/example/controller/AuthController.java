@@ -2,17 +2,23 @@ package com.example.controller;
 
 
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.DTO.AuthResponse;
+import com.example.DTO.JobPostDTO;
 import com.example.DTO.LoginRequest;
 import com.example.DTO.RegisterRequest;
+
 import com.example.service.AuthService;
 
 
@@ -36,6 +42,8 @@ public class AuthController {
 	    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
 	        return ResponseEntity.ok(authService.login(request));
 	    }
+    	
+
 
 }
 //adding **produces = MediaType.APPLICATION_JSON_VALUE** in your controller method ensures that the response will be returned in JSON format.

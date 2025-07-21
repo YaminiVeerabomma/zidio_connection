@@ -1,5 +1,9 @@
 package com.example.service;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -7,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.example.DTO.AuthResponse;
 import com.example.DTO.LoginRequest;
 import com.example.DTO.RegisterRequest;
+
 import com.example.entity.User;
 import com.example.repository.UserRepository;
 import com.example.security.JWTUtil;
@@ -28,6 +33,7 @@ public class AuthService {
 		 user.setEmail(request.getEmail());
 		 user.setPassword(passwordEncoder.encode(request.getPassword()));
 		 user.setRole(request.getRole());
+		
 		 userRepository.save(user);
 		 
 		 String token = jwtUtil.generateToken( user.getEmail(),user.getRole().name());
@@ -50,4 +56,5 @@ public class AuthService {
 		 
 		 
 	 }
+	
 }
