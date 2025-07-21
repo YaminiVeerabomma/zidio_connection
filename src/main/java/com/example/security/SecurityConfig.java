@@ -10,6 +10,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.firewall.HttpFirewall;
+import org.springframework.security.web.firewall.StrictHttpFirewall;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 
 @Configuration
 public class SecurityConfig {
@@ -20,14 +23,33 @@ public class SecurityConfig {
     }
 
     @Bean
+    public HttpFirewall allowUrlEncodedCharactersFirewall() {
+        StrictHttpFirewall firewall = new StrictHttpFirewall();
+
+        firewall.setAllowUrlEncodedLineFeed(true);
+        firewall.setAllowUrlEncodedCarriageReturn(true);
+
+        firewall.setAllowUrlEncodedPercent(true);
+        firewall.setAllowUrlEncodedSlash(true);
+        firewall.setAllowUrlEncodedDoubleSlash(true);
+        firewall.setAllowUrlEncodedPeriod(true);
+      
+
+        return firewall;
+    }
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer(HttpFirewall firewall) {
+        return web -> web.httpFirewall(firewall);
+    }
+
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .csrf().disable()
             .cors().and()
             .authorizeRequests()
-                // Allow preflight requests
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                // Public endpoints
                 .antMatchers(
                     "/api/auth/**",
                     "/api/students/**",
@@ -38,15 +60,12 @@ public class SecurityConfig {
                     "/api/admins/**",
                     "/api/notify/**",
                     "/api/analystics**",
-                "/api/upload**",
-                "/api/payments**",
-                "/api/subscription**",
-                "/api/user_subscrptions_Status**",
-                "/api/invoice"
-                
-                   // "/eureka/**"
+                    "/api/upload**",
+                    "/api/payments**",
+                    "/api/subscription**",
+                    "/api/user_subscrptions_Status**",
+                    "/api/invoice**"
                 ).permitAll()
-                // All others need authentication
                 .anyRequest().authenticated()
             .and()
             .sessionManagement()
@@ -60,4 +79,3 @@ public class SecurityConfig {
         return config.getAuthenticationManager();
     }
 }
-
