@@ -1,19 +1,21 @@
 package com.example.DTO;
 
 public class ForgotPasswordRequest {
-	 private String email;
+    private String email;
 
-	public ForgotPasswordRequest(String email) {
-		
-		this.email = email;
-	}
+    public ForgotPasswordRequest() {
+        // no-arg constructor for Jackson
+    }
 
-	public String getEmail() {
-		return email;
-	}
+    public ForgotPasswordRequest(String email) {
+        this.email = email;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
-	 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }

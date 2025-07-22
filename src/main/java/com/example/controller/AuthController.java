@@ -1,9 +1,6 @@
 package com.example.controller;
 
-
-
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -12,16 +9,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.DTO.AuthResponse;
 import com.example.DTO.ForgotPasswordRequest;
-import com.example.DTO.JobPostDTO;
 import com.example.DTO.LoginRequest;
 import com.example.DTO.RegisterRequest;
 import com.example.DTO.ResetPasswordRequest;
@@ -32,13 +26,13 @@ import com.example.repository.UserRepository;
 import com.example.service.AuthService;
 import com.example.service.EmailService;
 
-
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
 
     @Autowired
     private AuthService authService;
+
     @Autowired
     private UserRepository userRepository;
 
@@ -51,72 +45,64 @@ public class AuthController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @PostMapping(value="/register", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/register", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request) {
         AuthResponse response = authService.register(request);
-        
         return ResponseEntity.ok(response);
     }
-    
-    
-    @PostMapping(value="/login", produces = MediaType.APPLICATION_JSON_VALUE)
-	
-	    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
-	        return ResponseEntity.ok(authService.login(request));
-	    }
 
-
-    @PostMapping(value="/forgot-password", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> forgotPassword(@RequestBody ForgotPasswordRequest request) {
-        String email = request.getEmail().trim(); // ✅ Sanitize input
-        Optional<User> userOpt = userRepository.findByEmail(email);
-        if (userOpt.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
-        }
-
-        String token = UUID.randomUUID().toString();
-
-        PasswordResetToken resetToken = new PasswordResetToken();
-        resetToken.setEmail(email);
-        resetToken.setToken(token);
-        resetToken.setExpiryDate(new Date(System.currentTimeMillis() + 1000 * 60 * 30)); // 30 min
-        tokenRepository.save(resetToken);
-
-        String resetLink = "http://localhost:8889/reset-password?token=" + token;
-        emailService.sendEmail(email, "Reset Your Password", "Click to reset: " + resetLink);
-
-        return ResponseEntity.ok("Reset link sent to email");
+    @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
+        return ResponseEntity.ok(authService.login(request));
     }
 
-        @PostMapping(value="/reset-password", produces = MediaType.APPLICATION_JSON_VALUE)
-        public ResponseEntity<String> resetPassword(@RequestBody ResetPasswordRequest request) {
-            String rawToken = request.getToken().trim(); // ✅ TRIM to avoid %0A newline issue
-            PasswordResetToken tokenEntity = tokenRepository.findByToken(rawToken);
+    @PostMapping(value = "/forgot-password", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> forgotPassword(@RequestBody ForgotPasswordRequest request) {
+    	return ResponseEntity.ok(authService.forgotPassword(request.getEmail() ));
+//    	System.out.println("forgot controller");
+//        String email = request.getEmail().trim();
+//        Optional<User> userOpt = userRepository.findByEmail(email);
+//        if (userOpt.isEmpty()) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+//        }
+//
+//        String token = UUID.randomUUID().toString();
+//
+//        PasswordResetToken resetToken = new PasswordResetToken();
+//        resetToken.setEmail(email);
+//        resetToken.setToken(token);
+//        resetToken.setExpiryDate(new Date(System.currentTimeMillis() + 1000 * 60 * 30)); // 30 min
+//        tokenRepository.save(resetToken);
+//
+//        String resetLink = "http://localhost:8889/reset-password?token=" + token;
+//        emailService.sendEmail(email, "Reset Your Password", "Click to reset: " + resetLink);
 
-            if (tokenEntity == null || tokenEntity.getExpiryDate().before(new Date())) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token invalid or expired");
-            }
+       // return ResponseEntity.ok("Reset link sent to email");
+    }
 
-            Optional<User> userOpt = userRepository.findByEmail(tokenEntity.getEmail());
-            if (userOpt.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
-            }
-
-            User user = userOpt.get();
-            user.setPassword(passwordEncoder.encode(request.getNewPassword()));
-            userRepository.save(user);
-
-            tokenRepository.delete(tokenEntity); // Optional cleanup
-
-            return ResponseEntity.ok("Password has been reset");
-        }
-
-
-    	
-
-
+    @PostMapping(value = "/reset-password", produces = MediaType.APPLICATION_JSON_VALUE)
+   public ResponseEntity<String> resetPassword(@RequestBody ResetPasswordRequest request) {
+    	return ResponseEntity.ok(authService.resetPassword(request.getToken(),request.getNewPassword() ));
+//        String rawToken = request.getToken().trim();
+//
+//        Optional<PasswordResetToken> tokenOpt = tokenRepository.findByToken(rawToken);
+//        if (tokenOpt.isEmpty() || tokenOpt.get().getExpiryDate().before(new Date())) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token invalid or expired");
+//        }
+//
+//        PasswordResetToken tokenEntity = tokenOpt.get();
+//
+//        Optional<User> userOpt = userRepository.findByEmail(tokenEntity.getEmail());
+//        if (userOpt.isEmpty()) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+//        }
+//
+//        User user = userOpt.get();
+//        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+//        userRepository.save(user);
+//
+//        tokenRepository.delete(tokenEntity);
+//
+//        return ResponseEntity.ok("Password has been reset");
+    }
 }
-//adding **produces = MediaType.APPLICATION_JSON_VALUE** in your controller method ensures that the response will be returned in JSON format.
-//if add the above line we can import 
-
-

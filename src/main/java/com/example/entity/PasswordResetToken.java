@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "password_reset")
+//@Table(name = "password_reset")
 public class PasswordResetToken {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,7 +23,7 @@ public class PasswordResetToken {
 	public PasswordResetToken() {}
 
 	public PasswordResetToken(Long id, String token, String email, Date expiryDate) {
-		super();
+	
 		this.id = id;
 		this.token = token;
 		this.email = email;
@@ -61,6 +61,7 @@ public class PasswordResetToken {
 	public void setExpiryDate(Date expiryDate) {
 		this.expiryDate = expiryDate;
 	}
-    
+
+
 
 }
