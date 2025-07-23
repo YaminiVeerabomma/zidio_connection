@@ -26,6 +26,6 @@ public class AnalyticsService {
 		Long  subscriptionPlan=restTemplate.getForObject("http://subscriptionPlan-service/internal/count",Long.class);
 		Long  userPaymentStatus=restTemplate.getForObject("http://sserPaymentStatus-service/internal/count",Long.class);
 		
-		return new AnalysticsResponse(students,recruiters,jobPosts,applications,admins,email,fileUpload,payment,subscriptionPlan,userPaymentStatus);
+		return new AnalysticsResponse(auth,students,recruiters,jobPosts,applications,admins,email,fileUpload,payment,subscriptionPlan,userPaymentStatus);
 	}
 }
