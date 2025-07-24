@@ -36,6 +36,7 @@ public class AuthService {
 
     // REGISTER
     public AuthResponse register(RegisterRequest request) {
+    	System.out.println("Login service hit");
         User user = new User();
         user.setName(request.getName());
         user.setEmail(request.getEmail());
@@ -46,6 +47,7 @@ public class AuthService {
 
         String token = jwtUtil.generateToken(user.getEmail(), user.getRole().name());
         return new AuthResponse(token, "User Registered Successfully");
+     
     }
 
     // LOGIN

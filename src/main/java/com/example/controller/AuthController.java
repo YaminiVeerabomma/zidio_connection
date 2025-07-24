@@ -46,9 +46,10 @@ public class AuthController {
     private PasswordEncoder passwordEncoder;
 
     @PostMapping(value = "/register", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request) {
-        AuthResponse response = authService.register(request);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<AuthResponse>register(@RequestBody RegisterRequest request) {
+    	System.out.println("Login controller hit");
+        return  ResponseEntity.ok(authService.register(request));
+        
     }
 
     @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
