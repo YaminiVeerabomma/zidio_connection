@@ -40,12 +40,14 @@ public class JWTUtil {
 
     // Validate token (email match + not expired)
     public boolean validateToken(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
+    	System.out.println("jwt");
+    	final String username = extractUsername(token);
         return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
 
     // Check if expired
     public boolean isTokenExpired(String token) {
+    	System.out.println("jwt1");
         return extractExpiration(token).before(new Date());
     }
 

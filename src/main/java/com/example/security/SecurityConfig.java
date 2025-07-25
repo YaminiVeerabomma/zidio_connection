@@ -18,8 +18,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 
 @Configuration
 public class SecurityConfig {
-	//@Autowired
-	//private JWTAuthenticationFilter jwtAuthFilter;
+	@Autowired
+	private JWTAuthenticationFilter jwtAuthFilter;
 
     // Password encoder bean for encoding passwords
     @Bean
@@ -52,12 +52,12 @@ public class SecurityConfig {
             .cors().and()
             .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Allow CORS preflight
-                .antMatchers("/api/auth/**").permitAll() // Allow only login/register
+                .antMatchers("/api/auth/**").permitAll() 
                 .anyRequest().authenticated() // All other APIs are protected
             .and()
             .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-     //   http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+      http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
 
         return http.build();
