@@ -1,6 +1,8 @@
 
 package com.example.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +31,15 @@ public class StudentController {
     @PostMapping
     public ResponseEntity<StudentDTO> createOrUpdateStudent(@RequestBody StudentDTO dto) {
         return ResponseEntity.ok(studentService.createOrUpdateStudent(dto));
+    }
+    @DeleteMapping(value="/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        studentService.deleteStudent(id);
+        return ResponseEntity.noContent().build();
+    }
+    @GetMapping
+    public ResponseEntity<List<StudentDTO>> getAll() {
+        return ResponseEntity.ok(studentService.getAllStudents());
     }
 }
 

@@ -1,8 +1,10 @@
 package com.example.DTO;
 
+import java.util.Date;
 import java.util.List;
 
 import com.example.Enum.ExperienceLevel;
+import com.example.Enum.Gender;
 
 public class StudentDTO {
 	
@@ -16,20 +18,29 @@ public class StudentDTO {
 	public String githubURL;
 	public String linkdenURL;
 	public ExperienceLevel experienceLevel;
+	public Gender gender;
+	public Date graduationYear;
 	
-	public StudentDTO(Long id,String name,String email,String phone,String qualification,String resumeURL,List<String> skills, String githubURL, String linkdenURL,    ExperienceLevel experienceLevel) {
-	this.id=id;
-	this.name=name;
-	this.email=email;
-	this.phone=phone;
-	this.qualification=qualification;
-	this.resumeURL=resumeURL;
-	this.skills = skills;
-	this.githubURL = githubURL;
-	this.linkdenURL = linkdenURL;
-	this. experienceLevel=experienceLevel;
+	public StudentDTO() {}
+	public StudentDTO(Long id, String name, String email, String phone,
+            String qualification, String resumeURL, List<String> skills,
+            String githubURL, String linkdenURL,
+            ExperienceLevel experienceLevel, Gender gender, Date graduationYear)
+ {
+this.id = id;
+this.name = name;
+this.email = email;
+this.phone = phone;
+this.qualification = qualification;
+this.resumeURL = resumeURL;
+this.skills = skills;
+this.githubURL = githubURL;
+this.linkdenURL = linkdenURL;
+this.experienceLevel = experienceLevel;
+this.gender = gender;
+this.graduationYear = graduationYear;
+}
 
-	}
 
 	public Long getId() {
 		return id;
@@ -110,6 +121,22 @@ public class StudentDTO {
 
 	public void setExperienceLevel(ExperienceLevel experienceLevel) {
 		this.experienceLevel = experienceLevel;
+	}
+
+	public Gender getGender() {
+		return gender;
+	}
+
+	public void setGender(Gender gender) {
+		this.gender = gender;
+	}
+
+	public Date getGraduationYear() {
+		return graduationYear;
+	}
+
+	public void setGraduationYear(Date graduationYear) {
+		this.graduationYear = graduationYear;
 	}
 	
 	

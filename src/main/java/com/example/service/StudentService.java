@@ -1,5 +1,8 @@
 package com.example.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +18,7 @@ private StudentRepository studentRepository;
 	public StudentDTO createOrUpdateStudent(StudentDTO dto) {
 		
 		Student student = new Student(
-				dto.id,dto.name,dto.email,dto.phone,dto.qualification,dto.resumeURL,dto.skills,dto.githubURL,dto.linkdenURL,dto.experienceLevel);
+				dto.id,dto.name,dto.email,dto.phone,dto.qualification,dto.resumeURL,dto.skills,dto.githubURL,dto.linkdenURL,dto.experienceLevel,dto.gender,dto.graduationYear);
 			
 		Student saved = (Student) studentRepository.save(student);
 		return mapToDTO(saved);
@@ -30,6 +33,16 @@ private StudentRepository studentRepository;
 		Student student = studentRepository.findById(id).orElseThrow(()-> new RuntimeException("student not found"));
 		 return mapToDTO(student);
 	}
+	public void deleteStudent(Long id) {
+        studentRepository.deleteById(id);
+    }
+	public List<StudentDTO> getAllStudents() {
+	    List<Student> students = studentRepository.findAll();
+	    return students.stream()
+	                   .map(this::mapToDTO)
+	                   .toList(); 
+	}
+
 	
 
 	private StudentDTO mapToDTO(Student student) {
@@ -43,7 +56,10 @@ private StudentRepository studentRepository;
 				student.getSkills(),
 				student.getGithubURL(),
 				student.getLinkdenURL(),
-				student.getExperienceLevel()				);
+				student.getExperienceLevel(),
+				student.getGender(),
+				student.getGraduationYear()
+				);
 				
 		
 	}

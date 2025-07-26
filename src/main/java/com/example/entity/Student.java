@@ -1,10 +1,12 @@
 package com.example.entity;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.*;
 
 import com.example.Enum.ExperienceLevel;
+import com.example.Enum.Gender;
 
 @Entity
 @Table(name="Student")
@@ -17,18 +19,23 @@ public class Student {
 	private String email;
 	private String phone;
 	private String qualification;
-	private  String resumeURL;
-	
-	@Enumerated(EnumType.STRING)
-    private ExperienceLevel experienceLevel;
+
+    private Gender gender;
+    private Date graduationYear;
     @ElementCollection
     private List<String> skills;
+    private ExperienceLevel experienceLevel;
+    private  String resumeURL;
     private String githubURL;
     private String linkdenURL;
 	
 	public Student() {}
 	
-	public Student(Long id,String name,String email,String phone,String qualification,String resumeURL,List<String> skills, String githubURL, String linkdenURL, ExperienceLevel experienceLevel) {
+	public Student(Long id, String name, String email, String phone,
+            String qualification, String resumeURL, List<String> skills,
+            String githubURL, String linkdenURL,
+            ExperienceLevel experienceLevel, Gender gender, Date graduationYear)
+ {
 		this.id=id;
 		this.name=name;
 		this.email=email;
@@ -38,7 +45,10 @@ public class Student {
 		this.skills = skills;
 		this.githubURL = githubURL;
 		this.linkdenURL = linkdenURL;
-		this.experienceLevel=experienceLevel;
+		this.graduationYear= graduationYear;
+		this.gender=gender;
+		this.experienceLevel= experienceLevel;
+
 		
 		
 	}
@@ -116,6 +126,23 @@ public class Student {
 		this.linkdenURL = linkdenURL;
 	}
 
+	public Gender getGender() {
+		return gender;
+	}
+
+	public void setGender(Gender gender) {
+		this.gender = gender;
+	}
+
+	public Date getGraduationYear() {
+		return graduationYear;
+	}
+
+	public void setGraduationYear(Date graduationYear) {
+		this.graduationYear = graduationYear;
+		
+	}
+
 	public ExperienceLevel getExperienceLevel() {
 		return experienceLevel;
 	}
@@ -123,6 +150,9 @@ public class Student {
 	public void setExperienceLevel(ExperienceLevel experienceLevel) {
 		this.experienceLevel = experienceLevel;
 	}
+	
+
+
 	
 	
 	

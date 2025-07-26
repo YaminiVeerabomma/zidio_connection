@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,6 +45,7 @@ public class AuthController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+    
 
     @PostMapping(value = "/register", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<AuthResponse>register(@RequestBody RegisterRequest request) {
@@ -55,6 +57,12 @@ public class AuthController {
     @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
         return ResponseEntity.ok(authService.login(request));
+    }
+    @GetMapping(value="/test",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> testEndpoint() {
+        return ResponseEntity.ok(
+            java.util.Map.of("message", "Auth service is working")
+        );
     }
 
     @PostMapping(value = "/forgot-password", produces = MediaType.APPLICATION_JSON_VALUE)

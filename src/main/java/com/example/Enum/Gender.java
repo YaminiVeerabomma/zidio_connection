@@ -1,7 +1,7 @@
-//package com.example.Enum;
-//
-//public enum Gender {
-//	
-// FEMAIL,MAIL,OTHER	
-//
-//}
+package com.example.Enum;
+
+public enum Gender {
+	
+ FEMAIL,MAIL,OTHERS	
+
+}
