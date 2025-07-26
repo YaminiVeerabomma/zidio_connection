@@ -41,6 +41,24 @@ public class StudentController {
     public ResponseEntity<List<StudentDTO>> getAll() {
         return ResponseEntity.ok(studentService.getAllStudents());
     }
+    @GetMapping(value = "/gender/{gender}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<StudentDTO>> getStudentsByGender(@PathVariable String gender) {
+        return ResponseEntity.ok(studentService.getStudentsByGender(gender));
+    }
+    @GetMapping(value = "/experience/{experienceLevel}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<StudentDTO>> getStudentsByExperienceLevel(@PathVariable String experienceLevel) {
+        return ResponseEntity.ok(studentService.getStudentsByExperienceLevel(experienceLevel));
+    }
+    @GetMapping(value="/graduationYear/{year}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<StudentDTO>> getStudentsByGraduationYear(@PathVariable Integer year) {
+        return ResponseEntity.ok(studentService.getStudentsByGraduationYear(year));
+    }
+
+    @GetMapping(value="/skills/{skill}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<StudentDTO>> getStudentsBySkill(@PathVariable String skill) {
+        return ResponseEntity.ok(studentService.getStudentsBySkill(skill));
+    }
+
 }
 
 //package com.example.controller;

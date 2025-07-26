@@ -1,8 +1,12 @@
 package com.example.Enum;
 
-public enum ExperienceLevel {
-	 LOWLEVEL,
-	    MIDLEVEL,
-	    HIGHLEVEL;
 
+
+public enum ExperienceLevel {
+    FRESHER,
+    JUNIOR,
+    MID_LEVEL,
+    SENIOR,
+    LEAD,
+    MANAGER
 }

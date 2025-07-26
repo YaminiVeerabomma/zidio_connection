@@ -42,6 +42,28 @@ private StudentRepository studentRepository;
 	                   .map(this::mapToDTO)
 	                   .toList(); 
 	}
+	public List<StudentDTO> getStudentsByGender(String gender) {
+	    List<Student> students = studentRepository.findByGender(gender);
+	    return students.stream()
+	                   .map(this::mapToDTO)
+	                   .collect(Collectors.toList());
+	}
+	public List<StudentDTO> getStudentsByExperienceLevel(String experienceLevel) {
+	    List<Student> students = studentRepository.findByExperienceLevel(experienceLevel);
+	    return students.stream()
+	                   .map(this::mapToDTO)
+	                   .collect(Collectors.toList());
+	}
+	public List<StudentDTO> getStudentsByGraduationYear(Integer year) {
+	    List<Student> students = studentRepository.findByGraduationYear(year);
+	    return students.stream().map(this::mapToDTO).toList();
+	}
+
+	public List<StudentDTO> getStudentsBySkill(String skill) {
+	    List<Student> students = studentRepository.findBySkillsContaining(skill);
+	    return students.stream().map(this::mapToDTO).toList();
+	}
+
 
 	
 
