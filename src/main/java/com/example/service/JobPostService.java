@@ -33,6 +33,7 @@ public class JobPostService {
         jobPost.setSkills(dto.getSkills());
         jobPost.setExperienceLevel(dto.getExperienceLevel());
         jobPost.setActive(dto.isActive());
+        jobPost.setNumberOfVacancies(dto.getNumberOfVacancies());
 
         JobPost saved = jobPostRepository.save(jobPost);
         return mapToDTO(saved);
@@ -76,6 +77,13 @@ public class JobPostService {
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
     }
+    public List<JobPostDTO> getByJobLocation(String jobLocation) {
+        return jobPostRepository.findByJobLocation(jobLocation)
+                .stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
+    }
+
 
 
 
@@ -95,7 +103,8 @@ public class JobPostService {
                 job.getSalaryMax() ,
                 job.getEducation(),
                 job.getSkills(),
-                job.isActive()
+                job.isActive(),
+                job.getNumberOfVacancies()
                );
     }
 }

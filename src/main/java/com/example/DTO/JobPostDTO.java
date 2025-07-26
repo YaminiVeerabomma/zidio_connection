@@ -2,6 +2,7 @@ package com.example.DTO;
 
 import java.util.Date;
 
+import com.example.Enum.ExperienceLevel;
 import com.example.Enum.JobType;
 
 public class JobPostDTO {
@@ -14,18 +15,19 @@ public class JobPostDTO {
     public String companyName;
     public String postedByEmail;
     public Date postedDate;
-    public String experienceLevel;
+    public ExperienceLevel experienceLevel;
     public Double salaryMin;
     public Double salaryMax;
     public String education;
     public String skills;
     public boolean isActive = true;
+    public Integer numberOfVacancies;
     public JobPostDTO() {}
 
     // ✅ Add this constructor
     public JobPostDTO(Long id, String jobTitle, JobType jobType, String jobLocation, String jobDescription,
-                      String companyName, String postedByEmail, Date postedDate, String experienceLevel,
-                      Double salaryMin, Double salaryMax, String education, String skills, boolean isActive) {
+                      String companyName, String postedByEmail, Date postedDate, ExperienceLevel experienceLevel,
+                      Double salaryMin, Double salaryMax, String education, String skills, boolean isActive,Integer numberOfVacancies) {
         this.id = id;
         this.jobTitle = jobTitle;
         this.jobType = jobType;
@@ -40,6 +42,7 @@ public class JobPostDTO {
         this.education = education;
         this.skills = skills;
         this.isActive = isActive;
+    	this.numberOfVacancies=numberOfVacancies;
     }
 
   
@@ -170,17 +173,24 @@ public class JobPostDTO {
 		this.isActive = isActive;
 	}
 
-
-
-	public String getExperienceLevel() {
+	public ExperienceLevel getExperienceLevel() {
 		return experienceLevel;
 	}
 
-
-
-	public void setExperienceLevel(String experienceLevel) {
+	public void setExperienceLevel(ExperienceLevel experienceLevel) {
 		this.experienceLevel = experienceLevel;
 	}
+	public Integer getNumberOfVacancies() {
+		return numberOfVacancies;
+	}
+
+	public void setNumberOfVacancies(Integer numberOfVacancies) {
+		this.numberOfVacancies = numberOfVacancies;
+	}
+
+
+
+	
 	
     
 }

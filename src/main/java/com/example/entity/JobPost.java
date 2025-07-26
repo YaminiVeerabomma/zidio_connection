@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.persistence.*;
 
+import com.example.Enum.ExperienceLevel;
 import com.example.Enum.JobType;
 
 @Entity
@@ -22,18 +23,19 @@ public class JobPost {
     private String companyName;
     private String postedByEmail;
     private Date postedDate;
-    private String experienceLevel; 
+    private ExperienceLevel experienceLevel; //Required experience (e.g., "Junior", "Senior")
     private Double salaryMin;          
     private Double salaryMax;           
 
     private String education;         
     private String skills; 
     private boolean isActive = true; 
+    private Integer numberOfVacancies;
 
     public JobPost() {}
 
     public JobPost(Long id, String jobTitle, String jobDescription, String jobLocation,JobType jobType,
-                   String companyName, String postedByEmail, Date postedDate, String experienceLevel, Double salaryMin, Double salaryMax, String education, String skills, boolean isActive) {
+                   String companyName, String postedByEmail, Date postedDate, ExperienceLevel experienceLevel, Double salaryMin, Double salaryMax, String education, String skills, boolean isActive, Integer numberOfVacancies) {
         this.id = id;
         this.jobTitle = jobTitle;
         this.jobDescription = jobDescription;
@@ -48,6 +50,7 @@ public class JobPost {
 		this.education = education;
 		this.skills = skills;
 		this.isActive = isActive;
+		this.numberOfVacancies=numberOfVacancies;
     }
 
 
@@ -157,14 +160,24 @@ public class JobPost {
 		this.isActive = isActive;
 	}
 
-	public String getExperienceLevel() {
+	public ExperienceLevel getExperienceLevel() {
 		return experienceLevel;
 	}
 
-	public void setExperienceLevel(String experienceLevel) {
+	public void setExperienceLevel(ExperienceLevel experienceLevel) {
 		this.experienceLevel = experienceLevel;
 	}
+
+	public Integer getNumberOfVacancies() {
+		return numberOfVacancies;
+	}
+
+	public void setNumberOfVacancies(Integer numberOfVacancies) {
+		this.numberOfVacancies = numberOfVacancies;
+	}
 	
+
+
     
 }
 

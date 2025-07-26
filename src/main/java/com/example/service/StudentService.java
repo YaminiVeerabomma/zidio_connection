@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.DTO.StudentDTO;
+import com.example.Enum.NoticePeriod;
 import com.example.entity.Student;
 import com.example.repository.StudentRepository;
 
@@ -18,7 +19,7 @@ private StudentRepository studentRepository;
 	public StudentDTO createOrUpdateStudent(StudentDTO dto) {
 		
 		Student student = new Student(
-				dto.id,dto.name,dto.email,dto.phone,dto.qualification,dto.resumeURL,dto.skills,dto.githubURL,dto.linkdenURL,dto.experienceLevel,dto.gender,dto.graduationYear);
+				dto.id,dto.name,dto.email,dto.phone,dto.qualification,dto.resumeURL,dto.skills,dto.githubURL,dto.linkdenURL,dto.experienceLevel,dto.gender,dto.graduationYear,dto.preferredJobLocations,dto.expectedSalary,dto.noticePeriod);
 			
 		Student saved = (Student) studentRepository.save(student);
 		return mapToDTO(saved);
@@ -58,6 +59,13 @@ private StudentRepository studentRepository;
 	    List<Student> students = studentRepository.findByGraduationYear(year);
 	    return students.stream().map(this::mapToDTO).toList();
 	}
+	public List<StudentDTO> getStudentsByNoticePeriod(NoticePeriod noticePeriod) {
+	    List<Student> students = studentRepository.findByNoticePeriod(noticePeriod);
+	    return students.stream()
+	                   .map(this::mapToDTO)
+	                   .collect(Collectors.toList());
+	}
+
 
 	public List<StudentDTO> getStudentsBySkill(String skill) {
 	    List<Student> students = studentRepository.findBySkillsContaining(skill);
@@ -80,7 +88,11 @@ private StudentRepository studentRepository;
 				student.getLinkdenURL(),
 				student.getExperienceLevel(),
 				student.getGender(),
-				student.getGraduationYear()
+				student.getGraduationYear(),
+				student.getPreferredJobLocations(),
+			    student.getExpectedSalary(),
+				student.getNoticePeriod()
+
 				);
 				
 		

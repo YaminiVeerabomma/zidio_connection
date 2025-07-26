@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.DTO.StudentDTO;
+import com.example.Enum.NoticePeriod;
 import com.example.service.StudentService;
 
 @RestController
@@ -58,6 +59,11 @@ public class StudentController {
     public ResponseEntity<List<StudentDTO>> getStudentsBySkill(@PathVariable String skill) {
         return ResponseEntity.ok(studentService.getStudentsBySkill(skill));
     }
+    @GetMapping(value="/notice-period/{noticePeriod}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<StudentDTO>> getByNoticePeriod(@PathVariable NoticePeriod noticePeriod) {
+        return ResponseEntity.ok(studentService.getStudentsByNoticePeriod(noticePeriod));
+    }
+
 
 }
 

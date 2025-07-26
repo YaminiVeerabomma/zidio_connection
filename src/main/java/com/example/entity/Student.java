@@ -7,6 +7,7 @@ import javax.persistence.*;
 
 import com.example.Enum.ExperienceLevel;
 import com.example.Enum.Gender;
+import com.example.Enum.NoticePeriod;
 
 @Entity
 @Table(name="Student")
@@ -19,22 +20,32 @@ public class Student {
 	private String email;
 	private String phone;
 	private String qualification;
-
+	@Enumerated(EnumType.STRING)
     private Gender gender;
     private Date graduationYear;
     @ElementCollection
     private List<String> skills;
+    @Enumerated(EnumType.STRING)
     private ExperienceLevel experienceLevel;
     private  String resumeURL;
     private String githubURL;
     private String linkdenURL;
+    @ElementCollection
+    private List<String> preferredJobLocations;
+
+    private Double expectedSalary;
+
+    @Enumerated(EnumType.STRING)
+    private NoticePeriod noticePeriod;
+
 	
 	public Student() {}
 	
 	public Student(Long id, String name, String email, String phone,
             String qualification, String resumeURL, List<String> skills,
             String githubURL, String linkdenURL,
-            ExperienceLevel experienceLevel, Gender gender, Date graduationYear)
+            ExperienceLevel experienceLevel, Gender gender, Date graduationYear,
+            List<String> preferredJobLocations, Double expectedSalary, NoticePeriod noticePeriod)
  {
 		this.id=id;
 		this.name=name;
@@ -48,6 +59,9 @@ public class Student {
 		this.graduationYear= graduationYear;
 		this.gender=gender;
 		this.experienceLevel= experienceLevel;
+		this.preferredJobLocations = preferredJobLocations;
+		this.expectedSalary = expectedSalary;
+		this.noticePeriod = noticePeriod;
 
 		
 		
@@ -149,6 +163,24 @@ public class Student {
 
 	public void setExperienceLevel(ExperienceLevel experienceLevel) {
 		this.experienceLevel = experienceLevel;
+	}
+	public List<String> getPreferredJobLocations() {
+		return preferredJobLocations;
+	}
+	public void setPreferredJobLocations(List<String> preferredJobLocations) {
+		this.preferredJobLocations = preferredJobLocations;
+	}
+	public Double getExpectedSalary() {
+		return expectedSalary;
+	}
+	public void setExpectedSalary(Double expectedSalary) {
+		this.expectedSalary = expectedSalary;
+	}
+	public NoticePeriod getNoticePeriod() {
+		return noticePeriod;
+	}
+	public void setNoticePeriod(NoticePeriod noticePeriod) {
+		this.noticePeriod = noticePeriod;
 	}
 	
 
