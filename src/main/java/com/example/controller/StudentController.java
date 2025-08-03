@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.example.DTO.StudentDTO;
 import com.example.Enum.NoticePeriod;
+import com.example.Enum.PreferredLocation;
 import com.example.service.StudentService;
 
 @RestController
@@ -62,6 +63,10 @@ public class StudentController {
     @GetMapping(value="/notice-period/{noticePeriod}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<StudentDTO>> getByNoticePeriod(@PathVariable NoticePeriod noticePeriod) {
         return ResponseEntity.ok(studentService.getStudentsByNoticePeriod(noticePeriod));
+    }
+    @GetMapping(value="/Preferred-Location/{PreferredLocation}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<StudentDTO>> getByPreferredLocation(@PathVariable PreferredLocation preferredLocation) {
+        return ResponseEntity.ok(studentService.getStudentsByPreferredLocation(preferredLocation));
     }
 
 

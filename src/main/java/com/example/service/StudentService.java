@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.DTO.StudentDTO;
 import com.example.Enum.NoticePeriod;
+import com.example.Enum.PreferredLocation;
 import com.example.entity.Student;
 import com.example.repository.StudentRepository;
 
@@ -19,7 +20,7 @@ private StudentRepository studentRepository;
 	public StudentDTO createOrUpdateStudent(StudentDTO dto) {
 		
 		Student student = new Student(
-				dto.id,dto.name,dto.email,dto.phone,dto.qualification,dto.resumeURL,dto.skills,dto.githubURL,dto.linkdenURL,dto.experienceLevel,dto.gender,dto.graduationYear,dto.preferredJobLocations,dto.expectedSalary,dto.noticePeriod);
+				dto.id,dto.name,dto.email,dto.phone,dto.qualification,dto.resumeURL,dto.skills,dto.githubURL,dto.linkdenURL,dto.experienceLevel,dto.gender,dto.graduationYear,dto.preferredLocation,dto.expectedSalary,dto.noticePeriod);
 			
 		Student saved = (Student) studentRepository.save(student);
 		return mapToDTO(saved);
@@ -71,7 +72,12 @@ private StudentRepository studentRepository;
 	    List<Student> students = studentRepository.findBySkillsContaining(skill);
 	    return students.stream().map(this::mapToDTO).toList();
 	}
-
+	public List<StudentDTO> getStudentsByPreferredLocation(PreferredLocation  preferredLocation) {
+	    List<Student> students = studentRepository.findByPreferredLocation(preferredLocation);
+	    return students.stream()
+	                   .map(this::mapToDTO)
+	                   .collect(Collectors.toList());
+	}
 
 	
 
@@ -89,7 +95,7 @@ private StudentRepository studentRepository;
 				student.getExperienceLevel(),
 				student.getGender(),
 				student.getGraduationYear(),
-				student.getPreferredJobLocations(),
+				student.getPreferredLocation(),
 			    student.getExpectedSalary(),
 				student.getNoticePeriod()
 

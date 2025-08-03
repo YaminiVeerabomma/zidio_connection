@@ -6,6 +6,7 @@ import java.util.List;
 import com.example.Enum.ExperienceLevel;
 import com.example.Enum.Gender;
 import com.example.Enum.NoticePeriod;
+import com.example.Enum.PreferredLocation;
 
 public class StudentDTO {
 	
@@ -21,7 +22,7 @@ public class StudentDTO {
 	public ExperienceLevel experienceLevel;
 	public Gender gender;
 	public Date graduationYear;
-	public List<String> preferredJobLocations;
+	public PreferredLocation preferredLocation;
 	public Double expectedSalary;
 	public NoticePeriod noticePeriod;
 
@@ -31,7 +32,7 @@ public class StudentDTO {
             String qualification, String resumeURL, List<String> skills,
             String githubURL, String linkdenURL,
             ExperienceLevel experienceLevel, Gender gender, Date graduationYear,
-            List<String> preferredJobLocations, Double expectedSalary, NoticePeriod noticePeriod)
+            PreferredLocation preferredLocations, Double expectedSalary, NoticePeriod noticePeriod)
  {
 this.id = id;
 this.name = name;
@@ -45,7 +46,7 @@ this.linkdenURL = linkdenURL;
 this.experienceLevel = experienceLevel;
 this.gender = gender;
 this.graduationYear = graduationYear;
-this.preferredJobLocations = preferredJobLocations;
+this.preferredLocation = preferredLocation;
 this.expectedSalary = expectedSalary;
 this.noticePeriod = noticePeriod;
 }
@@ -148,11 +149,11 @@ this.noticePeriod = noticePeriod;
 	public void setGraduationYear(Date graduationYear) {
 		this.graduationYear = graduationYear;
 	}
-	public List<String> getPreferredJobLocations() {
-		return preferredJobLocations;
+	public PreferredLocation getPreferredLocation() {
+		return preferredLocation;
 	}
-	public void setPreferredJobLocations(List<String> preferredJobLocations) {
-		this.preferredJobLocations = preferredJobLocations;
+	public void setPreferredLocations(PreferredLocation preferredLocations) {
+		this.preferredLocation = preferredLocation;
 	}
 	public Double getExpectedSalary() {
 		return expectedSalary;

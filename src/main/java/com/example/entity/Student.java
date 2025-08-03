@@ -8,6 +8,7 @@ import javax.persistence.*;
 import com.example.Enum.ExperienceLevel;
 import com.example.Enum.Gender;
 import com.example.Enum.NoticePeriod;
+import com.example.Enum.PreferredLocation;
 
 @Entity
 @Table(name="Student")
@@ -30,8 +31,8 @@ public class Student {
     private  String resumeURL;
     private String githubURL;
     private String linkdenURL;
-    @ElementCollection
-    private List<String> preferredJobLocations;
+    @Enumerated(EnumType.STRING)
+    private PreferredLocation  preferredLocation;
 
     private Double expectedSalary;
 
@@ -45,7 +46,7 @@ public class Student {
             String qualification, String resumeURL, List<String> skills,
             String githubURL, String linkdenURL,
             ExperienceLevel experienceLevel, Gender gender, Date graduationYear,
-            List<String> preferredJobLocations, Double expectedSalary, NoticePeriod noticePeriod)
+            PreferredLocation preferredLocation, Double expectedSalary, NoticePeriod noticePeriod)
  {
 		this.id=id;
 		this.name=name;
@@ -59,7 +60,7 @@ public class Student {
 		this.graduationYear= graduationYear;
 		this.gender=gender;
 		this.experienceLevel= experienceLevel;
-		this.preferredJobLocations = preferredJobLocations;
+		this.preferredLocation = preferredLocation;
 		this.expectedSalary = expectedSalary;
 		this.noticePeriod = noticePeriod;
 
@@ -164,11 +165,11 @@ public class Student {
 	public void setExperienceLevel(ExperienceLevel experienceLevel) {
 		this.experienceLevel = experienceLevel;
 	}
-	public List<String> getPreferredJobLocations() {
-		return preferredJobLocations;
+	public PreferredLocation getPreferredLocation() {
+		return preferredLocation;
 	}
-	public void setPreferredJobLocations(List<String> preferredJobLocations) {
-		this.preferredJobLocations = preferredJobLocations;
+	public void setPreferredJobLocations( PreferredLocation preferredLocation) {
+		this.preferredLocation= preferredLocation;
 	}
 	public Double getExpectedSalary() {
 		return expectedSalary;
