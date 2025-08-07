@@ -53,6 +53,7 @@ public class SecurityConfig {
             .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Allow CORS preflight
                 .antMatchers("/api/auth/**").permitAll() 
+                
                 .anyRequest().authenticated() // All other APIs are protected
             .and()
             .sessionManagement()
