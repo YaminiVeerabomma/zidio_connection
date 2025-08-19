@@ -7,10 +7,23 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Info;
+
+@OpenAPIDefinition(
+	    info = @Info(
+	        title = "Zidio Connect API",
+	        version = "1.0",
+	        description = "API documentation for Zidio Job Portal"
+	    )
+	)
+
+
 @SpringBootApplication
 @ComponentScan(basePackages = "com.example")
 @EnableJpaRepositories(basePackages = "com.example.repository")
 @EntityScan("com.example.entity")
+
 public class ZidioApplication {
     public static void main(String[] args) {
         SpringApplication.run(ZidioApplication.class, args);

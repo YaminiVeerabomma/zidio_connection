@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import java.util.Date;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -9,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,7 +29,13 @@ import com.example.repository.UserRepository;
 import com.example.service.AuthService;
 import com.example.service.EmailService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+@CrossOrigin(origins = "http://localhost:3000")
+
 @RestController
+@Tag(name = "Authentication", description = "Login & Registration APIs")
 @RequestMapping("/api/auth")
 public class AuthController {
 
@@ -48,17 +56,26 @@ public class AuthController {
     
 
     @PostMapping(value = "/register", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<AuthResponse>register(@RequestBody RegisterRequest request) {
-    	System.out.println("Login controller hit");
-        return  ResponseEntity.ok(authService.register(request));
-        
+    @Operation(summary = "Register User", description = "Create a new user account")
+    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
+        try {
+            return ResponseEntity.ok(authService.register(request));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                                 .body(Map.of("message", e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                 .body(Map.of("message", "Something went wrong"));
+        }
     }
 
     @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Login User", description = "Authenticate user and return JWT token")
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
         return ResponseEntity.ok(authService.login(request));
     }
     @GetMapping(value="/test",produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Testing purpose")
     public ResponseEntity<?> testEndpoint() {
         return ResponseEntity.ok(
             java.util.Map.of("message", "Auth service is working")
@@ -66,6 +83,11 @@ public class AuthController {
     }
 
     @PostMapping(value = "/forgot-password", produces = MediaType.APPLICATION_JSON_VALUE)
+
+    @Operation(
+        summary = "Forgot Password",
+        description = "Send a password reset link to the registered email"
+    )
     public ResponseEntity<String> forgotPassword(@RequestBody ForgotPasswordRequest request) {
     	return ResponseEntity.ok(authService.forgotPassword(request.getEmail() ));
 //    	System.out.println("forgot controller");
@@ -90,6 +112,10 @@ public class AuthController {
     }
 
     @PostMapping(value = "/reset-password", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(
+            summary = "Reset Password",
+            description = "Reset the user password using the token sent to email"
+        )
    public ResponseEntity<String> resetPassword(@RequestBody ResetPasswordRequest request) {
     	return ResponseEntity.ok(authService.resetPassword(request.getToken(),request.getNewPassword() ));
 //        String rawToken = request.getToken().trim();

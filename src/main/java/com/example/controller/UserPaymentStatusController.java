@@ -1,57 +1,65 @@
 package com.example.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.DTO.UserPaymentStatusDTO;
 import com.example.service.UserPaymentStatusService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/api/user_subscrptions_Status")
-
-
+@Tag(name = "User Payment Status API", description = "APIs for managing user subscription/payment status")
 public class UserPaymentStatusController {
 
     @Autowired
     private UserPaymentStatusService service;
 
     @PostMapping
-    public ResponseEntity<UserPaymentStatusDTO> create(@RequestBody UserPaymentStatusDTO dto) {
+    @Operation(summary = "Create User Payment Status", description = "Create a new payment/subscription status record for a user")
+    public ResponseEntity<UserPaymentStatusDTO> create(
+            @RequestBody 
+            @Parameter(description = "UserPaymentStatus object to create", required = true) UserPaymentStatusDTO dto) {
         return ResponseEntity.ok(service.create(dto));
     }
 
     @GetMapping
+    @Operation(summary = "Get All User Payment Status", description = "Retrieve all user payment/subscription status records")
     public ResponseEntity<List<UserPaymentStatusDTO>> getAll() {
         return ResponseEntity.ok(service.getAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserPaymentStatusDTO> getById(@PathVariable Long id) {
+    @Operation(summary = "Get User Payment Status by ID", description = "Retrieve a specific user payment status by its ID")
+    public ResponseEntity<UserPaymentStatusDTO> getById(
+            @Parameter(description = "ID of the payment status", required = true, example = "1")
+            @PathVariable Long id) {
         UserPaymentStatusDTO dto = service.getById(id);
         return dto != null ? ResponseEntity.ok(dto) : ResponseEntity.notFound().build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserPaymentStatusDTO> update(@PathVariable Long id, @RequestBody UserPaymentStatusDTO dto) {
+    @Operation(summary = "Update User Payment Status", description = "Update an existing user payment status by its ID")
+    public ResponseEntity<UserPaymentStatusDTO> update(
+            @Parameter(description = "ID of the payment status to update", required = true, example = "1")
+            @PathVariable Long id, 
+            @RequestBody 
+            @Parameter(description = "Updated UserPaymentStatus object", required = true) UserPaymentStatusDTO dto) {
         UserPaymentStatusDTO updated = service.update(id, dto);
         return updated != null ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    @Operation(summary = "Delete User Payment Status", description = "Delete a user payment status record by its ID")
+    public ResponseEntity<Void> delete(
+            @Parameter(description = "ID of the payment status to delete", required = true, example = "1")
+            @PathVariable Long id) {
         return service.delete(id) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 }
-

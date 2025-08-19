@@ -34,9 +34,16 @@ public class AuthService {
     @Autowired
     private PasswordResetTokenRepository passwordResetTokenRepository;
 
-    // REGISTER
     public AuthResponse register(RegisterRequest request) {
-    	System.out.println("Login service hit");
+        System.out.println("Login service hit");
+
+        // 1. Check if email already exists
+        Optional<User> existingUser = userRepository.findByEmail(request.getEmail());
+        if (existingUser.isPresent()) {
+            throw new IllegalArgumentException("Email is already registered.");
+        }
+
+        // 2. Create and save new user
         User user = new User();
         user.setName(request.getName());
         user.setEmail(request.getEmail());
@@ -45,10 +52,11 @@ public class AuthService {
 
         userRepository.save(user);
 
+        // 3. Generate token
         String token = jwtUtil.generateToken(user.getEmail(), user.getRole().name());
         return new AuthResponse(token, "User Registered Successfully");
-     
     }
+
 
     // LOGIN
     public AuthResponse login(LoginRequest request) {

@@ -51,9 +51,12 @@ public class SecurityConfig {
             .csrf().disable()
             .cors().and()
             .authorizeRequests()
-                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Allow CORS preflight
-                .antMatchers("/api/auth/**").permitAll() 
-                
+                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Allow CORS preflight    
+            .antMatchers("/api/auth/**", "/swagger-ui/**", "/v3/api-docs/**",   "/swagger-resources/**", 
+                    "/webjars/**","/actuator/**"
+                   ).permitAll() 
+         
+
                 .anyRequest().authenticated() // All other APIs are protected
             .and()
             .sessionManagement()
