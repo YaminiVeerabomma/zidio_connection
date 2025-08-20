@@ -91,7 +91,7 @@ private StudentRepository studentRepository;
 				student.getResumeURL(),
 				student.getSkills(),
 				student.getGithubURL(),
-				student.getLinkdenURL(),
+				student.getLinkedinURL(),
 				student.getExperienceLevel(),
 				student.getGender(),
 				student.getGraduationYear(),

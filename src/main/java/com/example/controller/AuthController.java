@@ -57,18 +57,9 @@ public class AuthController {
 
     @PostMapping(value = "/register", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Register User", description = "Create a new user account")
-    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
-        try {
-            return ResponseEntity.ok(authService.register(request));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                                 .body(Map.of("message", e.getMessage()));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                                 .body(Map.of("message", "Something went wrong"));
-        }
-    }
-
+    public ResponseEntity<AuthResponse>register(@RequestBody RegisterRequest request){
+		return ResponseEntity.ok(authService.register(request));
+	}
     @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Login User", description = "Authenticate user and return JWT token")
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {

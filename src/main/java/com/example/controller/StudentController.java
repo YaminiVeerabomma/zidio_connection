@@ -13,8 +13,11 @@ import com.example.Enum.PreferredLocation;
 import com.example.service.StudentService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 @RestController
 @RequestMapping("/api/students")
 @Tag(name = "Student API", description = "Operations related to Student management")
@@ -32,12 +35,46 @@ public class StudentController {
 
     @GetMapping(value="/id/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Get Student by ID", description = "Fetch a student by their unique ID")
+    @ApiResponses(value = {
+    	    @ApiResponse(responseCode = "200", description = "Student found"),
+    	    @ApiResponse(responseCode = "404", description = "Student not found")
+    	})
     public ResponseEntity<StudentDTO> getStudentById(@PathVariable Long id) {
         StudentDTO student = studentService.getStudentById(id);
         return student != null ? ResponseEntity.ok(student) : ResponseEntity.notFound().build();
     }
 
     @PostMapping
+//    @Operation(
+//    	    summary = "Create or Update Student",
+//    	    description = "Add a new student or update an existing student",
+//    	    requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+//    	        description = "Student details",
+//    	        required = true,
+//    	        content = @Content(
+//    	            mediaType = "application/json",
+//    	            examples = @ExampleObject(
+//    	                value = "{\n" +
+//    	                        "  \"name\": \"John Doe\",\n" +
+//    	                        "  \"email\": \"john.doe@example.com\",\n" +
+//    	                        "  \"phone\": \"9876543210\",\n" +
+//    	                        "  \"qualification\": \"B.Tech\",\n" +
+//    	                        "  \"gender\": \"MALE\",\n" +
+//    	                        "  \"graduationYear\": 2025,\n" +
+//    	                        "  \"skills\": [\"Java\", \"Spring Boot\", \"React\"],\n" +
+//    	                        "  \"experienceLevel\": \"FRESHER\",\n" +
+//    	                        "  \"resumeURL\": \"http://example.com/resume.pdf\",\n" +
+//    	                        "  \"githubURL\": \"http://github.com/johndoe\",\n" +
+//    	                        "  \"linkedinURL\": \"http://linkedin.com/in/johndoe\",\n" +
+//    	                        "  \"preferredJobLocations\": [\"BANGALORE\", \"HYDERABAD\"],\n" +
+//    	                        "  \"expectedSalary\": 500000,\n" +
+//    	                        "  \"noticePeriod\": \"IMMEDIATE\"\n" +
+//    	                        "}"
+//    	            )
+//    	        )
+//    	    )
+//    	)
+
     @Operation(summary = "Create or Update Student", description = "Add a new student or update an existing student")
     public ResponseEntity<StudentDTO> createOrUpdateStudent(@RequestBody StudentDTO dto) {
         StudentDTO savedStudent = studentService.createOrUpdateStudent(dto);
@@ -46,6 +83,7 @@ public class StudentController {
 
     @DeleteMapping(value="/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Delete Student", description = "Delete a student by their ID")
+    
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         studentService.deleteStudent(id);
         return ResponseEntity.noContent().build();

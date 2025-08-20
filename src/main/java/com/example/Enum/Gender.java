@@ -2,6 +2,6 @@ package com.example.Enum;
 
 public enum Gender {
 	
- FEMAIL,MAIL,OTHERS	
+ FEMAIL,MALE,OTHERS	
 
 }

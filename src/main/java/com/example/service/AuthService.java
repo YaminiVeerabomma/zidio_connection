@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.apache.http.auth.InvalidCredentialsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,9 +16,14 @@ import com.example.DTO.LoginRequest;
 import com.example.DTO.RegisterRequest;
 import com.example.entity.PasswordResetToken;
 import com.example.entity.User;
+import com.example.exception.UserNotFoundException;
 import com.example.repository.PasswordResetTokenRepository;
 import com.example.repository.UserRepository;
 import com.example.security.JWTUtil;
+import com.example.exception.*;
+
+
+
 
 @Service
 public class AuthService {
@@ -59,17 +65,17 @@ public class AuthService {
 
 
     // LOGIN
-    public AuthResponse login(LoginRequest request) {
+    public AuthResponse login(LoginRequest request) throws InvalidCredentialsException {
         User user = userRepository.findByEmail(request.email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         if (!passwordEncoder.matches(request.password, user.getPassword())) {
-            throw new RuntimeException("Invalid credentials");
+            throw new InvalidCredentialsException("Invalid email or password");
         }
-
         String token = jwtUtil.generateToken(user.getEmail(), user.getRole().name());
         return new AuthResponse(token, "Login Successful");
     }
+ 
 
  // FORGOT PASSWORD
     public String forgotPassword(String email) {
