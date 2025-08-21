@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
-import org.apache.http.auth.InvalidCredentialsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,14 +15,13 @@ import com.example.DTO.LoginRequest;
 import com.example.DTO.RegisterRequest;
 import com.example.entity.PasswordResetToken;
 import com.example.entity.User;
+import com.example.exception.EmailNotRegisteredException;
+import com.example.exception.InvalidCredentialsException;
+import com.example.exception.InvalidEmailException;
 import com.example.exception.UserNotFoundException;
 import com.example.repository.PasswordResetTokenRepository;
 import com.example.repository.UserRepository;
 import com.example.security.JWTUtil;
-import com.example.exception.*;
-
-
-
 
 @Service
 public class AuthService {
@@ -40,16 +38,13 @@ public class AuthService {
     @Autowired
     private PasswordResetTokenRepository passwordResetTokenRepository;
 
+    // ------------------ REGISTER ------------------
     public AuthResponse register(RegisterRequest request) {
-        System.out.println("Login service hit");
-
-        // 1. Check if email already exists
         Optional<User> existingUser = userRepository.findByEmail(request.getEmail());
         if (existingUser.isPresent()) {
             throw new IllegalArgumentException("Email is already registered.");
         }
 
-        // 2. Create and save new user
         User user = new User();
         user.setName(request.getName());
         user.setEmail(request.getEmail());
@@ -58,34 +53,33 @@ public class AuthService {
 
         userRepository.save(user);
 
-        // 3. Generate token
         String token = jwtUtil.generateToken(user.getEmail(), user.getRole().name());
-        return new AuthResponse(token, "User Registered Successfully");
+        return new AuthResponse(token, "User registered successfully");
     }
 
-
-    // LOGIN
-    public AuthResponse login(LoginRequest request) throws InvalidCredentialsException {
-        User user = userRepository.findByEmail(request.email)
+    // ------------------ LOGIN ------------------
+    public AuthResponse login(LoginRequest request) {
+        User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
-        if (!passwordEncoder.matches(request.password, user.getPassword())) {
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new InvalidCredentialsException("Invalid email or password");
         }
-        String token = jwtUtil.generateToken(user.getEmail(), user.getRole().name());
-        return new AuthResponse(token, "Login Successful");
-    }
- 
 
- // FORGOT PASSWORD
+        String token = jwtUtil.generateToken(user.getEmail(), user.getRole().name());
+        return new AuthResponse(token, "Login successful");
+    }
     public String forgotPassword(String email) {
-    	System.out.println("forgot-service");
-        Optional<User> optionalUser = userRepository.findByEmail(email);
-        if (optionalUser.isEmpty()) {
-            throw new RuntimeException("User not found with email: " + email);
+        if (email == null || email.trim().isEmpty()) {
+            throw new InvalidEmailException("Enter valid email");
         }
 
-        // Generate token
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+        if (optionalUser.isEmpty()) {
+            throw new EmailNotRegisteredException("Email is not registered");
+        }
+
+        // Generate reset token
         String token = UUID.randomUUID().toString();
         Date expiry = Date.from(LocalDateTime.now().plusMinutes(30)
                 .atZone(ZoneId.systemDefault()).toInstant());
@@ -97,28 +91,52 @@ public class AuthService {
 
         passwordResetTokenRepository.save(resetToken);
 
-        // Send this link via email (log for now)
+        // Log reset link (or send email)
         System.out.println("Reset link: http://localhost:8889/api/auth/reset-password?token=" + token);
+
         return "Reset link sent to email";
     }
 
-    // RESET PASSWORD
+
+
+//    // ------------------ FORGOT PASSWORD ------------------
+//    public String forgotPassword(String email) {
+//        User user = userRepository.findByEmail(email)
+//                .orElseThrow(() -> new UserNotFoundException("User not found with email: " + email));
+//
+//        String token = UUID.randomUUID().toString();
+//        Date expiry = Date.from(LocalDateTime.now().plusMinutes(30)
+//                .atZone(ZoneId.systemDefault()).toInstant());
+//
+//        PasswordResetToken resetToken = new PasswordResetToken();
+//        resetToken.setToken(token);
+//        resetToken.setEmail(email);
+//        resetToken.setExpiryDate(expiry);
+//
+//        passwordResetTokenRepository.save(resetToken);
+//
+//        // For now, just log the link
+//        System.out.println("Reset link: http://localhost:8889/api/auth/reset-password?token=" + token);
+//
+//        return "Reset link sent to email";
+//    }
+
+    // ------------------ RESET PASSWORD ------------------
     public String resetPassword(String token, String newPassword) {
         PasswordResetToken resetToken = passwordResetTokenRepository.findByToken(token)
-                .orElseThrow(() -> new RuntimeException("Invalid reset token"));
+                .orElseThrow(() -> new IllegalArgumentException("Invalid reset token"));
 
         if (resetToken.getExpiryDate().before(new Date())) {
-            throw new RuntimeException("Reset token has expired");
+            throw new IllegalArgumentException("Reset token has expired");
         }
 
         User user = userRepository.findByEmail(resetToken.getEmail())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
 
-        // Cleanup token after use
         passwordResetTokenRepository.delete(resetToken);
-        return "Password has been reset";
+        return "Password has been reset successfully";
     }
 }
