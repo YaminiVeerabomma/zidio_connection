@@ -5,78 +5,56 @@ import javax.persistence.*;
 import com.example.Enum.Role;
 
 @Entity
-@Table(name="adminUsers")
+@Table(name = "admin_users")
 public class AdminUser {
-	
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long id;
-	
-	private String name;
-	
-	@Column(unique=true)
-	private String email;
-	private Role role;
-	
-	private boolean active=true;
+
+    @Id
+    private Long id; // shared with User, no @GeneratedValue
+
+    private String name;
+
+    @Column(unique = true)
+    private String email;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    private boolean active = true;
     private boolean blocked = false;
-	
-	public AdminUser(Long id,String name,String email,Role role,boolean active,boolean blocked) {
-		this.id=id;
-		this.name=name;
-		this.email=email;
-		this.role = role;
-		this.active=active;
-		this.blocked=blocked;
-		
-	}
-	public Long getId() {
-		return id;
-	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    @OneToOne
+    @MapsId  // shares PK with User
+    @JoinColumn(name = "id") // FK references User.id
+    private User user;
 
-	public String getName() {
-		return name;
-	}
+    public AdminUser() {}
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public AdminUser(User user, String name, String email, Role role) {
+        this.user = user;
+        this.name = name;
+        this.email = email;
+        this.role = role;
+    }
 
-	public String getEmail() {
-		return email;
-	}
+    // Getters & Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
-	public Role getRole() {
-		return role;
-	}
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-	public void setRole(Role role) {
-		this.role = role;
-	}
-	public boolean isActive() {
-		return active;
-	}
-	public void setActive(boolean active) {
-		this.active = active;
-	}
-	public boolean isBlocked() {
-		return blocked;
-	}
-	public void setBlocked(boolean blocked) {
-		this.blocked = blocked;
-	}
+    public Role getRole() { return role; }
+    public void setRole(Role role) { this.role = role; }
 
-	
-	
-	
+    public boolean isActive() { return active; }
+    public void setActive(boolean active) { this.active = active; }
 
+    public boolean isBlocked() { return blocked; }
+    public void setBlocked(boolean blocked) { this.blocked = blocked; }
 
+    public User getUser() { return user; }
+    public void setUser(User user) { this.user = user; }
 }

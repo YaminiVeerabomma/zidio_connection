@@ -1,15 +1,12 @@
 package com.example.service;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
+import com.example.entity.Recruiter;
+import com.example.repository.RecruiterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.DTO.RecruiterDTO;
-import com.example.Enum.Designation;
-import com.example.entity.Recruiter;
-import com.example.repository.RecruiterRepository;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RecruiterService {
@@ -17,52 +14,23 @@ public class RecruiterService {
     @Autowired
     private RecruiterRepository recruiterRepository;
 
-    public RecruiterDTO createrRecruiter(RecruiterDTO dto) {
-        Recruiter recruiter = new Recruiter(
-            dto.id,
-            dto.name,
-            dto.email,
-            dto.companyName,
-            dto.phone,
-            dto.companydiscription,
-            dto.companyWebsite,
-            dto.designation
-        );
-        recruiter = recruiterRepository.save(recruiter);
-        return mapToDTO(recruiter);
+    // Create or Update Recruiter
+    public Recruiter saveOrUpdateRecruiter(Recruiter recruiter) {
+        return recruiterRepository.save(recruiter);
     }
 
-    public RecruiterDTO getRecruiterByEmail(String email) {
-        Optional<Recruiter> optionalRecruiter = recruiterRepository.findByEmail(email);
-        if (!optionalRecruiter.isPresent()) return null;
-        return mapToDTO(optionalRecruiter.get());
+    // Get all recruiters
+    public List<Recruiter> getAllRecruiters() {
+        return recruiterRepository.findAll();
     }
 
-    public RecruiterDTO getRecruiterById(Long id) {
-        Optional<Recruiter> optionalRecruiter = recruiterRepository.findById(id);
-        if (!optionalRecruiter.isPresent()) return null;
-        return mapToDTO(optionalRecruiter.get());
-    }
-    public List<RecruiterDTO> getRecruitersByDesignation(Designation designation) {
-        List<Recruiter> recruiters = recruiterRepository.findByDesignation(designation);
-        return recruiters.stream()
-                .map(this::mapToDTO)
-                .collect(Collectors.toList());
+    // Get recruiter by ID
+    public Optional<Recruiter> getRecruiterById(Long id) {
+        return recruiterRepository.findById(id);
     }
 
- 
-
-    private RecruiterDTO mapToDTO(Recruiter recruiter) {
-        return new RecruiterDTO(
-            recruiter.getId(),
-            recruiter.getName(),
-            recruiter.getEmail(),
-            recruiter.getCompanyName(),
-            recruiter.getPhone(),
-            recruiter.getCompanydescription(),
-            recruiter.getCompanyWebsit(),
-            recruiter.getDesignation()
-        );
+    // Delete recruiter by ID
+    public void deleteRecruiter(Long id) {
+        recruiterRepository.deleteById(id);
     }
 }
-

@@ -4,7 +4,7 @@ package com.example.DTO;
 import com.example.Enum.Role;
 
 public class RegisterRequest {
-
+	public Long id;
 	public String name;
     public String email;
     public String password;
@@ -14,16 +14,26 @@ public class RegisterRequest {
 
     public RegisterRequest() {}
     
-    public RegisterRequest(String name, String email, String password, Role role) {
+    public RegisterRequest(Long id,String name, String email, String password, Role role) {
+    	this.id=id;
         this.name = name;
         this.email = email;
         this.password = password;
         this.role = role;
     
     }
+    
 
 
-    public String getName() {
+    public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getName() {
         return name;
     }
 

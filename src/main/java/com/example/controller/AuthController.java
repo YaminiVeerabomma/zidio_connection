@@ -5,6 +5,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
+import javax.validation.Valid;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -60,11 +63,13 @@ public class AuthController {
     public ResponseEntity<AuthResponse>register(@RequestBody RegisterRequest request){
 		return ResponseEntity.ok(authService.register(request));
 	}
+    // ------------------ LOGIN ------------------
     @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Login User", description = "Authenticate user and return JWT token")
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
         return ResponseEntity.ok(authService.login(request));
     }
+
     @GetMapping(value="/test",produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Testing purpose")
     public ResponseEntity<?> testEndpoint() {

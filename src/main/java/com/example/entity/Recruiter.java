@@ -1,111 +1,87 @@
 package com.example.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.example.Enum.Designation;
 
 @Entity
 @Table(name = "recruiters")
 public class Recruiter {
-	@Id
+
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
-    private String email;
-    private String companyName;
-    private String phone;
-    private String companydescription;
-    private String companyWebsit;
-     @Enumerated(EnumType.STRING)
-    private Designation designation;
-    
+    private String name;                // Recruiter name
+    private String email;               // Recruiter email
+    private String phone;               // Recruiter phone
+
+    private String companyName;         // Company name
+    private String companyDescription;  // About the company
+    private String companyWebsite;      // Website URL
+    private String companyAddress;      // Office location/address
+    private String companySize;         // e.g., Small/Medium/Large
+
+    @Enumerated(EnumType.STRING)
+    private Designation designation;    // Recruiter's designation (HR, Manager, etc.)
+
+    // Relation with User (same as Student -> User mapping)
+    @OneToOne
+    @MapsId
+    @JoinColumn(name = "id")
+    private User user;
+
+    // Default constructor
     public Recruiter() {}
 
-	public Recruiter(Long id, String name, String email, String companyName, String phone, String companydescription,
-			String companyWebsit, Designation designation) {
-		
-		this.id = id;
-		this.name = name;
-		this.email = email;
-		this.companyName = companyName;
-		this.phone = phone;
-		this.companydescription = companydescription;
-		this.companyWebsit = companyWebsit;
-		this. designation =designation;
-	}
+    // Full constructor
+    public Recruiter(Long id, String name, String email, String phone,
+                     String companyName, String companyDescription,
+                     String companyWebsite, String companyAddress, String companySize,
+                     Designation designation) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+        this.companyName = companyName;
+        this.companyDescription = companyDescription;
+        this.companyWebsite = companyWebsite;
+        this.companyAddress = companyAddress;
+        this.companySize = companySize;
+        this.designation = designation;
+    }
 
-	public Long getId() {
-		return id;
-	}
+    // Getters & Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
-	public String getName() {
-		return name;
-	}
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getPhone() { return phone; }
+    public void setPhone(String phone) { this.phone = phone; }
 
-	public String getEmail() {
-		return email;
-	}
+    public String getCompanyName() { return companyName; }
+    public void setCompanyName(String companyName) { this.companyName = companyName; }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public String getCompanyDescription() { return companyDescription; }
+    public void setCompanyDescription(String companyDescription) { this.companyDescription = companyDescription; }
 
-	public String getCompanyName() {
-		return companyName;
-	}
+    public String getCompanyWebsite() { return companyWebsite; }
+    public void setCompanyWebsite(String companyWebsite) { this.companyWebsite = companyWebsite; }
 
-	public void setCompanyName(String companyName) {
-		this.companyName = companyName;
-	}
+    public String getCompanyAddress() { return companyAddress; }
+    public void setCompanyAddress(String companyAddress) { this.companyAddress = companyAddress; }
 
-	public String getPhone() {
-		return phone;
-	}
+    public String getCompanySize() { return companySize; }
+    public void setCompanySize(String companySize) { this.companySize = companySize; }
 
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
+    public Designation getDesignation() { return designation; }
+    public void setDesignation(Designation designation) { this.designation = designation; }
 
-	public String getCompanydescription() {
-		return companydescription;
-	}
-
-	public void setCompanydescription(String companydescription) {
-		this.companydescription = companydescription;
-	}
-
-	public String getCompanyWebsit() {
-		return companyWebsit;
-	}
-
-	public void setCompanyWebsit(String companyWebsit) {
-		this.companyWebsit = companyWebsit;
-	}
-
-	public Designation getDesignation() {
-		return designation;
-	}
-
-	public void setDesignation(Designation designation) {
-		this.designation = designation;
-	}
-	
-    
+    public User getUser() { return user; }
+    public void setUser(User user) { this.user = user; }
 }
-
-	
