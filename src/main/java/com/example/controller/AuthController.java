@@ -2,6 +2,9 @@ package com.example.controller;
 
 import javax.validation.Valid;
 
+import javax.validation.Valid;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -29,16 +32,33 @@ public class AuthController {
     // ------------------ REGISTER ------------------
     @PostMapping(value = "/register", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Register User", description = "Create a new user account")
+<<<<<<< HEAD
     public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request) {
         return ResponseEntity.ok(authService.register(request));
     }
 
+=======
+    public ResponseEntity<AuthResponse>register(@RequestBody RegisterRequest request){
+		return ResponseEntity.ok(authService.register(request));
+	}
+>>>>>>> feature/swagger
     // ------------------ LOGIN ------------------
     @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Login User", description = "Authenticate user and return JWT token")
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
         return ResponseEntity.ok(authService.login(request));
     }
+<<<<<<< HEAD
+=======
+
+    @GetMapping(value="/test",produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Testing purpose")
+    public ResponseEntity<?> testEndpoint() {
+        return ResponseEntity.ok(
+            java.util.Map.of("message", "Auth service is working")
+        );
+    }
+>>>>>>> feature/swagger
 
     // ------------------ FORGOT PASSWORD ------------------
     @PostMapping(value = "/forgot-password", produces = MediaType.APPLICATION_JSON_VALUE)

@@ -1,6 +1,5 @@
 package com.example.entity;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -16,8 +15,7 @@ import com.example.Enum.PreferredLocation;
 public class Student {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id; // 👈 same as User ID (no auto-generation, shared via @MapsId)
 
     private String name;
     private String email;
@@ -25,21 +23,21 @@ public class Student {
     private String qualification;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "gender", nullable = false)
+    @Column(nullable = true)
     private Gender gender;
 
-    @Temporal(TemporalType.DATE)  // stores full date; use TemporalType.YEAR if only year needed
+    @Temporal(TemporalType.DATE)
     private Date graduationYear;
 
     @ElementCollection
-    private List<String> skills ;
+    private List<String> skills;
 
     @Enumerated(EnumType.STRING)
     private ExperienceLevel experienceLevel;
 
     private String resumeURL;
     private String githubURL;
-    private String linkedinURL;  // fixed typo
+    private String linkedinURL;
 
     @Enumerated(EnumType.STRING)
     private PreferredLocation preferredLocation;
@@ -49,16 +47,19 @@ public class Student {
     @Enumerated(EnumType.STRING)
     private NoticePeriod noticePeriod;
 
+    @OneToOne
+    @MapsId   // 👈 Student uses same PK as User
+    @JoinColumn(name = "id")
+    private User user;
+
     // Default constructor
     public Student() {}
 
-    // Full constructor
-    public Student(Long id, String name, String email, String phone,
-                   String qualification, String resumeURL, List<String> skills,
-                   String githubURL, String linkedinURL,
+    // Constructor with fields
+    public Student(String name, String email, String phone, String qualification,
+                   String resumeURL, List<String> skills, String githubURL, String linkedinURL,
                    ExperienceLevel experienceLevel, Gender gender, Date graduationYear,
-                   PreferredLocation preferredLocation, Double expectedSalary, NoticePeriod noticePeriod) {
-        this.id = id;
+                   PreferredLocation preferredLocation, Double expectedSalary, NoticePeriod noticePeriod, User user) {
         this.name = name;
         this.email = email;
         this.phone = phone;
@@ -67,18 +68,17 @@ public class Student {
         this.skills = skills;
         this.githubURL = githubURL;
         this.linkedinURL = linkedinURL;
+        this.experienceLevel = experienceLevel;
         this.gender = gender;
         this.graduationYear = graduationYear;
-        this.experienceLevel = experienceLevel;
         this.preferredLocation = preferredLocation;
         this.expectedSalary = expectedSalary;
         this.noticePeriod = noticePeriod;
+        this.user = user;
     }
 
-    // Getters and Setters
-
+    // Getters & Setters
     public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
@@ -121,4 +121,7 @@ public class Student {
 
     public NoticePeriod getNoticePeriod() { return noticePeriod; }
     public void setNoticePeriod(NoticePeriod noticePeriod) { this.noticePeriod = noticePeriod; }
+
+    public User getUser() { return user; }
+    public void setUser(User user) { this.user = user; }
 }
