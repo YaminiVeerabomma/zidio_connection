@@ -1,14 +1,22 @@
 package com.example.service;
 
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
+import com.example.DTO.StudentDTO;
+import com.example.Enum.ExperienceLevel;
+import com.example.Enum.Gender;
+import com.example.Enum.NoticePeriod;
+import com.example.Enum.PreferredLocation;
 import com.example.entity.Student;
 import com.example.entity.User;
 import com.example.repository.StudentRepository;
 import com.example.repository.UserRepository;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.Date;
 
 @Service
 public class StudentService {
@@ -17,53 +25,103 @@ public class StudentService {
     private StudentRepository studentRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserRepository userRepository; // needed for @MapsId
 
-    // Create Student from User
-    public Student createStudent(Student student, Long userId) {
-        Optional<User> userOpt = userRepository.findById(userId);
-        if (!userOpt.isPresent()) {
-            throw new RuntimeException("User not found with ID: " + userId);
+    // ---------- DTO Conversion ----------
+    private StudentDTO convertToDTO(Student student) {
+        return new StudentDTO(
+                student.getId(),
+                student.getName(),
+                student.getEmail(),
+                student.getPhone(),
+                student.getQualification(),
+                student.getResumeURL(),
+                student.getSkills(),
+                student.getGithubURL(),
+                student.getLinkedinURL(),
+                student.getExperienceLevel(),
+                student.getGender(),
+                student.getGraduationYear() != null ? student.getGraduationYear().getYear() + 1900 : null,
+                student.getPreferredLocation(),
+                student.getExpectedSalary(),
+                student.getNoticePeriod()
+        );
+    }
+
+    private Student convertToEntity(StudentDTO dto) {
+        Student student = new Student();
+        student.setName(dto.name);
+        student.setEmail(dto.email);
+        student.setPhone(dto.phone);
+        student.setQualification(dto.qualification);
+        student.setResumeURL(dto.resumeURL);
+        student.setSkills(dto.skills);
+        student.setGithubURL(dto.githubURL);
+        student.setLinkedinURL(dto.linkdenURL);
+        student.setExperienceLevel(dto.experienceLevel);
+        student.setGender(dto.gender);
+        if (dto.graduationYear != null) {
+            student.setGraduationYear(new Date(dto.graduationYear - 1900, 0, 1));
         }
-
-        User user = userOpt.get();
-        student.setUser(user);   // link student to user
-        return studentRepository.save(student);
+        student.setPreferredLocation(dto.preferredLocation);
+        student.setExpectedSalary(dto.expectedSalary);
+        student.setNoticePeriod(dto.noticePeriod);
+        return student;
     }
 
-    // Get Student by ID
-    public Student getStudent(Long id) {
-        return studentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Student not found with id " + id));
+    // ---------- CRUD ----------
+    public StudentDTO saveStudent(StudentDTO dto, Long userId) {
+        Student student = convertToEntity(dto);
+
+        // Link student with User (important for @MapsId)
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+
+        student.setUser(user);
+        return convertToDTO(studentRepository.save(student));
     }
 
-    // Update Student
-    public Student updateStudent(Long id, Student studentDetails) {
-        Student student = getStudent(id);
-
-        student.setName(studentDetails.getName());
-        student.setEmail(studentDetails.getEmail());
-        student.setPhone(studentDetails.getPhone());
-        student.setQualification(studentDetails.getQualification());
-        student.setResumeURL(studentDetails.getResumeURL());
-        student.setSkills(studentDetails.getSkills());
-        student.setGithubURL(studentDetails.getGithubURL());
-        student.setLinkedinURL(studentDetails.getLinkedinURL());
-        student.setGender(studentDetails.getGender());
-        student.setGraduationYear(studentDetails.getGraduationYear());
-        student.setExperienceLevel(studentDetails.getExperienceLevel());
-        student.setPreferredLocation(studentDetails.getPreferredLocation());
-        student.setExpectedSalary(studentDetails.getExpectedSalary());
-        student.setNoticePeriod(studentDetails.getNoticePeriod());
-
-        return studentRepository.save(student);
+    public Optional<StudentDTO> getStudentById(Long id) {
+        return studentRepository.findById(id).map(this::convertToDTO);
     }
 
-    // Delete Student
+    public List<StudentDTO> getAllStudents() {
+        return studentRepository.findAll()
+                .stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
+
     public void deleteStudent(Long id) {
-        if (!studentRepository.existsById(id)) {
-            throw new RuntimeException("Student not found with id " + id);
-        }
         studentRepository.deleteById(id);
+    }
+
+    // ---------- Filters ----------
+    public List<StudentDTO> getByGender(Gender gender) {
+        return studentRepository.findByGender(gender)
+                .stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
+
+    public List<StudentDTO> getByExperienceLevel(ExperienceLevel level) {
+        return studentRepository.findByExperienceLevel(level)
+                .stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
+
+    public List<StudentDTO> getByGraduationYear(Integer year) {
+        return studentRepository.findByGraduationYear(year)
+                .stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
+
+    public List<StudentDTO> getBySkill(String skill) {
+        return studentRepository.findBySkillsContainingIgnoreCase(skill)
+                .stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
+
+    public List<StudentDTO> getByNoticePeriod(NoticePeriod notice) {
+        return studentRepository.findByNoticePeriod(notice)
+                .stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
+
+    public List<StudentDTO> getByPreferredLocation(PreferredLocation location) {
+        return studentRepository.findByPreferredLocation(location)
+                .stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 }
