@@ -3,6 +3,7 @@ package com.example.controller;
 import com.example.DTO.AuthResponse;
 import com.example.DTO.LoginRequest;
 import com.example.DTO.RegisterRequest;
+import com.example.DTO.ResetPasswordRequest;
 import com.example.service.AuthService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -56,16 +57,15 @@ public class AuthController {
         return ResponseEntity.ok(authService.forgotPassword(email));
     }
 
-    // ---------------- RESET PASSWORD ----------------
+ // ---------------- RESET PASSWORD ----------------
     @Operation(summary = "Reset password", description = "Resets password using the reset token")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Password reset successfully"),
             @ApiResponse(responseCode = "400", description = "Invalid or expired reset token")
     })
     @PostMapping("/reset-password")
-    public ResponseEntity<String> resetPassword(
-            @RequestParam String token,
-            @RequestParam String newPassword) {
-        return ResponseEntity.ok(authService.resetPassword(token, newPassword));
+    public ResponseEntity<String> resetPassword(@RequestBody ResetPasswordRequest request) {
+        return ResponseEntity.ok(authService.resetPassword(request.getToken(), request.getNewPassword()));
     }
+
 }
