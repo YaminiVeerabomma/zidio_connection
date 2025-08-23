@@ -1,83 +1,71 @@
 package com.example.controller;
 
-import javax.validation.Valid;
-
-import javax.validation.Valid;
-
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import com.example.DTO.AuthResponse;
-import com.example.DTO.ForgotPasswordRequest;
 import com.example.DTO.LoginRequest;
 import com.example.DTO.RegisterRequest;
-import com.example.DTO.ResetPasswordRequest;
 import com.example.service.AuthService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
-@CrossOrigin(origins = "http://localhost:3000")
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 @RestController
 @RequestMapping("/api/auth")
-@Tag(name = "Authentication", description = "Login & Registration APIs")
+@Tag(name = "Authentication", description = "APIs for user registration, login, and password management")
+@CrossOrigin(origins = "*")
 public class AuthController {
 
     @Autowired
     private AuthService authService;
 
-    // ------------------ REGISTER ------------------
-    @PostMapping(value = "/register", produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Register User", description = "Create a new user account")
-<<<<<<< HEAD
-    public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request) {
+    // ---------------- REGISTER ----------------
+    @Operation(summary = "Register a new user", description = "Registers a Student, Recruiter, or Admin user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User registered successfully"),
+            @ApiResponse(responseCode = "400", description = "Email already exists")
+    })
+    @PostMapping("/register")
+    public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request) {
         return ResponseEntity.ok(authService.register(request));
     }
 
-=======
-    public ResponseEntity<AuthResponse>register(@RequestBody RegisterRequest request){
-		return ResponseEntity.ok(authService.register(request));
-	}
->>>>>>> feature/swagger
-    // ------------------ LOGIN ------------------
-    @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Login User", description = "Authenticate user and return JWT token")
-    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
+    // ---------------- LOGIN ----------------
+    @Operation(summary = "User login", description = "Logs in user and returns JWT token")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Login successful"),
+            @ApiResponse(responseCode = "401", description = "Invalid email or password")
+    })
+    @PostMapping("/login")
+    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
         return ResponseEntity.ok(authService.login(request));
     }
-<<<<<<< HEAD
-=======
 
-    @GetMapping(value="/test",produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Testing purpose")
-    public ResponseEntity<?> testEndpoint() {
-        return ResponseEntity.ok(
-            java.util.Map.of("message", "Auth service is working")
-        );
-    }
->>>>>>> feature/swagger
-
-    // ------------------ FORGOT PASSWORD ------------------
-    @PostMapping(value = "/forgot-password", produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Forgot Password", description = "Send a password reset link to email")
-    public ResponseEntity<String> forgotPassword(@RequestBody ForgotPasswordRequest request) {
-        return ResponseEntity.ok(authService.forgotPassword(request.getEmail()));
+    // ---------------- FORGOT PASSWORD ----------------
+    @Operation(summary = "Forgot password", description = "Generates a reset token and sends reset link to email")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Password reset link sent"),
+            @ApiResponse(responseCode = "400", description = "Email not registered")
+    })
+    @PostMapping("/forgot-password")
+    public ResponseEntity<String> forgotPassword(@RequestParam String email) {
+        return ResponseEntity.ok(authService.forgotPassword(email));
     }
 
-    // ------------------ RESET PASSWORD ------------------
-    @PostMapping(value = "/reset-password", produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Reset Password", description = "Reset user password using token")
-    public ResponseEntity<String> resetPassword(@RequestBody ResetPasswordRequest request) {
-        return ResponseEntity.ok(authService.resetPassword(request.getToken(), request.getNewPassword()));
-    }
-
-    // ------------------ TEST ------------------
-    @GetMapping(value = "/test", produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Test Endpoint")
-    public ResponseEntity<?> test() {
-        return ResponseEntity.ok(java.util.Map.of("message", "Auth service is working"));
+    // ---------------- RESET PASSWORD ----------------
+    @Operation(summary = "Reset password", description = "Resets password using the reset token")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Password reset successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid or expired reset token")
+    })
+    @PostMapping("/reset-password")
+    public ResponseEntity<String> resetPassword(
+            @RequestParam String token,
+            @RequestParam String newPassword) {
+        return ResponseEntity.ok(authService.resetPassword(token, newPassword));
     }
 }
