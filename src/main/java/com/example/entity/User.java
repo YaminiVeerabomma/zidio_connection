@@ -11,75 +11,43 @@ import javax.persistence.*;
 @Entity
 @Table(name = "users")
 public class User {
-  
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;   // ✅ lowercase for consistency
 
     private String name;
+
     @Column(unique = true)
-	private String email;
-	
-	private String password;
-	
-	@Enumerated(EnumType.STRING)
-	private Role role;
+    private String email;
 
-	
-	public User() {}
-	
-	public User(String name,String email,String password,Role role) {
-		this.name=name;
-		this.email=email;
-		this.password=password;
-		this.role=role;
-	
-	}
+    private String password;
 
-	public Long getId() {
-		return Id;
-	}
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
-	public void setId(Long id) {
-		Id = id;
-	}
+    public User() {}
 
-	public String getName() {
-		return name;
-	}
+    public User(String name, String email, String password, Role role) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    // Getters & Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-	public String getEmail() {
-		return email;
-	}
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-	public String getPassword() {
-		return password;
-	}
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public Role getRole() {
-		return role;
-	}
-
-	public void setRole(Role role) {
-		this.role = role;
-	}
-
-
-	
-	
-	
-
+    public Role getRole() { return role; }
+    public void setRole(Role role) { this.role = role; }
 }
-
