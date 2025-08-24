@@ -146,6 +146,14 @@
     <artifactId>jersey-apache-client4</artifactId>
     <version>1.19.4</version>
 </dependency>
+<!-- flyway-->
+<dependency>
+    <groupId>org.flywaydb</groupId>
+    <artifactId>flyway-core</artifactId>
+        <version>9.22.3</version>
+</dependency>
+
+
 
 	</dependencies>
 
