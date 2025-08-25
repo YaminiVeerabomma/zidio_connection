@@ -53,6 +53,8 @@ public class Student {
     @MapsId
     @JoinColumn(name = "id")   // ✅ no PrimaryKeyJoinColumn
     private User user;
+    @Column(columnDefinition = "TEXT")
+    private String projects; 
 
     public Student() {}
 
@@ -60,7 +62,7 @@ public class Student {
                    String resumeURL, List<String> skills, String githubURL, String linkedinURL,
                    ExperienceLevel experienceLevel, Gender gender, Date graduationYear,
                    PreferredLocation preferredLocation, Double expectedSalary,
-                   NoticePeriod noticePeriod, User user) {
+                   NoticePeriod noticePeriod, User user,String projects) {
         this.name = name;
         this.email = email;
         this.phone = phone;
@@ -76,6 +78,7 @@ public class Student {
         this.expectedSalary = expectedSalary;
         this.noticePeriod = noticePeriod;
         this.user = user;
+        this.projects=projects;
     }
 
     // Getters & Setters
@@ -110,4 +113,13 @@ public class Student {
     public void setNoticePeriod(NoticePeriod noticePeriod) { this.noticePeriod = noticePeriod; }
     public User getUser() { return user; }
     public void setUser(User user) { this.user = user; }
+
+	public String getProjects() {
+		return projects;
+	}
+
+	public void setProjects(String projects) {
+		this.projects = projects;
+	}
+    
 }

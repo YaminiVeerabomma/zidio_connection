@@ -44,7 +44,8 @@ public class StudentService {
                 student.getGraduationYear() != null ? student.getGraduationYear().getYear() + 1900 : null,
                 student.getPreferredLocation(),
                 student.getExpectedSalary(),
-                student.getNoticePeriod()
+                student.getNoticePeriod(),
+                student.getProjects()
         );
     }
 
@@ -66,6 +67,7 @@ public class StudentService {
         student.setPreferredLocation(dto.preferredLocation);
         student.setExpectedSalary(dto.expectedSalary);
         student.setNoticePeriod(dto.noticePeriod);
+        student.setProjects(dto.projects);
         return student;
     }
 

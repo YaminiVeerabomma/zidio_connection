@@ -2,11 +2,16 @@ package com.example.entity;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import com.example.Enum.Status;
 
@@ -17,11 +22,17 @@ public class Application {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	
 	private Long id;
-	
+
+    @Column(name = "student_id", nullable = false)
 	private Long studentId;
+
+    @Column(name = "job_id", nullable = false)
 	private Long jobId;
 	private String resumeURL;
+
+    @Enumerated(EnumType.STRING)
 	private Status status;
+    @Temporal(TemporalType.TIMESTAMP)
 	private Date appliedDate;
 	
 	public Application() {}
