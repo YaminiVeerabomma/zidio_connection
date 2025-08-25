@@ -23,6 +23,7 @@ public class JobPost {
     private String companyName;
     private String postedByEmail;
     private Date postedDate;
+    @Enumerated(EnumType.STRING)
     private ExperienceLevel experienceLevel; //Required experience (e.g., "Junior", "Senior")
     private Double salaryMin;          
     private Double salaryMax;           

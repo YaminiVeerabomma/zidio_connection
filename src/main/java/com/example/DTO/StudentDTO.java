@@ -24,7 +24,7 @@ public class StudentDTO {
     public PreferredLocation preferredLocation;
     public Double expectedSalary;
     public NoticePeriod noticePeriod;
-
+    public String projects;
     // ✅ Default constructor
     public StudentDTO() {}
 
@@ -32,7 +32,7 @@ public class StudentDTO {
     public StudentDTO(Long id, String name, String email, String phone, String qualification,
                       String resumeURL, List<String> skills, String githubURL, String linkdenURL,
                       ExperienceLevel experienceLevel, Gender gender, Integer graduationYear,
-                      PreferredLocation preferredLocation, Double expectedSalary, NoticePeriod noticePeriod) {
+                      PreferredLocation preferredLocation, Double expectedSalary, NoticePeriod noticePeriod,String projects) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -48,5 +48,6 @@ public class StudentDTO {
         this.preferredLocation = preferredLocation;
         this.expectedSalary = expectedSalary;
         this.noticePeriod = noticePeriod;
+        this.projects=projects;
     }
 }
