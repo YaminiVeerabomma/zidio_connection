@@ -19,14 +19,14 @@ CREATE TABLE students (
     phone VARCHAR(20),
     qualification VARCHAR(255),
     gender VARCHAR(20),
-    graduation_year DATE,
+    graduation_year INT,
     skills TEXT,
     experience_level VARCHAR(50),
     resume_url VARCHAR(500),
     github_url VARCHAR(500),
     linkedin_url VARCHAR(500),
     preferred_location VARCHAR(50),
-    expected_salary DOUBLE,
+    expected_salary DECIMAL(10,2),
     notice_period VARCHAR(50),
     CONSTRAINT fk_student_user FOREIGN KEY (id) REFERENCES users(id) ON DELETE CASCADE
 );
@@ -37,7 +37,7 @@ CREATE TABLE students (
 CREATE TABLE admin_users (
     id BIGINT PRIMARY KEY,
     name VARCHAR(255),
-    email VARCHAR(255) UNIQUE,
+    email VARCHAR(255),
     role VARCHAR(50),
     active BOOLEAN DEFAULT TRUE,
     blocked BOOLEAN DEFAULT FALSE,
@@ -72,7 +72,7 @@ CREATE TABLE job_posts (
     job_location VARCHAR(255),
     job_type VARCHAR(50),
     company_name VARCHAR(255),
-    posted_by_email VARCHAR(255),
+    posted_by BIGINT,
     posted_date DATETIME,
     experience_level VARCHAR(50),
     salary_min DECIMAL(10,2),
@@ -80,7 +80,8 @@ CREATE TABLE job_posts (
     education VARCHAR(255),
     skills VARCHAR(500),
     is_active BOOLEAN DEFAULT TRUE,
-    number_of_vacancies INT
+    number_of_vacancies INT,
+    CONSTRAINT fk_job_recruiter FOREIGN KEY (posted_by) REFERENCES recruiters(id) ON DELETE CASCADE
 );
 
 -- ========================
@@ -99,7 +100,7 @@ CREATE TABLE password_reset_token (
 CREATE TABLE subscription_plans (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255),
-    price DOUBLE,
+    price DECIMAL(10,2),
     description TEXT,
     duration_in_days INT,
     razorpay_order_id VARCHAR(255),
@@ -113,7 +114,7 @@ CREATE TABLE invoice (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     user_email VARCHAR(255),
     service_type VARCHAR(255),
-    amount DOUBLE,
+    amount DECIMAL(10,2),
     payment_method VARCHAR(100),
     status VARCHAR(50),
     purchase_date TIMESTAMP,
@@ -132,7 +133,7 @@ CREATE TABLE payments (
     user_id BIGINT,
     plan_id BIGINT,
     transaction_id VARCHAR(255),
-    amount DECIMAL(15,2),
+    amount DECIMAL(10,2),
     currency VARCHAR(10),
     payment_status VARCHAR(50),
     payment_type VARCHAR(50),
