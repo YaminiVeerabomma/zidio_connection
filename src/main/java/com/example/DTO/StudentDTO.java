@@ -15,7 +15,7 @@ public class StudentDTO {
     public String phone;
     public String qualification;
     public String resumeURL;
-    public List<String> skills;
+    public String skills;
     public String githubURL;
     public String linkdenURL;
     public ExperienceLevel experienceLevel;
@@ -30,7 +30,7 @@ public class StudentDTO {
 
     // ✅ Full constructor
     public StudentDTO(Long id, String name, String email, String phone, String qualification,
-                      String resumeURL, List<String> skills, String githubURL, String linkdenURL,
+                      String resumeURL, String skills, String githubURL, String linkdenURL,
                       ExperienceLevel experienceLevel, Gender gender, Integer graduationYear,
                       PreferredLocation preferredLocation, Double expectedSalary, NoticePeriod noticePeriod,String projects) {
         this.id = id;

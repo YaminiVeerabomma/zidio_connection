@@ -1,5 +1,6 @@
 package com.example.entity;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -26,20 +27,23 @@ public class Student {
     @Column(nullable = true)
     private Gender gender;
 
-    @Temporal(TemporalType.DATE)
-    private Date graduationYear;
-
-    @ElementCollection
-    @CollectionTable(name = "student_skills", joinColumns = @JoinColumn(name = "student_id"))
-    @Column(name = "skill")
-    private List<String> skills;
+  
+    private Integer graduationYear;
+    @Column(name = "skills")
+    private String skills;
 
     @Enumerated(EnumType.STRING)
     private ExperienceLevel experienceLevel;
 
-    private String resumeURL;
+    @Column(name = "github_url")
     private String githubURL;
+
+    @Column(name = "linkedin_url")
     private String linkedinURL;
+
+    @Column(name = "resume_url")
+    private String resumeURL;
+
 
     @Enumerated(EnumType.STRING)
     private PreferredLocation preferredLocation;
@@ -58,9 +62,9 @@ public class Student {
 
     public Student() {}
 
-    public Student(String name, String email, String phone, String qualification,
-                   String resumeURL, List<String> skills, String githubURL, String linkedinURL,
-                   ExperienceLevel experienceLevel, Gender gender, Date graduationYear,
+    public Student(String name, String email, String phone, String qualification,String skills,
+                   String resumeURL , String githubURL, String linkedinURL,
+                   ExperienceLevel experienceLevel, Gender gender, Integer graduationYear,
                    PreferredLocation preferredLocation, Double expectedSalary,
                    NoticePeriod noticePeriod, User user,String projects) {
         this.name = name;
@@ -81,7 +85,11 @@ public class Student {
         this.projects=projects;
     }
 
-    // Getters & Setters
+  
+
+	
+
+	// Getters & Setters
     public Long getId() { return id; }
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
@@ -93,11 +101,18 @@ public class Student {
     public void setQualification(String qualification) { this.qualification = qualification; }
     public Gender getGender() { return gender; }
     public void setGender(Gender gender) { this.gender = gender; }
-    public Date getGraduationYear() { return graduationYear; }
-    public void setGraduationYear(Date graduationYear) { this.graduationYear = graduationYear; }
-    public List<String> getSkills() { return skills; }
-    public void setSkills(List<String> skills) { this.skills = skills; }
-    public ExperienceLevel getExperienceLevel() { return experienceLevel; }
+    public Integer getGraduationYear() { return graduationYear; }
+    public void setGraduationYear(Integer graduationYear) { this.graduationYear = graduationYear; }
+  
+    public String getSkills() {
+		return skills;
+	}
+
+	public void setSkills(String skills) {
+		this.skills = skills;
+	}
+
+	public ExperienceLevel getExperienceLevel() { return experienceLevel; }
     public void setExperienceLevel(ExperienceLevel experienceLevel) { this.experienceLevel = experienceLevel; }
     public String getResumeURL() { return resumeURL; }
     public void setResumeURL(String resumeURL) { this.resumeURL = resumeURL; }
