@@ -41,7 +41,7 @@ public class StudentService {
                 student.getLinkedinURL(),
                 student.getExperienceLevel(),
                 student.getGender(),
-                student.getGraduationYear() != null ? student.getGraduationYear().getYear() + 1900 : null,
+                student.getGraduationYear() ,
                 student.getPreferredLocation(),
                 student.getExpectedSalary(),
                 student.getNoticePeriod(),
@@ -61,9 +61,7 @@ public class StudentService {
         student.setLinkedinURL(dto.linkdenURL);
         student.setExperienceLevel(dto.experienceLevel);
         student.setGender(dto.gender);
-        if (dto.graduationYear != null) {
-            student.setGraduationYear(new Date(dto.graduationYear - 1900, 0, 1));
-        }
+        student.setGraduationYear(dto.graduationYear);    
         student.setPreferredLocation(dto.preferredLocation);
         student.setExpectedSalary(dto.expectedSalary);
         student.setNoticePeriod(dto.noticePeriod);
