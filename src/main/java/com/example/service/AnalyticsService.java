@@ -1,10 +1,14 @@
 package com.example.service;
 
+import java.time.LocalDate;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.example.DTO.AnalysticsResponse;
+import com.example.DTO.ApplicationDTO;
 
 @Service
 public class AnalyticsService {
@@ -28,4 +32,12 @@ public class AnalyticsService {
 		
 		return new AnalysticsResponse(auth,students,recruiters,jobPosts,applications,admins,email,fileUpload,payment,subscriptionPlan,userPaymentStatus);
 	}
+	// 🔹 Get weekly applications tracker
+    public List<ApplicationDTO> getWeeklyApplicationsTracker() {
+        String url = "http://application-service/internal/applications/weekly";
+        ApplicationDTO[] response = restTemplate.getForObject(url, ApplicationDTO[].class);
+        return List.of(response);
+    }
+
+
 }
