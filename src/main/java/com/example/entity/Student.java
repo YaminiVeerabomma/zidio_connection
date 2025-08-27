@@ -29,7 +29,8 @@ public class Student {
 
   
     private Integer graduationYear;
-    @Column(name = "skills")
+    @Column(columnDefinition = "TEXT")
+  
     private String skills;
 
     @Enumerated(EnumType.STRING)
@@ -46,6 +47,7 @@ public class Student {
 
 
     @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "TEXT")
     private PreferredLocation preferredLocation;
 
     private Double expectedSalary;
@@ -72,12 +74,14 @@ public class Student {
         this.phone = phone;
         this.qualification = qualification;
         this.resumeURL = resumeURL;
+    
         this.skills = skills;
         this.githubURL = githubURL;
         this.linkedinURL = linkedinURL;
         this.experienceLevel = experienceLevel;
         this.gender = gender;
         this.graduationYear = graduationYear;
+        
         this.preferredLocation = preferredLocation;
         this.expectedSalary = expectedSalary;
         this.noticePeriod = noticePeriod;
