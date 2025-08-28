@@ -1,6 +1,7 @@
 package com.example.service;
 
 import com.example.DTO.RecruiterDTO;
+import com.example.Enum.Designation;
 import com.example.entity.Recruiter;
 import com.example.entity.User;
 import com.example.repository.RecruiterRepository;
@@ -30,6 +31,22 @@ public class RecruiterService {
 
         return convertToDTO(recruiterRepository.save(recruiter));
     }
+    public Recruiter updateRecruiter(Long id, Recruiter updatedRecruiter) {
+        return recruiterRepository.findById(id)
+                .map(recruiter -> {
+                    recruiter.setName(updatedRecruiter.getName());
+                    recruiter.setEmail(updatedRecruiter.getEmail());
+                    recruiter.setPhone(updatedRecruiter.getPhone());
+                    recruiter.setCompanyName(updatedRecruiter.getCompanyName());
+                    recruiter.setCompanyDescription(updatedRecruiter.getCompanyDescription());
+                    recruiter.setCompanyWebsite(updatedRecruiter.getCompanyWebsite());
+                    recruiter.setCompanyAddress(updatedRecruiter.getCompanyAddress());
+                    recruiter.setCompanySize(updatedRecruiter.getCompanySize());
+                    recruiter.setDesignation(updatedRecruiter.getDesignation());
+                    return recruiterRepository.save(recruiter);
+                })
+                .orElseThrow(() -> new RuntimeException("Recruiter not found with id: " + id));
+    }
 
     // 🔹 Get Recruiter by ID
     public RecruiterDTO getRecruiterById(Long id) {
@@ -49,6 +66,19 @@ public class RecruiterService {
     // 🔹 Delete Recruiter
     public void deleteRecruiter(Long id) {
         recruiterRepository.deleteById(id);
+    }
+    public List<RecruiterDTO> getRecruitersByDesignation(Designation designation) {
+        return recruiterRepository.findByDesignation(designation)
+                .stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+  
+    public List<RecruiterDTO> getRecruitersBySkill(String skill) {
+        return recruiterRepository.findBySkillsContaining(skill)
+                .stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
     // ========== DTO Converters ==========
