@@ -4,10 +4,11 @@ import com.example.DTO.StudentDTO;
 import com.example.Enum.ExperienceLevel;
 import com.example.Enum.Gender;
 import com.example.Enum.NoticePeriod;
-import com.example.Enum.PreferredLocation;
+import com.example.Enum.PreferredJobLocations;
 import com.example.service.StudentService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,73 +19,90 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/students")
-@Tag(name = "Student API", description = "CRUD + Filter operations for Students")
+@Tag(name = "Student API", description = "CRUD and filters for Students")
 public class StudentController {
 
     @Autowired
     private StudentService studentService;
 
-    // ---------- CRUD ----------
-    @Operation(summary = "Create or Update a Student (link with User)")
-    @PostMapping("/{userId}")
-    public ResponseEntity<StudentDTO> saveStudent(@RequestBody StudentDTO dto, @PathVariable Long userId) {
-        return ResponseEntity.ok(studentService.saveStudent(dto, userId));
+    // ----------------- Create -----------------
+    @Operation(summary = "Create a new student", description = "Add a new student profile")
+    @ApiResponse(responseCode = "200", description = "Student created successfully")
+    @PostMapping
+    public ResponseEntity<StudentDTO> createStudent(@RequestBody StudentDTO studentDTO) {
+        return ResponseEntity.ok(studentService.createStudent(studentDTO));
     }
 
-    @Operation(summary = "Get Student by ID")
+    // ----------------- Update -----------------
+    @Operation(summary = "Update student", description = "Update existing student details")
+    @ApiResponse(responseCode = "200", description = "Student updated successfully")
+    @PutMapping("/{id}")
+    public ResponseEntity<StudentDTO> updateStudent(@PathVariable Long id, @RequestBody StudentDTO studentDTO) {
+        StudentDTO updated = studentService.updateStudent(id, studentDTO);
+        return updated != null ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
+    }
+
+    // ----------------- Delete -----------------
+    @Operation(summary = "Delete student", description = "Delete student by ID")
+    @ApiResponse(responseCode = "204", description = "Student deleted successfully")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteStudent(@PathVariable Long id) {
+        studentService.deleteStudent(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    // ----------------- Get By ID -----------------
+    @Operation(summary = "Get student by ID", description = "Retrieve student by ID")
+    @ApiResponse(responseCode = "200", description = "Student found")
     @GetMapping("/{id}")
-    public ResponseEntity<StudentDTO> getById(@PathVariable Long id) {
+    public ResponseEntity<StudentDTO> getStudentById(@PathVariable Long id) {
         return studentService.getStudentById(id)
-                .map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    @Operation(summary = "Get All Students")
+    // ----------------- Get All -----------------
+    @Operation(summary = "Get all students", description = "Retrieve all students")
+    @ApiResponse(responseCode = "200", description = "List of students returned")
     @GetMapping
-    public ResponseEntity<List<StudentDTO>> getAll() {
+    public ResponseEntity<List<StudentDTO>> getAllStudents() {
         return ResponseEntity.ok(studentService.getAllStudents());
     }
 
-    @Operation(summary = "Delete Student by ID")
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable Long id) {
-        studentService.deleteStudent(id);
-        return ResponseEntity.ok("Student deleted successfully");
-    }
-
-    // ---------- Filters ----------
-    @Operation(summary = "Filter Students by Gender")
+    // ----------------- Filters -----------------
+    @Operation(summary = "Get students by gender")
     @GetMapping("/gender/{gender}")
-    public ResponseEntity<List<StudentDTO>> getByGender(@PathVariable Gender gender) {
-        return ResponseEntity.ok(studentService.getByGender(gender));
+    public ResponseEntity<List<StudentDTO>> getStudentsByGender(@PathVariable Gender gender) {
+        return ResponseEntity.ok(studentService.getStudentsByGender(gender));
     }
 
-    @Operation(summary = "Filter Students by Experience Level")
-    @GetMapping("/experience/{level}")
-    public ResponseEntity<List<StudentDTO>> getByExperience(@PathVariable ExperienceLevel level) {
-        return ResponseEntity.ok(studentService.getByExperienceLevel(level));
+    @Operation(summary = "Get students by experience level")
+    @GetMapping("/experience/{experienceLevel}")
+    public ResponseEntity<List<StudentDTO>> getStudentsByExperienceLevel(@PathVariable ExperienceLevel experienceLevel) {
+        return ResponseEntity.ok(studentService.getStudentsByExperienceLevel(experienceLevel));
     }
 
-    @Operation(summary = "Filter Students by Graduation Year")
+    @Operation(summary = "Get students by graduation year")
     @GetMapping("/graduation/{year}")
-    public ResponseEntity<List<StudentDTO>> getByGraduationYear(@PathVariable Integer year) {
-        return ResponseEntity.ok(studentService.getByGraduationYear(year));
+    public ResponseEntity<List<StudentDTO>> getStudentsByGraduationYear(@PathVariable Integer year) {
+        return ResponseEntity.ok(studentService.getStudentsByGraduationYear(year));
     }
 
-    @Operation(summary = "Filter Students by Skill")
+    @Operation(summary = "Get students by skill (keyword search)")
     @GetMapping("/skill/{skill}")
-    public ResponseEntity<List<StudentDTO>> getBySkill(@PathVariable String skill) {
-        return ResponseEntity.ok(studentService.getBySkill(skill));
+    public ResponseEntity<List<StudentDTO>> getStudentsBySkill(@PathVariable String skill) {
+        return ResponseEntity.ok(studentService.getStudentsBySkill(skill));
     }
 
-    @Operation(summary = "Filter Students by Notice Period")
-    @GetMapping("/notice/{notice}")
-    public ResponseEntity<List<StudentDTO>> getByNotice(@PathVariable NoticePeriod notice) {
-        return ResponseEntity.ok(studentService.getByNoticePeriod(notice));
+    @Operation(summary = "Get students by notice period")
+    @GetMapping("/notice/{noticePeriod}")
+    public ResponseEntity<List<StudentDTO>> getStudentsByNoticePeriod(@PathVariable NoticePeriod noticePeriod) {
+        return ResponseEntity.ok(studentService.getStudentsByNoticePeriod(noticePeriod));
     }
 
-    @Operation(summary = "Filter Students by Preferred Location")
+    @Operation(summary = "Get students by preferred job location")
     @GetMapping("/location/{location}")
-    public ResponseEntity<List<StudentDTO>> getByLocation(@PathVariable PreferredLocation location) {
-        return ResponseEntity.ok(studentService.getByPreferredLocation(location));
+    public ResponseEntity<List<StudentDTO>> getStudentsByPreferredLocation(@PathVariable PreferredJobLocations location) {
+        return ResponseEntity.ok(studentService.getStudentsByPreferredLocation(location));
     }
 }

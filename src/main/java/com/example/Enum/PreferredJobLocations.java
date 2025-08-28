@@ -1,6 +1,6 @@
 package com.example.Enum;
 
-public enum PreferredLocation {
+public enum PreferredJobLocations {
     HYDERABAD,
     BANGALORE,
     CHENNAI,
