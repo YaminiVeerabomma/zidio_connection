@@ -29,14 +29,18 @@ public class AdminUser {
 
     public AdminUser() {}
 
-    public AdminUser(User user, String name, String email, Role role) {
+    public AdminUser(User user, String name, String email, Role role,boolean active, boolean blocked ) {
         this.user = user;
         this.name = name;
         this.email = email;
         this.role = role;
+        this.active = active;
+		this.blocked = blocked;
+		
     }
 
-    // Getters & Setters
+   
+	// Getters & Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -57,4 +61,6 @@ public class AdminUser {
 
     public User getUser() { return user; }
     public void setUser(User user) { this.user = user; }
+
+	
 }
