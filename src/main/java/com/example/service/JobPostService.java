@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.DTO.JobPostDTO;
 import com.example.Enum.JobType;
+import com.example.Enum.RequiredExperience;
 import com.example.entity.JobPost;
 import com.example.repository.JobPostRepository;
 
@@ -31,13 +32,38 @@ public class JobPostService {
         jobPost.setSalaryMax(dto.getSalaryMax());
         jobPost.setEducation(dto.getEducation());
         jobPost.setSkills(dto.getSkills());
-        jobPost.setExperienceLevel(dto.getExperienceLevel());
+        jobPost.setRequiredExperience (dto.getRequiredExperience());
         jobPost.setActive(dto.isActive());
         jobPost.setNumberOfVacancies(dto.getNumberOfVacancies());
 
         JobPost saved = jobPostRepository.save(jobPost);
         return mapToDTO(saved);
     }
+ // ✅ Update Job Post
+    public JobPostDTO updateJobPost(Long id, JobPostDTO dto) {
+        JobPost jobPost = jobPostRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Job Post not found with id " + id));
+
+        // Update fields
+        jobPost.setJobTitle(dto.getJobTitle());
+        jobPost.setJobType(dto.getJobType());
+        jobPost.setJobLocation(dto.getJobLocation());
+        jobPost.setJobDescription(dto.getJobDescription());
+        jobPost.setCompanyName(dto.getCompanyName());
+        jobPost.setPostedByEmail(dto.getPostedByEmail());
+        jobPost.setPostedDate(dto.getPostedDate());
+        jobPost.setSalaryMin(dto.getSalaryMin());
+        jobPost.setSalaryMax(dto.getSalaryMax());
+        jobPost.setEducation(dto.getEducation());
+        jobPost.setSkills(dto.getSkills());
+        jobPost.setRequiredExperience(dto.getRequiredExperience());
+        jobPost.setActive(dto.isActive());
+        jobPost.setNumberOfVacancies(dto.getNumberOfVacancies());
+
+        JobPost updated = jobPostRepository.save(jobPost);
+        return mapToDTO(updated);
+    }
+
 
     // ✅ Get jobs by email
     public List<JobPostDTO> getByPostedByEmail(String email) {
@@ -83,7 +109,12 @@ public class JobPostService {
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
     }
-
+    public List<JobPostDTO> getByRequiredExperience(RequiredExperience requiredExperience) {
+        return jobPostRepository.findByRequiredExperience(requiredExperience)
+                .stream()
+                .map(this::mapToDTO)
+                .toList();
+    }
 
 
 
@@ -98,7 +129,7 @@ public class JobPostService {
                 job.getCompanyName(),
                 job.getPostedByEmail(),
                 job.getPostedDate(),
-                job.getExperienceLevel(),
+                job.getRequiredExperience (),
                 job.getSalaryMin(),
                 job.getSalaryMax() ,
                 job.getEducation(),
