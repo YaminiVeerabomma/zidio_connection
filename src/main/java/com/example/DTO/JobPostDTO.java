@@ -2,8 +2,9 @@ package com.example.DTO;
 
 import java.util.Date;
 
-import com.example.Enum.ExperienceLevel;
+
 import com.example.Enum.JobType;
+import com.example.Enum.RequiredExperience;
 
 public class JobPostDTO {
 
@@ -15,7 +16,7 @@ public class JobPostDTO {
     public String companyName;
     public String postedByEmail;
     public Date postedDate;
-    public ExperienceLevel experienceLevel;
+   public RequiredExperience requiredExperience;
     public Double salaryMin;
     public Double salaryMax;
     public String education;
@@ -26,7 +27,7 @@ public class JobPostDTO {
 
     // ✅ Add this constructor
     public JobPostDTO(Long id, String jobTitle, JobType jobType, String jobLocation, String jobDescription,
-                      String companyName, String postedByEmail, Date postedDate, ExperienceLevel experienceLevel,
+                      String companyName, String postedByEmail, Date postedDate,RequiredExperience requiredExperience,
                       Double salaryMin, Double salaryMax, String education, String skills, boolean isActive,Integer numberOfVacancies) {
         this.id = id;
         this.jobTitle = jobTitle;
@@ -36,7 +37,7 @@ public class JobPostDTO {
         this.companyName = companyName;
         this.postedByEmail = postedByEmail;
         this.postedDate = postedDate;
-        this.experienceLevel = experienceLevel;
+        this.requiredExperience =requiredExperience;
         this.salaryMin = salaryMin;
         this.salaryMax = salaryMax;
         this.education = education;
@@ -173,13 +174,15 @@ public class JobPostDTO {
 		this.isActive = isActive;
 	}
 
-	public ExperienceLevel getExperienceLevel() {
-		return experienceLevel;
+
+	public RequiredExperience getRequiredExperience() {
+		return requiredExperience;
 	}
 
-	public void setExperienceLevel(ExperienceLevel experienceLevel) {
-		this.experienceLevel = experienceLevel;
+	public void setRequiredExperience(RequiredExperience requiredExperience) {
+		this.requiredExperience = requiredExperience;
 	}
+
 	public Integer getNumberOfVacancies() {
 		return numberOfVacancies;
 	}
@@ -188,6 +191,7 @@ public class JobPostDTO {
 		this.numberOfVacancies = numberOfVacancies;
 	}
 
+	
 
 
 	

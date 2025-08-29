@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.example.DTO.JobPostDTO;
 import com.example.Enum.JobType;
+import com.example.Enum.RequiredExperience;
 import com.example.service.JobPostService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,6 +28,11 @@ public class JobPostController {
     @Operation(summary = "Create Job Post", description = "Post a new job")
     public ResponseEntity<JobPostDTO> createJob(@RequestBody JobPostDTO dto){
         return ResponseEntity.ok(jobPostService.postJob(dto));
+    }
+    // ✅ Update JobPost
+    @PutMapping("/{id}")
+    public ResponseEntity<JobPostDTO> updateJobPost(@PathVariable Long id, @RequestBody JobPostDTO dto) {
+        return ResponseEntity.ok(jobPostService.updateJobPost(id, dto));
     }
 
     @GetMapping(value="/recruiter", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -75,4 +81,13 @@ public class JobPostController {
         List<JobPostDTO> jobs = jobPostService.getByJobLocation(location);
         return ResponseEntity.ok(jobs);
     }
+    // ✅ Get JobPosts by RequiredExperience
+    @GetMapping("/requiredExperience/{requiredExperience}")
+    public ResponseEntity<List<JobPostDTO>> getByRequiredExperience(
+            @PathVariable("requiredExperience") RequiredExperience requiredExperience) {
+        return ResponseEntity.ok(jobPostService.getByRequiredExperience(requiredExperience));
+    }
+
 }
+//GET /api/jobPosts/recruiter?email=hr@techcorp.com
+

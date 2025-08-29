@@ -4,8 +4,9 @@ import java.util.Date;
 
 import javax.persistence.*;
 
-import com.example.Enum.ExperienceLevel;
+
 import com.example.Enum.JobType;
+import com.example.Enum.RequiredExperience;
 
 @Entity
 @Table(name = "jobPosts")
@@ -24,7 +25,7 @@ public class JobPost {
     private String postedByEmail;
     private Date postedDate;
     @Enumerated(EnumType.STRING)
-    private ExperienceLevel experienceLevel; //Required experience (e.g., "Junior", "Senior")
+    private RequiredExperience requiredExperience; 
     private Double salaryMin;          
     private Double salaryMax;           
 
@@ -36,7 +37,7 @@ public class JobPost {
     public JobPost() {}
 
     public JobPost(Long id, String jobTitle, String jobDescription, String jobLocation,JobType jobType,
-                   String companyName, String postedByEmail, Date postedDate, ExperienceLevel experienceLevel, Double salaryMin, Double salaryMax, String education, String skills, boolean isActive, Integer numberOfVacancies) {
+                   String companyName, String postedByEmail, Date postedDate, RequiredExperience requiredExperience, Double salaryMin, Double salaryMax, String education, String skills, boolean isActive, Integer numberOfVacancies) {
         this.id = id;
         this.jobTitle = jobTitle;
         this.jobDescription = jobDescription;
@@ -44,7 +45,7 @@ public class JobPost {
         this.jobType = jobType;
         this.companyName = companyName;
         this.postedByEmail = postedByEmail;
-      this. experienceLevel=experienceLevel; 
+    	this.requiredExperience = requiredExperience ;
         this.postedDate = postedDate;
     	this.salaryMin = salaryMin;
 		this.salaryMax = salaryMax;
@@ -53,6 +54,7 @@ public class JobPost {
 		this.isActive = isActive;
 		this.numberOfVacancies=numberOfVacancies;
     }
+
 
 
 
@@ -119,6 +121,15 @@ public class JobPost {
     public void setPostedDate(Date postedDate) {
         this.postedDate = postedDate;
     }
+    
+
+	public RequiredExperience getRequiredExperience() {
+		return requiredExperience;
+	}
+
+	public void setRequiredExperience(RequiredExperience requiredExperience) {
+		this.requiredExperience = requiredExperience;
+	}
 
 	public Double getSalaryMin() {
 		return salaryMin;
@@ -161,14 +172,7 @@ public class JobPost {
 		this.isActive = isActive;
 	}
 
-	public ExperienceLevel getExperienceLevel() {
-		return experienceLevel;
-	}
-
-	public void setExperienceLevel(ExperienceLevel experienceLevel) {
-		this.experienceLevel = experienceLevel;
-	}
-
+	
 	public Integer getNumberOfVacancies() {
 		return numberOfVacancies;
 	}
