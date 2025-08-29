@@ -34,7 +34,7 @@ public class Recruiter {
     public Recruiter(Long id, String name, String email, String phone,
                      String companyName, String companyDescription,
                      String companyWebsite, String companyAddress, String companySize,
-                     Designation designation) {
+                     Designation designation,User user) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -45,6 +45,7 @@ public class Recruiter {
         this.companyAddress = companyAddress;
         this.companySize = companySize;
         this.designation = designation;
+        this.user=user;
     }
 
     // Getters & Setters

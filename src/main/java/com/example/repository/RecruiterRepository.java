@@ -16,10 +16,7 @@ public interface RecruiterRepository extends JpaRepository<Recruiter, Long> {
   Optional<Recruiter>findByEmail(String email);
   Optional< Recruiter> findById(Long id);
   List<Recruiter> findByDesignation(Designation designation);
-//Find recruiters whose skills contain a certain keyword (if you store skills as comma-separated String)
-  List<Recruiter> findBySkillsContaining(String skill);
 
-  // Optional: Find recruiters by active status
-  List<Recruiter> findByIsActive(boolean isActive);
+ 
 
 }
