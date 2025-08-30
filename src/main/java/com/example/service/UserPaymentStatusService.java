@@ -1,88 +1,86 @@
 package com.example.service;
 
+import com.example.DTO.UserPaymentStatusDTO;
+import com.example.Enum.PaidStatus;
+import com.example.entity.UserPaymentStatus;
+import com.example.repository.UserPaymentStatusRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import com.example.DTO.UserPaymentStatusDTO;
-import com.example.entity.UserPaymentStatus;
-import com.example.repository.UserPaymentStatusRepository;
-
-
 @Service
 public class UserPaymentStatusService {
-	
-	@Autowired
-	private UserPaymentStatusRepository userPaymentStatusRepository;
-	
-	
-	    public UserPaymentStatusDTO create(UserPaymentStatusDTO dto) {
-	        UserPaymentStatus payment = mapToEntity(dto);
-	        UserPaymentStatus saved =userPaymentStatusRepository.save(payment);
-	        return mapToDTO(saved);
-	    }
 
-	    public List<UserPaymentStatusDTO> getAll() {
-	        return userPaymentStatusRepository.findAll()
-	                .stream()
-	                .map(this::mapToDTO)
-	                .collect(Collectors.toList());
-	    }
+    @Autowired
+    private UserPaymentStatusRepository userPaymentStatusRepository;
 
-	    public UserPaymentStatusDTO getById(Long id) {
-	        Optional<UserPaymentStatus> optional = userPaymentStatusRepository.findById(id);
-	        return optional.map(this::mapToDTO).orElse(null);
-	    }
+    // 🔹 Convert Entity → DTO
+    private UserPaymentStatusDTO convertToDTO(UserPaymentStatus entity) {
+        if (entity == null) return null;
+        return new UserPaymentStatusDTO(
+                entity.getId(),
+                entity.getPlanId(),
+                entity.getUserId(),
+                entity.getSubscriptionStart(),
+                entity.getSubscriptionEnd(),
+                entity.getPaidStatus(),
+                entity.getTransactionId()
+        );
+    }
 
-	    public UserPaymentStatusDTO update(Long id, UserPaymentStatusDTO dto) {
-	        Optional<UserPaymentStatus> optional = userPaymentStatusRepository.findById(id);
-	        if (optional.isPresent()) {
-	            UserPaymentStatus existing = optional.get();
-	            existing.setPlanId(dto.getPlanId());
-	            existing.setUserId(dto.getUserId());
-	            existing.setSubscriptionStart(dto.getSubscriptionStart());
-	            existing.setSubscriptionEnd(dto.getSubscriptionEnd());
-	            existing.setStatus(dto.getStatus());
-	            existing.setTransactionId(dto.getTransactionId());
-	            return mapToDTO(userPaymentStatusRepository.save(existing));
-	        }
-	        return null;
-	    }
+    // 🔹 Convert DTO → Entity
+    private UserPaymentStatus convertToEntity(UserPaymentStatusDTO dto) {
+        if (dto == null) return null;
+        return new UserPaymentStatus(
+                dto.getId(),
+                dto.getPlanId(),
+                dto.getUserId(),
+                dto.getSubscriptionStart(),
+                dto.getSubscriptionEnd(),
+                dto.getPaidStatus(),
+                dto.getTransactionId()
+        );
+    }
 
-	    public boolean delete(Long id) {
-	        if (userPaymentStatusRepository.existsById(id)) {
-	        	userPaymentStatusRepository.deleteById(id);
-	            return true;
-	        }
-	        return false;
-	    }
+    // ✅ Save or update
+    public UserPaymentStatusDTO save(UserPaymentStatusDTO dto) {
+        UserPaymentStatus entity = convertToEntity(dto);
+        UserPaymentStatus saved = userPaymentStatusRepository.save(entity);
+        return convertToDTO(saved);   // ✅ FIXED: pass entity, not dto
+    }
 
-	    // Mapping helpers
+    // ✅ Get by userId
+    public Optional<UserPaymentStatusDTO> getByUserId(Long userId) {
+        return userPaymentStatusRepository.findByUserId(userId).map(this::convertToDTO);
+    }
 
-	    private UserPaymentStatusDTO mapToDTO(UserPaymentStatus entity) {
-	        return new UserPaymentStatusDTO(
-	                entity.getId(),
-	                entity.getPlanId(),
-	                entity.getUserId(),
-	                entity.getSubscriptionStart(),
-	                entity.getSubscriptionEnd(),
-	                entity.getStatus(),
-	                entity.getTransactionId()
-	        );
-	    }
+    // ✅ Active subscriptions
+    public List<UserPaymentStatusDTO> getActiveSubscriptions() {
+        return userPaymentStatusRepository.findBySubscriptionEndAfter(LocalDate.now())
+                .stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
 
-	    private UserPaymentStatus mapToEntity(UserPaymentStatusDTO dto) {
-	        UserPaymentStatus entity = new UserPaymentStatus();
-	        entity.setId(dto.getId());
-	        entity.setPlanId(dto.getPlanId());
-	        entity.setUserId(dto.getUserId());
-	        entity.setSubscriptionStart(dto.getSubscriptionStart());
-	        entity.setSubscriptionEnd(dto.getSubscriptionEnd());
-	        entity.setStatus(dto.getStatus());
-	        entity.setTransactionId(dto.getTransactionId());
-	        return entity;
-	    }
-	}
+    // ✅ Expired subscriptions
+    public List<UserPaymentStatusDTO> getExpiredSubscriptions() {
+        return userPaymentStatusRepository.findBySubscriptionEndBefore(LocalDate.now())
+                .stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
+
+    // ✅ By planId
+    public List<UserPaymentStatusDTO> getByPlanId(Long planId) {
+        return userPaymentStatusRepository.findByPlanId(planId)
+                .stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
+
+    // ✅ Delete by userId
+    public void deleteByUserId(Long userId) {
+        userPaymentStatusRepository.deleteByUserId(userId);
+    }
+    public List<UserPaymentStatusDTO> getByPaidStatus(PaidStatus paidStatus) {
+        return   userPaymentStatusRepository.findByPaidStatus(paidStatus).stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
+}

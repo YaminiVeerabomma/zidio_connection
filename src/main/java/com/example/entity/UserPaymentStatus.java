@@ -18,28 +18,21 @@ public class UserPaymentStatus {
 	private Long userId;
 	private LocalDate subscriptionStart;
 	private LocalDate subscriptionEnd;
-	private PaidStatus status;
+	   @Enumerated(EnumType.STRING) // ✅ store enum as string in DB
+	    @Column(name = "paid_status") // ✅ DB column will be `paid_status`
+	    private PaidStatus paidStatus;
 	private String transactionId;
 
 	public UserPaymentStatus(){} 
-	public UserPaymentStatus(Long id,Long planId,Long userId,LocalDate subscriptionStart,LocalDate subscriptionEnd,PaidStatus status,String transactionId) {
+	public UserPaymentStatus(Long id,Long planId,Long userId,LocalDate subscriptionStart,LocalDate subscriptionEnd,PaidStatus paidStatus,String transactionId) {
 		this.id=id;
 		this.planId=planId;
 		this.userId=userId;
 		this.subscriptionStart=subscriptionStart;
 		this.subscriptionEnd=subscriptionEnd;
-		this.status=status;
+		this.paidStatus=paidStatus;
 		this.transactionId=transactionId;
 		
-	}
-	
-
-
-	public PaidStatus getStatus() {
-		return status;
-	}
-	public void setStatus(PaidStatus status) {
-		this.status = status;
 	}
 	public Long getId() {
 		return id;
@@ -71,6 +64,12 @@ public class UserPaymentStatus {
 	public void setSubscriptionEnd(LocalDate subscriptionEnd) {
 		this.subscriptionEnd = subscriptionEnd;
 	}
+	public PaidStatus getPaidStatus() {
+		return paidStatus;
+	}
+	public void setPaidStatus(PaidStatus paidStatus) {
+		this.paidStatus = paidStatus;
+	}
 	public String getTransactionId() {
 		return transactionId;
 	}
@@ -79,6 +78,8 @@ public class UserPaymentStatus {
 	}
 	
 	
-	
+
+
+
 
 }

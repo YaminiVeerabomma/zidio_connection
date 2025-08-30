@@ -1,111 +1,90 @@
 package com.example.controller;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import com.example.DTO.PaymentDTO;
 import com.example.Enum.PaymentStatus;
 import com.example.Enum.PaymentType;
 import com.example.service.PaymentService;
-
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/payments")
-@CrossOrigin(origins = "*")
-@Tag(name = "Payment API", description = "APIs to manage payments, check status, type, plan usage, and transaction")
+@Tag(name = "Payments", description = "APIs for managing payments and subscriptions")
 public class PaymentController {
 
     @Autowired
     private PaymentService paymentService;
 
-    // ✅ Create Payment
+    // ✅ Create / Make a Payment
     @PostMapping
-    @Operation(summary = "Create Payment", description = "Create a new payment record")
-    public ResponseEntity<PaymentDTO> createPayment(
-            @RequestBody
-            @Parameter(description="Payment object to create", required=true) PaymentDTO dto) {
+    @Operation(summary = "Make a Payment", description = "Create a payment and update subscription if completed")
+    public ResponseEntity<PaymentDTO> makePayment(@RequestBody PaymentDTO dto) {
         return ResponseEntity.ok(paymentService.makePayment(dto));
     }
 
-    // ✅ Get all Payments
+    // ✅ Get All Payments
     @GetMapping
-    @Operation(summary = "Get all Payments", description = "Retrieve all payment records")
+    @Operation(summary = "Get All Payments")
     public ResponseEntity<List<PaymentDTO>> getAllPayments() {
         return ResponseEntity.ok(paymentService.getAllPayments());
     }
 
     // ✅ Get Payment by ID
     @GetMapping("/{id}")
-    @Operation(summary = "Get Payment by ID", description = "Retrieve a payment by its ID")
-    public ResponseEntity<PaymentDTO> getPaymentById(
-            @PathVariable
-            @Parameter(description="ID of the payment", required=true) Long id) {
-        PaymentDTO dto = paymentService.getPaymentById(id);
-        return dto != null ? ResponseEntity.ok(dto) : ResponseEntity.notFound().build();
+    @Operation(summary = "Get Payment by ID")
+    public ResponseEntity<PaymentDTO> getPaymentById(@PathVariable Long id) {
+        return ResponseEntity.ok(paymentService.getPaymentById(id));
     }
 
     // ✅ Get Payment by Transaction ID
     @GetMapping("/transaction/{transactionId}")
-    @Operation(summary = "Get Payment by Transaction ID", description = "Retrieve a payment using its transaction ID")
-    public ResponseEntity<PaymentDTO> getPaymentByTransaction(
-            @PathVariable
-            @Parameter(description="Transaction ID", required=true) String transactionId) {
-        PaymentDTO dto = paymentService.getPaymentByTransactionId(transactionId);
-        return dto != null ? ResponseEntity.ok(dto) : ResponseEntity.notFound().build();
+    @Operation(summary = "Get Payment by Transaction ID")
+    public ResponseEntity<PaymentDTO> getPaymentByTransactionId(@PathVariable String transactionId) {
+        return ResponseEntity.ok(paymentService.getPaymentByTransactionId(transactionId));
     }
 
-    // ✅ Get Payments by User
+    // ✅ Get Payments by User ID
     @GetMapping("/user/{userId}")
-    @Operation(summary = "Get Payments by User", description = "Retrieve all payments for a specific user")
-    public ResponseEntity<List<PaymentDTO>> getPaymentsByUser(
-            @PathVariable
-            @Parameter(description="User ID", required=true) Long userId) {
+    @Operation(summary = "Get Payments by User ID")
+    public ResponseEntity<List<PaymentDTO>> getPaymentsByUser(@PathVariable Long userId) {
         return ResponseEntity.ok(paymentService.getPaymentsByUserId(userId));
     }
 
-    // ✅ Get Payments by Plan
+    // ✅ Get Payments by Plan ID
     @GetMapping("/plan/{planId}")
-    @Operation(summary = "Get Payments by Plan", description = "Retrieve all payments associated with a subscription plan")
-    public ResponseEntity<List<PaymentDTO>> getPaymentsByPlan(
-            @PathVariable
-            @Parameter(description="Plan ID", required=true) Long planId) {
+    @Operation(summary = "Get Payments by Plan ID")
+    public ResponseEntity<List<PaymentDTO>> getPaymentsByPlan(@PathVariable Long planId) {
         return ResponseEntity.ok(paymentService.getPaymentsByPlanId(planId));
     }
 
-    // ✅ Get Payments by Plan and Status
+    // ✅ Get Payments by Plan & Status
     @GetMapping("/plan/{planId}/status/{status}")
-    @Operation(summary = "Get Payments by Plan and Status", description = "Retrieve all payments for a plan filtered by payment status")
-    public ResponseEntity<List<PaymentDTO>> getPaymentsByPlanAndStatus(
-            @PathVariable
-            @Parameter(description="Plan ID", required=true) Long planId,
-            @PathVariable
-            @Parameter(description="Payment Status (e.g., COMPLETED, FAILED, PENDING)", required=true) PaymentStatus status) {
+    @Operation(summary = "Get Payments by Plan and Status")
+    public ResponseEntity<List<PaymentDTO>> getPaymentsByPlanAndStatus(@PathVariable Long planId,
+                                                                       @PathVariable PaymentStatus status) {
         return ResponseEntity.ok(paymentService.getPaymentsByPlanIdAndStatus(planId, status));
     }
 
-    // ✅ Get Payments by User and Payment Type
+    // ✅ Get Payments by User & Type
     @GetMapping("/user/{userId}/type/{type}")
-    @Operation(summary = "Get Payments by User and Type", description = "Retrieve all payments of a specific user filtered by payment type")
-    public ResponseEntity<List<PaymentDTO>> getPaymentsByUserAndType(
-            @PathVariable
-            @Parameter(description="User ID", required=true) Long userId,
-            @PathVariable
-            @Parameter(description="Payment Type (e.g., CARD, NETBANKING, UPI)", required=true) PaymentType type) {
+    @Operation(summary = "Get Payments by User and Payment Type")
+    public ResponseEntity<List<PaymentDTO>> getPaymentsByUserAndType(@PathVariable Long userId,
+                                                                     @PathVariable PaymentType type) {
         return ResponseEntity.ok(paymentService.getPaymentsByUserAndType(userId, type));
     }
 
     // ✅ Delete Payment
     @DeleteMapping("/{id}")
-    @Operation(summary = "Delete Payment", description = "Delete a payment record by its ID")
-    public ResponseEntity<Void> deletePayment(
-            @PathVariable
-            @Parameter(description="Payment ID", required=true) Long id) {
-        return paymentService.deletePayment(id) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+    @Operation(summary = "Delete Payment")
+    public ResponseEntity<String> deletePayment(@PathVariable Long id) {
+        boolean deleted = paymentService.deletePayment(id);
+        return deleted
+                ? ResponseEntity.ok("Payment deleted successfully")
+                : ResponseEntity.badRequest().body("Payment not found");
     }
 }

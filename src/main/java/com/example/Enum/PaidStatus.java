@@ -1,6 +1,9 @@
 package com.example.Enum;
 
 public enum PaidStatus {
-	ACTIVE,EXPIRED,CANCELLED
+	PENDING,    // Payment is initiated but not completed
+    COMPLETED,  // Payment successful
+    FAILED,     // Payment failed
+    CANCELLED   // Payment was cancelled
 
 }

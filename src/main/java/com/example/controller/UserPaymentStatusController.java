@@ -1,65 +1,62 @@
 package com.example.controller;
 
-import java.util.List;
-
+import com.example.DTO.UserPaymentStatusDTO;
+import com.example.Enum.PaidStatus;
+import com.example.service.UserPaymentStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.DTO.UserPaymentStatusDTO;
-import com.example.service.UserPaymentStatusService;
-
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
 
 @RestController
-@RequestMapping("/api/user_subscrptions_Status")
-@Tag(name = "User Payment Status API", description = "APIs for managing user subscription/payment status")
+@RequestMapping("/api/user-payments_status")
 public class UserPaymentStatusController {
 
     @Autowired
-    private UserPaymentStatusService service;
+    private UserPaymentStatusService userPaymentStatusService;
 
+    // ✅ Create or Update Payment
     @PostMapping
-    @Operation(summary = "Create User Payment Status", description = "Create a new payment/subscription status record for a user")
-    public ResponseEntity<UserPaymentStatusDTO> create(
-            @RequestBody 
-            @Parameter(description = "UserPaymentStatus object to create", required = true) UserPaymentStatusDTO dto) {
-        return ResponseEntity.ok(service.create(dto));
+    public ResponseEntity<UserPaymentStatusDTO> savePayment(@RequestBody UserPaymentStatusDTO dto) {
+        return ResponseEntity.ok(userPaymentStatusService.save(dto));
     }
 
-    @GetMapping
-    @Operation(summary = "Get All User Payment Status", description = "Retrieve all user payment/subscription status records")
-    public ResponseEntity<List<UserPaymentStatusDTO>> getAll() {
-        return ResponseEntity.ok(service.getAll());
+    // ✅ Get by User ID
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<UserPaymentStatusDTO> getByUserId(@PathVariable Long userId) {
+        return userPaymentStatusService.getByUserId(userId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/{id}")
-    @Operation(summary = "Get User Payment Status by ID", description = "Retrieve a specific user payment status by its ID")
-    public ResponseEntity<UserPaymentStatusDTO> getById(
-            @Parameter(description = "ID of the payment status", required = true, example = "1")
-            @PathVariable Long id) {
-        UserPaymentStatusDTO dto = service.getById(id);
-        return dto != null ? ResponseEntity.ok(dto) : ResponseEntity.notFound().build();
+    // ✅ Active Subscriptions
+    @GetMapping("/active")
+    public ResponseEntity<List<UserPaymentStatusDTO>> getActiveSubscriptions() {
+        return ResponseEntity.ok(userPaymentStatusService.getActiveSubscriptions());
     }
 
-    @PutMapping("/{id}")
-    @Operation(summary = "Update User Payment Status", description = "Update an existing user payment status by its ID")
-    public ResponseEntity<UserPaymentStatusDTO> update(
-            @Parameter(description = "ID of the payment status to update", required = true, example = "1")
-            @PathVariable Long id, 
-            @RequestBody 
-            @Parameter(description = "Updated UserPaymentStatus object", required = true) UserPaymentStatusDTO dto) {
-        UserPaymentStatusDTO updated = service.update(id, dto);
-        return updated != null ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
+    // ✅ Expired Subscriptions
+    @GetMapping("/expired")
+    public ResponseEntity<List<UserPaymentStatusDTO>> getExpiredSubscriptions() {
+        return ResponseEntity.ok(userPaymentStatusService.getExpiredSubscriptions());
     }
 
-    @DeleteMapping("/{id}")
-    @Operation(summary = "Delete User Payment Status", description = "Delete a user payment status record by its ID")
-    public ResponseEntity<Void> delete(
-            @Parameter(description = "ID of the payment status to delete", required = true, example = "1")
-            @PathVariable Long id) {
-        return service.delete(id) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+    // ✅ Get by Plan ID
+    @GetMapping("/plan/{planId}")
+    public ResponseEntity<List<UserPaymentStatusDTO>> getByPlanId(@PathVariable Long planId) {
+        return ResponseEntity.ok(userPaymentStatusService.getByPlanId(planId));
+    }
+
+    // ✅ Delete by User ID
+    @DeleteMapping("/user/{userId}")
+    public ResponseEntity<Void> deleteByUserId(@PathVariable Long userId) {
+        userPaymentStatusService.deleteByUserId(userId);
+        return ResponseEntity.noContent().build();
+    }
+    // ✅ Get by PaidStatus (example: PAID, UNPAID, PENDING)
+    @GetMapping("/paidStatus/{paidStatus}")
+    public ResponseEntity<List<UserPaymentStatusDTO>> getByPaidStatus(@PathVariable PaidStatus paidStatus) {
+        return ResponseEntity.ok(userPaymentStatusService.getByPaidStatus(paidStatus));
     }
 }
