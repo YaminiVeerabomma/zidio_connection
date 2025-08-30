@@ -9,7 +9,7 @@ import com.example.Enum.JobType;
 import com.example.Enum.RequiredExperience;
 
 @Entity
-@Table(name = "jobPosts")
+@Table(name = "job_Posts")
 public class JobPost {
 
     @Id
