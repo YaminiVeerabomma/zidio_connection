@@ -28,6 +28,7 @@ public class Application {
 
     @Column(name = "job_id", nullable = false)
 	private Long jobId;
+    @Column(name = "resume_url")
 	private String resumeURL;
 
     @Enumerated(EnumType.STRING)
@@ -37,7 +38,7 @@ public class Application {
 	
 	public Application() {}
 	
-	public Application(Long id, Long studentId, Long jobId, Status status, Date appliedDate) {
+	public Application(Long id, Long studentId, Long jobId, String resumeURL,Status status, Date appliedDate) {
 		
 		this.id = id;
 		this.studentId = studentId;
@@ -45,7 +46,9 @@ public class Application {
 		this.resumeURL=resumeURL;
 		this.status = status;
 		this.appliedDate = appliedDate;
+		this.resumeURL = resumeURL;
 	}
+
 	public Long getId() {
 		return id;
 	}

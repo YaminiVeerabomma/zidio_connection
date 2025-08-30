@@ -1,52 +1,70 @@
 package com.example.controller;
 
 import com.example.DTO.ApplicationDTO;
-import com.example.Enum.Status;
+import com.example.DTO.ApplicationRequestDTO;
 import com.example.service.ApplicationService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.tags.Tag;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/applications")
-@Tag(name = "Application API", description = "Endpoints to manage job applications")
+@RequestMapping("api/applications")
 public class ApplicationController {
 
+    private static final Logger log = LoggerFactory.getLogger(ApplicationController.class);
+
     @Autowired
-    private ApplicationService applicaionService;
+    private ApplicationService applicationService;
 
-    @PostMapping(value="/apply", produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Apply for Job", description = "Create a new job application for a student")
-    public ResponseEntity<ApplicationDTO> apply(@RequestBody ApplicationDTO dto) {
-        return ResponseEntity.ok(applicaionService.apply(dto));
+    // Apply
+    @PostMapping
+    public ResponseEntity<ApplicationDTO> apply(@RequestBody ApplicationRequestDTO request) {
+        log.info("📥 Applying: student={}, job={}", request.getStudentId(), request.getJobId());
+        return ResponseEntity.ok(applicationService.apply(request));
     }
 
-    @GetMapping(value="/student/{studentId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Get Applications by Student ID", description = "Retrieve all applications submitted by a specific student")
-    public ResponseEntity<List<ApplicationDTO>> getApplicationByStudentId(
-            @Parameter(description = "ID of the student", required = true) @PathVariable Long studentId) {
-        return ResponseEntity.ok(applicaionService.getApplicationByStudentId(studentId));
+    // Get All
+    @GetMapping
+    public ResponseEntity<List<ApplicationDTO>> getAllApplications() {
+        return ResponseEntity.ok(applicationService.getAllApplications());
     }
 
-    @GetMapping(value="/job/{jobId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Get Applications by Job ID", description = "Retrieve all applications for a specific job")
-    public ResponseEntity<List<ApplicationDTO>> getApplicationByJobId(
-            @Parameter(description = "ID of the job", required = true) @PathVariable Long jobId) {
-        return ResponseEntity.ok(applicaionService.getApplicationByJobId(jobId));
+    // Get by ID
+    @GetMapping("/{id}")
+    public ResponseEntity<ApplicationDTO> getApplicationById(@PathVariable Long id) {
+        return applicationService.getApplicationById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping(value="/{id}/status", produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Update Application Status", description = "Update the status of a specific application")
-    public void updateStatus(
-            @Parameter(description = "ID of the application", required = true) @PathVariable Long id,
-            @Parameter(description = "New status for the application", required = true) @RequestParam Status status) {
-        applicaionService.updateStatus(id, status);
+    // Get by Student
+    @GetMapping("/student/{studentId}")
+    public ResponseEntity<List<ApplicationDTO>> getApplicationsByStudent(@PathVariable Long studentId) {
+        return ResponseEntity.ok(applicationService.getApplicationsByStudent(studentId));
+    }
+
+    // Get by Job
+    @GetMapping("/job/{jobId}")
+    public ResponseEntity<List<ApplicationDTO>> getApplicationsByJob(@PathVariable Long jobId) {
+        return ResponseEntity.ok(applicationService.getApplicationsByJob(jobId));
+    }
+
+    // Update
+    @PutMapping("/{id}")
+    public ResponseEntity<ApplicationDTO> updateApplication(@PathVariable Long id, @RequestBody ApplicationDTO dto) {
+        log.info("✏️ Updating Application {}", id);
+        return ResponseEntity.ok(applicationService.updateApplication(id, dto));
+    }
+
+    // Delete
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteApplication(@PathVariable Long id) {
+        log.warn("🗑️ Deleting Application {}", id);
+        applicationService.deleteApplication(id);
+        return ResponseEntity.noContent().build();
     }
 }
