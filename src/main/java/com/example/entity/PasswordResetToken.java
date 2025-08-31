@@ -1,34 +1,33 @@
 package com.example.entity;
 
+import javax.persistence.*;
 import java.util.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
 @Entity
-//@Table(name = "password_reset")
+@Table(name = "password_reset_tokens")
 public class PasswordResetToken {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, unique = true)
     private String token;
 
+    @Column(nullable = false)
     private String email;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "expiry_date", nullable = false)
     private Date expiryDate;
-	public PasswordResetToken() {}
 
-	public PasswordResetToken(Long id, String token, String email, Date expiryDate) {
-	
-		this.id = id;
-		this.token = token;
-		this.email = email;
-		this.expiryDate = expiryDate;
-	}
+    public PasswordResetToken() {}
+
+    public PasswordResetToken(String token, String email, Date expiryDate) {
+        this.token = token;
+        this.email = email;
+        this.expiryDate = expiryDate;
+    }
 
 	public Long getId() {
 		return id;
@@ -61,7 +60,7 @@ public class PasswordResetToken {
 	public void setExpiryDate(Date expiryDate) {
 		this.expiryDate = expiryDate;
 	}
+    
 
-
-
+  
 }

@@ -48,7 +48,7 @@ public class PaymentService {
             subscription.setTransactionId(saved.getTransactionId());
             subscription.setSubscriptionStart(LocalDate.now());
             subscription.setSubscriptionEnd(LocalDate.now().plusDays(30)); // Example: 30 days validity
-            subscription.setPaidStatus(PaidStatus.ACTIVE);
+            subscription.setPaidStatus(PaidStatus.	PENDING);
 
             userPaymentStatusRepository.save(subscription);
         }

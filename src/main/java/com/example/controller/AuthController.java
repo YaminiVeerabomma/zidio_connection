@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import com.example.DTO.AuthResponse;
+import com.example.DTO.ForgotPasswordRequest;
 import com.example.DTO.LoginRequest;
 import com.example.DTO.RegisterRequest;
 import com.example.DTO.ResetPasswordRequest;
@@ -46,18 +47,18 @@ public class AuthController {
         return ResponseEntity.ok(authService.login(request));
     }
 
-    // ---------------- FORGOT PASSWORD ----------------
+ // ---------------- FORGOT PASSWORD ----------------
     @Operation(summary = "Forgot password", description = "Generates a reset token and sends reset link to email")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Password reset link sent"),
             @ApiResponse(responseCode = "400", description = "Email not registered")
     })
     @PostMapping("/forgot-password")
-    public ResponseEntity<String> forgotPassword(@RequestParam String email) {
-        return ResponseEntity.ok(authService.forgotPassword(email));
+    public ResponseEntity<String> forgotPassword(@RequestBody ForgotPasswordRequest request) {
+        return ResponseEntity.ok(authService.forgotPassword(request.getEmail()));
     }
 
- // ---------------- RESET PASSWORD ----------------
+    // ---------------- RESET PASSWORD ----------------
     @Operation(summary = "Reset password", description = "Resets password using the reset token")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Password reset successfully"),
@@ -67,5 +68,6 @@ public class AuthController {
     public ResponseEntity<String> resetPassword(@RequestBody ResetPasswordRequest request) {
         return ResponseEntity.ok(authService.resetPassword(request.getToken(), request.getNewPassword()));
     }
+
 
 }
