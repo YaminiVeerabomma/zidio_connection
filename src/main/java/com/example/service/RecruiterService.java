@@ -4,18 +4,12 @@ import com.example.DTO.RecruiterDTO;
 import com.example.Enum.Designation;
 import com.example.entity.Recruiter;
 import com.example.entity.User;
+import com.example.exception.UserNotFoundException;
 import com.example.repository.RecruiterRepository;
 import com.example.repository.UserRepository;
 
-import io.swagger.v3.oas.annotations.Operation;
-
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,7 +26,7 @@ public class RecruiterService {
     // 🔹 Create or Update Recruiter
     public RecruiterDTO saveOrUpdateRecruiter(RecruiterDTO dto, Long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
 
         // Check if Recruiter exists for this user
         Recruiter recruiter = recruiterRepository.findById(user.getId())
@@ -47,7 +41,6 @@ public class RecruiterService {
         recruiter.setCompanyDescription(dto.companyDescription);
         recruiter.setCompanyWebsite(dto.companyWebsite);
         recruiter.setCompanyAddress(dto.companyAddress);
-    
         recruiter.setDesignation(dto.designation);
 
         // Save entity
@@ -57,7 +50,7 @@ public class RecruiterService {
     // 🔹 Get Recruiter by ID
     public RecruiterDTO getRecruiterById(Long id) {
         Recruiter recruiter = recruiterRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Recruiter not found with id: " + id));
+                .orElseThrow(() -> new UserNotFoundException("Recruiter not found with id: " + id));
         return convertToDTO(recruiter);
     }
 
@@ -71,15 +64,24 @@ public class RecruiterService {
 
     // 🔹 Delete Recruiter
     public void deleteRecruiter(Long id) {
+        if (!recruiterRepository.existsById(id)) {
+            throw new UserNotFoundException("Recruiter not found with id: " + id);
+        }
         recruiterRepository.deleteById(id);
     }
 
     // 🔹 Get by Designation
     public List<RecruiterDTO> getRecruitersByDesignation(Designation designation) {
-        return recruiterRepository.findByDesignation(designation)
+        List<RecruiterDTO> recruiters = recruiterRepository.findByDesignation(designation)
                 .stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
+
+        if (recruiters.isEmpty()) {
+            throw new UserNotFoundException("No recruiters found with designation: " + designation);
+        }
+
+        return recruiters;
     }
 
     // ========== DTO Converters ==========
@@ -93,7 +95,6 @@ public class RecruiterService {
                 recruiter.getCompanyDescription(),
                 recruiter.getCompanyWebsite(),
                 recruiter.getCompanyAddress(),
-        
                 recruiter.getDesignation()
         );
     }
