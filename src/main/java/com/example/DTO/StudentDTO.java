@@ -8,21 +8,37 @@ import com.example.Enum.PreferredJobLocations;
 
 import java.util.List;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Positive;
+
 public class StudentDTO {
 
     private Long id;
+    @NotBlank(message = "Name is required")
     private String name;
+    @Email(message = "Email must be valid")
     private String email;
+    @Pattern(regexp = "^[0-9]{10}$", message = "Phone must be 10 digits")
     private String phone;
+    @NotBlank(message = "Qualification is required")
     private String qualification;
     private String resumeURL;
+    @NotEmpty(message = "Skills cannot be empty")
     private List<String> skills;
     private String githubURL;
     private String linkedinURL;
     private ExperienceLevel experienceLevel;
     private Gender gender;
+
+    @Min(value = 2000, message = "Graduation year must be >= 2000")
     private Integer graduationYear;
     private List<PreferredJobLocations> preferredJobLocations;  // updated enum list
+
+    @Positive(message = "Expected salary must be positive")
     private Double expectedSalary;
     private NoticePeriod noticePeriod;
     private String projects;

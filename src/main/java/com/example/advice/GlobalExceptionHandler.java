@@ -14,6 +14,7 @@ import com.example.exception.EmailNotRegisteredException;
 import com.example.exception.InvalidCredentialsException;
 import com.example.exception.InvalidEmailException;
 import com.example.exception.UserNotFoundException;
+import com.example.exception.StudentNotFoundException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -24,6 +25,14 @@ public class GlobalExceptionHandler {
         Map<String, String> response = new HashMap<>();
         response.put("message", "Invalid login credentials");
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+    }
+
+    // ----- STUDENT NOT FOUND -----
+    @ExceptionHandler(StudentNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleStudentNotFound(StudentNotFoundException ex) {
+        Map<String, String> response = new HashMap<>();
+        response.put("message", ex.getMessage()); // e.g. "Student not found with id 5"
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
     // ----- VALIDATION ERRORS -----
@@ -43,13 +52,13 @@ public class GlobalExceptionHandler {
         response.put("message", ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
+
     @ExceptionHandler({InvalidEmailException.class, EmailNotRegisteredException.class})
     public ResponseEntity<Map<String, String>> handleEmailExceptions(RuntimeException ex) {
         Map<String, String> response = new HashMap<>();
         response.put("message", ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
-
 
     // ----- FALLBACK 500 ERROR -----
     @ExceptionHandler(Exception.class)
