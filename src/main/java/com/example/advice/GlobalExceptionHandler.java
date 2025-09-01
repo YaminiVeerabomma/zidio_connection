@@ -1,70 +1,64 @@
 package com.example.advice;
 
-import java.util.HashMap;
-import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.example.exception.EmailNotRegisteredException;
-import com.example.exception.InvalidCredentialsException;
-import com.example.exception.InvalidEmailException;
-import com.example.exception.UserNotFoundException;
-import com.example.exception.StudentNotFoundException;
 
-@RestControllerAdvice
+import com.example.exception.*;
+
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
+
+@ControllerAdvice
 public class GlobalExceptionHandler {
 
-    // ----- LOGIN / AUTH ERRORS -----
-    @ExceptionHandler({UserNotFoundException.class, InvalidCredentialsException.class})
-    public ResponseEntity<Map<String, String>> handleAuthExceptions() {
-        Map<String, String> response = new HashMap<>();
-        response.put("message", "Invalid login credentials");
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+    // Handle User Not Found
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<Map<String, Object>> handleUserNotFound(UserNotFoundException ex) {
+        return buildResponse(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 
-    // ----- STUDENT NOT FOUND -----
-    @ExceptionHandler(StudentNotFoundException.class)
-    public ResponseEntity<Map<String, String>> handleStudentNotFound(StudentNotFoundException ex) {
-        Map<String, String> response = new HashMap<>();
-        response.put("message", ex.getMessage()); // e.g. "Student not found with id 5"
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    // Handle Email Already Exists
+    @ExceptionHandler(EmailAlreadyExistsException.class)
+    public ResponseEntity<Map<String, Object>> handleEmailExists(EmailAlreadyExistsException ex) {
+        return buildResponse(HttpStatus.CONFLICT, ex.getMessage());
     }
 
-    // ----- VALIDATION ERRORS -----
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getFieldErrors().forEach((FieldError error) -> {
-            errors.put(error.getField(), error.getDefaultMessage());
-        });
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+    // Handle Invalid Credentials
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<Map<String, Object>> handleInvalidCredentials(InvalidCredentialsException ex) {
+        return buildResponse(HttpStatus.UNAUTHORIZED, ex.getMessage());
     }
 
-    // ----- GENERIC 400 ERROR -----
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<Map<String, String>> handleIllegalArgument(IllegalArgumentException ex) {
-        Map<String, String> response = new HashMap<>();
-        response.put("message", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    // Handle Invalid Reset Token
+    @ExceptionHandler(InvalidResetTokenException.class)
+    public ResponseEntity<Map<String, Object>> handleInvalidToken(InvalidResetTokenException ex) {
+        return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
-    @ExceptionHandler({InvalidEmailException.class, EmailNotRegisteredException.class})
-    public ResponseEntity<Map<String, String>> handleEmailExceptions(RuntimeException ex) {
-        Map<String, String> response = new HashMap<>();
-        response.put("message", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    // Handle Token Expired
+    @ExceptionHandler(TokenExpiredException.class)
+    public ResponseEntity<Map<String, Object>> handleExpiredToken(TokenExpiredException ex) {
+        return buildResponse(HttpStatus.GONE, ex.getMessage());
     }
 
-    // ----- FALLBACK 500 ERROR -----
+    // Fallback for all other exceptions
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Map<String, String>> handleOtherExceptions(Exception ex) {
-        Map<String, String> response = new HashMap<>();
-        response.put("message", "Something went wrong");
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+    public ResponseEntity<Map<String, Object>> handleGeneral(Exception ex) {
+        return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Unexpected error: " + ex.getMessage());
+    }
+
+    // Utility method to build response
+    private ResponseEntity<Map<String, Object>> buildResponse(HttpStatus status, String message) {
+        Map<String, Object> body = new HashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("status", status.value());
+        body.put("error", status.getReasonPhrase());
+        body.put("message", message);
+        return new ResponseEntity<>(body, status);
     }
 }

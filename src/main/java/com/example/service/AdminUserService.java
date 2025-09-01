@@ -10,6 +10,7 @@ import com.example.DTO.AdminUserDTO;
 import com.example.Enum.Role;
 import com.example.entity.AdminUser;
 import com.example.entity.User;
+import com.example.exception.UserNotFoundException;
 import com.example.repository.AdminUserRepository;
 import com.example.repository.UserRepository;
 
@@ -22,17 +23,15 @@ public class AdminUserService {
     @Autowired
     private UserRepository userRepository;
 
-    // Create AdminUser
+    // 🔹 Create AdminUser
     public AdminUserDTO createAdmin(AdminUserDTO dto) {
-        // Find linked User by email
         User user = userRepository.findByEmail(dto.getEmail())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found with email: " + dto.getEmail()));
 
         // Assign ADMIN role
         user.setRole(Role.ADMIN);
         userRepository.save(user);
 
-        // Map DTO to Entity
         AdminUser admin = new AdminUser();
         admin.setUser(user);
         admin.setName(dto.getName());
@@ -41,71 +40,71 @@ public class AdminUserService {
         admin.setActive(true);
         admin.setBlocked(false);
 
-        admin = adminUserRepository.save(admin);
-        return toDTO(admin);
+        return toDTO(adminUserRepository.save(admin));
     }
 
+    // 🔹 Update AdminUser
     public AdminUserDTO updateAdmin(Long id, AdminUserDTO dto) {
         AdminUser admin = adminUserRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Admin not found"));
+                .orElseThrow(() -> new UserNotFoundException("Admin not found with id: " + id));
 
         admin.setName(dto.getName());
         admin.setEmail(dto.getEmail());
 
-        // Update role
-        if(dto.getRole() != null) {
+        if (dto.getRole() != null) {
             admin.setRole(dto.getRole());
         }
 
-        // Update blocked status
         admin.setBlocked(dto.isBlocked());
-
-        // Update active status if needed
         admin.setActive(dto.isActive());
 
-        adminUserRepository.save(admin);
-
-        return toDTO(admin);
+        return toDTO(adminUserRepository.save(admin));
     }
 
-
-    // Existing methods: getAllUsers, blockUser, unBlockUser, getUserByRole, updateStatus
+    // 🔹 Get All Admin Users
     public List<AdminUserDTO> getAllUsers() {
-        return adminUserRepository.findAll().stream().map(this::toDTO).collect(Collectors.toList());
+        return adminUserRepository.findAll()
+                .stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
     }
 
+    // 🔹 Block User
     public AdminUserDTO blockUser(Long id) {
-        AdminUser user = adminUserRepository.findById(id).orElse(null);
-        if(user != null) {
-            user.setBlocked(true);
-            adminUserRepository.save(user);
-            return toDTO(user);
-        }
-        return null;
+        AdminUser user = adminUserRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
+
+        user.setBlocked(true);
+        return toDTO(adminUserRepository.save(user));
     }
 
+    // 🔹 Unblock User
     public AdminUserDTO unBlockUser(Long id) {
-        AdminUser user = adminUserRepository.findById(id).orElse(null);
-        if(user != null) {
-            user.setBlocked(false);
-            adminUserRepository.save(user);
-            return toDTO(user);
-        }
-        return null;
+        AdminUser user = adminUserRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
+
+        user.setBlocked(false);
+        return toDTO(adminUserRepository.save(user));
     }
 
+    // 🔹 Get Users by Role
     public List<AdminUserDTO> getUserByRole(Role role) {
-        return adminUserRepository.findByRole(role).stream().map(this::toDTO).collect(Collectors.toList());
+        return adminUserRepository.findByRole(role)
+                .stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
     }
 
+    // 🔹 Update Active Status
     public AdminUserDTO updateStatus(Long id, boolean isActive) {
         AdminUser user = adminUserRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
+
         user.setActive(isActive);
-        adminUserRepository.save(user);
-        return toDTO(user);
+        return toDTO(adminUserRepository.save(user));
     }
 
+    // 🔹 Convert Entity to DTO
     private AdminUserDTO toDTO(AdminUser admin) {
         return new AdminUserDTO(
                 admin.getId(),
