@@ -6,6 +6,8 @@ import com.example.Enum.Gender;
 import com.example.Enum.NoticePeriod;
 import com.example.Enum.PreferredJobLocations;
 import com.example.entity.Student;
+import com.example.entity.User;
+import com.example.exception.StudentNotFoundException;
 import com.example.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -64,45 +66,48 @@ public class StudentService {
         );
     }
 
-    // ----------------- CRUD -----------------
-    public StudentDTO createStudent(StudentDTO studentDTO) {
-        Student student = convertToEntity(studentDTO);
-        Student saved = studentRepository.save(student);
+ // ----------------- CRUD -----------------
+//    public StudentDTO createStudent(StudentDTO studentDTO) {
+//        Student student = convertToEntity(studentDTO);
+//        Student saved = studentRepository.save(student);
+//        return convertToDTO(saved);
+//    }
+
+    public StudentDTO updateStudent(Long id, StudentDTO dto) {
+        Student existing = studentRepository.findById(id)
+            .orElseThrow(() -> new StudentNotFoundException(id)); // ✅ throws exception if not found
+
+        // ✅ Update only if found
+        existing.setName(dto.getName());
+        existing.setEmail(dto.getEmail());
+        existing.setPhone(dto.getPhone());
+        existing.setQualification(dto.getQualification());
+        existing.setResumeURL(dto.getResumeURL());
+        existing.setSkills(dto.getSkills());
+        existing.setGithubURL(dto.getGithubURL());
+        existing.setLinkedinURL(dto.getLinkedinURL());
+        existing.setExperienceLevel(dto.getExperienceLevel());
+        existing.setGender(dto.getGender());
+        existing.setGraduationYear(dto.getGraduationYear());
+        existing.setPreferredJobLocations(dto.getPreferredJobLocations());
+        existing.setExpectedSalary(dto.getExpectedSalary());
+        existing.setNoticePeriod(dto.getNoticePeriod());
+        existing.setProjects(dto.getProjects());
+
+        Student saved = studentRepository.save(existing);
         return convertToDTO(saved);
     }
 
-    public StudentDTO updateStudent(Long id, StudentDTO studentDTO) {
-        Optional<Student> existingOpt = studentRepository.findById(id);
-        if (existingOpt.isPresent()) {
-            Student existing = existingOpt.get();
-            existing.setName(studentDTO.getName());
-            existing.setEmail(studentDTO.getEmail());
-            existing.setPhone(studentDTO.getPhone());
-            existing.setQualification(studentDTO.getQualification());
-            existing.setResumeURL(studentDTO.getResumeURL());
-            existing.setSkills(studentDTO.getSkills());
-            existing.setGithubURL(studentDTO.getGithubURL());
-            existing.setLinkedinURL(studentDTO.getLinkedinURL());
-            existing.setExperienceLevel(studentDTO.getExperienceLevel());
-            existing.setGender(studentDTO.getGender());
-            existing.setGraduationYear(studentDTO.getGraduationYear());
-            existing.setPreferredJobLocations(studentDTO.getPreferredJobLocations());
-            existing.setExpectedSalary(studentDTO.getExpectedSalary());
-            existing.setNoticePeriod(studentDTO.getNoticePeriod());
-            existing.setProjects(studentDTO.getProjects());
-
-            Student updated = studentRepository.save(existing);
-            return convertToDTO(updated);
-        }
-        return null;
-    }
-
     public void deleteStudent(Long id) {
+    	 if (!studentRepository.existsById(id))
+             throw new StudentNotFoundException(id);
         studentRepository.deleteById(id);
     }
 
-    public Optional<StudentDTO> getStudentById(Long id) {
-        return studentRepository.findById(id).map(this::convertToDTO);
+    public StudentDTO getStudentById(Long id) {
+        return studentRepository.findById(id)
+                .map(this::convertToDTO)
+                .orElseThrow(() -> new StudentNotFoundException(id));
     }
 
     public List<StudentDTO> getAllStudents() {

@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/api/students")
 @Tag(name = "Student API", description = "CRUD and filters for Students")
@@ -25,13 +27,6 @@ public class StudentController {
     @Autowired
     private StudentService studentService;
 
-    // ----------------- Create -----------------
-    @Operation(summary = "Create a new student", description = "Add a new student profile")
-    @ApiResponse(responseCode = "200", description = "Student created successfully")
-    @PostMapping
-    public ResponseEntity<StudentDTO> createStudent(@RequestBody StudentDTO studentDTO) {
-        return ResponseEntity.ok(studentService.createStudent(studentDTO));
-    }
 
     // ----------------- Update -----------------
     @Operation(summary = "Update student", description = "Update existing student details")
@@ -56,10 +51,9 @@ public class StudentController {
     @ApiResponse(responseCode = "200", description = "Student found")
     @GetMapping("/{id}")
     public ResponseEntity<StudentDTO> getStudentById(@PathVariable Long id) {
-        return studentService.getStudentById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    	 return ResponseEntity.ok(studentService.getStudentById(id));
     }
+ 
 
     // ----------------- Get All -----------------
     @Operation(summary = "Get all students", description = "Retrieve all students")
