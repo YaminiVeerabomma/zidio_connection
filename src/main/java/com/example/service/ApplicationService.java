@@ -4,6 +4,7 @@ import com.example.DTO.ApplicationDTO;
 import com.example.DTO.ApplicationRequestDTO;
 import com.example.Enum.Status;
 import com.example.entity.Application;
+import com.example.exception.ResourceNotFoundException;
 import com.example.repository.ApplicationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,9 @@ public class ApplicationService {
 
     // Apply for a job
     public ApplicationDTO apply(ApplicationRequestDTO request) {
+    	 if (request.getStudentId() == null || request.getJobId() == null) {
+             throw new IllegalArgumentException("StudentId and JobId are required to apply");
+         }
         Application application = new Application();
         application.setStudentId(request.getStudentId());
         application.setJobId(request.getJobId());
@@ -53,11 +57,19 @@ public class ApplicationService {
 
     // Get by ID
     public Optional<ApplicationDTO> getApplicationById(Long id) {
+    	 Optional<Application> apps = applicationRepository.findById(id);
+         if (apps.isEmpty()) {
+             throw new ResourceNotFoundException("No applications found for studentId: " + id);
+         }
         return applicationRepository.findById(id).map(this::convertToDTO);
     }
 
     // Get by Student
     public List<ApplicationDTO> getApplicationsByStudent(Long studentId) {
+    	 List<Application> apps = applicationRepository.findByStudentId(studentId);
+         if (apps.isEmpty()) {
+             throw new ResourceNotFoundException("No applications found for studentId: " + studentId);
+         }
         return applicationRepository.findByStudentId(studentId)
                 .stream()
                 .map(this::convertToDTO)
@@ -66,6 +78,10 @@ public class ApplicationService {
 
     // Get by Job
     public List<ApplicationDTO> getApplicationsByJob(Long jobId) {
+    	List<Application> apps = applicationRepository.findByJobId(jobId);
+        if (apps.isEmpty()) {
+            throw new ResourceNotFoundException("No applications found for jobId: " + jobId);
+        }
         return applicationRepository.findByJobId(jobId)
                 .stream()
                 .map(this::convertToDTO)
@@ -74,6 +90,8 @@ public class ApplicationService {
 
     // Update
     public ApplicationDTO updateApplication(Long id, ApplicationDTO dto) {
+    	Application existing = applicationRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Application not found with id: " + id));
         Application application = new Application();
         application.setId(id);
         application.setStudentId(dto.getStudentId());
@@ -87,6 +105,9 @@ public class ApplicationService {
 
     // Delete
     public void deleteApplication(Long id) {
+    	 if (!applicationRepository.existsById(id)) {
+             throw new ResourceNotFoundException("Application not found with id: " + id);
+         }
         applicationRepository.deleteById(id);
     }
 }
