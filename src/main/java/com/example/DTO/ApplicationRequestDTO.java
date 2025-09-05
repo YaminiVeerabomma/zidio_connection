@@ -1,10 +1,20 @@
 package com.example.DTO;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
 public class ApplicationRequestDTO {
 
-    private Long studentId;
-    private Long jobId;
-    private String resumeURL;
+	 @NotNull(message = "Student ID is required")
+	 public  Long studentId;
+
+	    @NotNull(message = "Job ID is required")
+	    public  Long jobId;
+
+	    @NotBlank(message = "Resume URL cannot be blank")
+	    @Pattern(regexp = "^(http|https)://.*$", message = "Resume URL must be a valid link")
+	    public  String resumeURL;
 
     public ApplicationRequestDTO() {}
 

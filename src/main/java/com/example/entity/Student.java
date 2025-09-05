@@ -6,6 +6,7 @@ import com.example.Enum.NoticePeriod;
 import com.example.Enum.PreferredJobLocations;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.persistence.CollectionTable;
@@ -14,6 +15,7 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.MapsId;
@@ -37,10 +39,16 @@ public class Student {
 
     private Integer graduationYear;
 
-    @ElementCollection
+//    @ElementCollection
+//    @CollectionTable(name = "student_skills", joinColumns = @JoinColumn(name = "student_id"))
+//    @Column(name = "skill")
+//    private List<String> skills;
+    @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "student_skills", joinColumns = @JoinColumn(name = "student_id"))
     @Column(name = "skill")
-    private List<String> skills;
+    
+    private Set<String> skills;   // ✅ Changed from List to Set
+
 
 
     @Enumerated(EnumType.STRING)
@@ -55,11 +63,17 @@ public class Student {
 
 
 
-@ElementCollection(targetClass = PreferredJobLocations.class)
-@CollectionTable(name = "student_preferred_locations", joinColumns = @JoinColumn(name = "student_id"))
-@Column(name = "preferred_job_location")
-@Enumerated(EnumType.STRING)
-    private List<PreferredJobLocations> preferredJobLocations;
+//@ElementCollection(targetClass = PreferredJobLocations.class)
+//@CollectionTable(name = "student_preferred_locations", joinColumns = @JoinColumn(name = "student_id"))
+//@Column(name = "preferred_job_location")
+//@Enumerated(EnumType.STRING)
+//    private List<PreferredJobLocations> preferredJobLocations;
+
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "student_preferred_locations", joinColumns = @JoinColumn(name = "student_id"))
+    @Column(name = "preferred_job_location")
+    @Enumerated(EnumType.STRING)
+    private Set<PreferredJobLocations> preferredJobLocations;   // ✅ Changed from List to Set
 
     private Double expectedSalary;
 
@@ -82,9 +96,9 @@ public class Student {
         // JPA requires no-arg constructor
     }
     public Student(Long id, String name, String email, String phone, String qualification,
-            String resumeURL, List<String> skills, String githubURL, String linkedinURL,
+            String resumeURL, Set<String> skills, String githubURL, String linkedinURL,
             ExperienceLevel experienceLevel, Gender gender, Integer graduationYear,
-            List<PreferredJobLocations> preferredJobLocations, Double expectedSalary,
+            Set<PreferredJobLocations> preferredJobLocations, Double expectedSalary,
             NoticePeriod noticePeriod, String projects,User user) {
 
 this.id = id;
@@ -126,8 +140,8 @@ public void setQualification(String qualification) { this.qualification = qualif
 public String getResumeURL() { return resumeURL; }
 public void setResumeURL(String resumeURL) { this.resumeURL = resumeURL; }
 
-public List<String> getSkills() { return skills; }
-public void setSkills(List<String> skills) { this.skills = skills; }
+public Set<String> getSkills() { return skills; }
+public void setSkills(Set<String> skills) { this.skills = skills; }
 
 public String getGithubURL() { return githubURL; }
 public void setGithubURL(String githubURL) { this.githubURL = githubURL; }
@@ -144,8 +158,8 @@ public void setGender(Gender gender) { this.gender = gender; }
 public Integer getGraduationYear() { return graduationYear; }
 public void setGraduationYear(Integer graduationYear) { this.graduationYear = graduationYear; }
 
-public List<PreferredJobLocations> getPreferredJobLocations() { return preferredJobLocations; }
-public void setPreferredJobLocations(List<PreferredJobLocations> preferredJobLocations) { this.preferredJobLocations = preferredJobLocations; }
+public Set<PreferredJobLocations> getPreferredJobLocations() { return preferredJobLocations; }
+public void setPreferredJobLocations(Set<PreferredJobLocations> preferredJobLocations) { this.preferredJobLocations = preferredJobLocations; }
 
 public Double getExpectedSalary() { return expectedSalary; }
 public void setExpectedSalary(Double expectedSalary) { this.expectedSalary = expectedSalary; }
