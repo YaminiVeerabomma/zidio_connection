@@ -1,13 +1,26 @@
 package com.example.DTO;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 import com.example.Enum.Role;
 
 public class AdminUserDTO {
 	
 	public Long id;
-	public String name;
-	public String email;
-	public Role role;
+
+	  @NotBlank(message = "Name cannot be empty")
+	    @Size(min = 2, max = 50, message = "Name must be between 2–50 characters")
+	    public String name;
+
+	    @NotBlank(message = "Email cannot be empty")
+	    @Email(message = "Invalid email format")
+	    public String email;
+
+	    @NotNull(message = "Role must be provided")
+	    public Role role;
 	public boolean active;
 	public boolean blocked;
 	

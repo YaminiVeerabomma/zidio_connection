@@ -1,15 +1,31 @@
 package com.example.DTO;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
+
 public class SubscriptionPlanDTO {
 
 	
 	public Long id;
-	public String name;
-	public Double price;
-	public String description;
-	public Integer durationInDays;
-	public String rozorpayorderId;
-	public String rozorpayPaymentId;
+    @NotBlank(message = "Plan name cannot be blank")
+    public  String name;
+
+    @NotNull(message = "Price cannot be null")
+    @Positive(message = "Price must be greater than 0")
+    public Double price;
+
+    @NotBlank(message = "Description cannot be blank")
+    @Size(min = 10, message = "Description must be at least 10 characters long")
+    public String description;
+
+    @NotNull(message = "Duration is required")
+    @Min(value = 1, message = "Duration must be at least 1 day")
+    public  Integer durationInDays;
+    public  String rozorpayorderId;
+    public String rozorpayPaymentId;
 	
 	
 	public SubscriptionPlanDTO() {}

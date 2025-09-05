@@ -5,8 +5,10 @@ import com.example.Enum.Gender;
 import com.example.Enum.NoticePeriod;
 
 import com.example.Enum.PreferredJobLocations;
+import com.example.entity.User;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
@@ -17,56 +19,59 @@ import javax.validation.constraints.Positive;
 
 public class StudentDTO {
 
-    private Long id;
+	public  Long id;
     @NotBlank(message = "Name is required")
-    private String name;
+    public String name;
     @Email(message = "Email must be valid")
-    private String email;
+    public  String email;
     @Pattern(regexp = "^[0-9]{10}$", message = "Phone must be 10 digits")
-    private String phone;
+    public  String phone;
     @NotBlank(message = "Qualification is required")
-    private String qualification;
-    private String resumeURL;
+    public  String qualification;
+    public  String resumeURL;
     @NotEmpty(message = "Skills cannot be empty")
-    private List<String> skills;
-    private String githubURL;
-    private String linkedinURL;
-    private ExperienceLevel experienceLevel;
-    private Gender gender;
+    public  Set<String> skills;
+    public  String githubURL;
+    public  String linkedinURL;
+    public  ExperienceLevel experienceLevel;
+    public  Gender gender;
 
     @Min(value = 2000, message = "Graduation year must be >= 2000")
-    private Integer graduationYear;
-    private List<PreferredJobLocations> preferredJobLocations;  // updated enum list
+    public  Integer graduationYear;
+    public  Set<PreferredJobLocations> preferredJobLocations;  // updated enum list
 
     @Positive(message = "Expected salary must be positive")
-    private Double expectedSalary;
-    private NoticePeriod noticePeriod;
-    private String projects;
+    public  Double expectedSalary;
+    public  NoticePeriod noticePeriod;
+    public  String projects;
     public StudentDTO() {}
     // ------------------- Constructor -------------------
     public StudentDTO(Long id, String name, String email, String phone, String qualification,
-                      String resumeURL, List<String> skills, String githubURL, String linkedinURL,
-                      ExperienceLevel experienceLevel, Gender gender, Integer graduationYear,
-                      List<PreferredJobLocations> preferredJobLocations, Double expectedSalary,
-                      NoticePeriod noticePeriod, String projects) {
+            String resumeURL, Set<String> skills, String githubURL, String linkedinURL,
+            ExperienceLevel experienceLevel, Gender gender, Integer graduationYear,
+            Set<PreferredJobLocations> preferredJobLocations, Double expectedSalary,
+            NoticePeriod noticePeriod, String projects,User user) {
 
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.phone = phone;
-        this.qualification = qualification;
-        this.resumeURL = resumeURL;
-        this.skills = skills;
-        this.githubURL = githubURL;
-        this.linkedinURL = linkedinURL;
-        this.experienceLevel = experienceLevel;
-        this.gender = gender;
-        this.graduationYear = graduationYear;
-        this.preferredJobLocations = preferredJobLocations;
-        this.expectedSalary = expectedSalary;
-        this.noticePeriod = noticePeriod;
-        this.projects = projects;
-    }
+this.id = id;
+this.name = name;
+this.email = email;
+this.phone = phone;
+this.qualification = qualification;
+this.resumeURL = resumeURL;
+this.skills = skills;
+this.githubURL = githubURL;
+this.linkedinURL = linkedinURL;
+this.experienceLevel = experienceLevel;
+this.gender = gender;
+this.graduationYear = graduationYear;
+this.preferredJobLocations = preferredJobLocations;
+this.expectedSalary = expectedSalary;
+this.noticePeriod = noticePeriod;
+this.projects = projects;
+
+}
+
+
 
     // ------------------- Getters & Setters -------------------
     public Long getId() { return id; }
@@ -87,8 +92,8 @@ public class StudentDTO {
     public String getResumeURL() { return resumeURL; }
     public void setResumeURL(String resumeURL) { this.resumeURL = resumeURL; }
 
-    public List<String> getSkills() { return skills; }
-    public void setSkills(List<String> skills) { this.skills = skills; }
+    public Set<String> getSkills() { return skills; }
+    public void setSkills(Set<String> skills) { this.skills = skills; }
 
     public String getGithubURL() { return githubURL; }
     public void setGithubURL(String githubURL) { this.githubURL = githubURL; }
@@ -105,8 +110,8 @@ public class StudentDTO {
     public Integer getGraduationYear() { return graduationYear; }
     public void setGraduationYear(Integer graduationYear) { this.graduationYear = graduationYear; }
 
-    public List<PreferredJobLocations> getPreferredJobLocations() { return preferredJobLocations; }
-    public void setPreferredJobLocations(List<PreferredJobLocations> preferredJobLocations) { this.preferredJobLocations = preferredJobLocations; }
+    public Set<PreferredJobLocations> getPreferredJobLocations() { return preferredJobLocations; }
+    public void setPreferredJobLocations(Set<PreferredJobLocations> preferredJobLocations) { this.preferredJobLocations = preferredJobLocations; }
 
     public Double getExpectedSalary() { return expectedSalary; }
     public void setExpectedSalary(Double expectedSalary) { this.expectedSalary = expectedSalary; }

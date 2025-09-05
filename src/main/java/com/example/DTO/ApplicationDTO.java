@@ -1,16 +1,32 @@
 package com.example.DTO;
 
 import java.util.Date;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PastOrPresent;
+import javax.validation.constraints.Pattern;
+
 import com.example.Enum.Status;
 
 public class ApplicationDTO {
 	
-	private Long id;
-	private Long studentId;
-	private Long jobId;
-	private String resumeURL;
-	private Status status;
-	private Date appliedDate;
+	public Long id;
+	  @NotNull(message = "Student ID is required")
+	  public  Long studentId;
+
+	    @NotNull(message = "Job ID is required")
+	    public  Long jobId;
+
+	    @NotBlank(message = "Resume URL cannot be blank")
+	    @Pattern(regexp = "^(http|https)://.*$", message = "Resume URL must be a valid link")
+	    public  String resumeURL;
+
+	    @NotNull(message = "Status must be provided")
+	    public  Status status;
+
+	    @PastOrPresent(message = "Applied date cannot be in the future")
+	    public  Date appliedDate;
 
 	// Constructor
 	public ApplicationDTO(Long id, Long studentId, Long jobId, String resumeURL, Status status, Date appliedDate) {

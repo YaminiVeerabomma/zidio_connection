@@ -4,17 +4,32 @@ package com.example.DTO;
 
 import java.time.LocalDate;
 
+import javax.validation.constraints.Future;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 import com.example.Enum.PaidStatus;
 public class UserPaymentStatusDTO {
 	
 	public Long id;
-	public Long planId;
-	public Long userId;
-	public LocalDate subscriptionStart;
-	public LocalDate subscriptionEnd;
-	public PaidStatus paidStatus;
-	  public String transactionId;
-	
+	@NotNull(message = "Plan ID cannot be null")
+    public Long planId;
+
+    @NotNull(message = "User ID cannot be null")
+    public Long userId;
+
+    @NotNull(message = "Subscription start date cannot be null")
+    public LocalDate subscriptionStart;
+
+    @NotNull(message = "Subscription end date cannot be null")
+    @Future(message = "Subscription end date must be in the future")
+    public LocalDate subscriptionEnd;
+
+    @NotNull(message = "Paid status is required")
+    public PaidStatus paidStatus;
+
+    @NotBlank(message = "Transaction ID cannot be blank")
+    public String transactionId;
 
 	public UserPaymentStatusDTO() {}
 	public UserPaymentStatusDTO(Long id,Long planId,Long userId,LocalDate subscriptionStart,LocalDate subscriptionEnd,PaidStatus paidstatus,   String transactionId) {

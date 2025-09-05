@@ -38,7 +38,8 @@ public class StudentService {
                 student.getPreferredJobLocations(),
                 student.getExpectedSalary(),
                 student.getNoticePeriod(),
-                student.getProjects()
+                student.getProjects(),
+                null
         );
     }
 

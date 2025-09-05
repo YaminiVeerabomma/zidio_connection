@@ -1,7 +1,11 @@
 package com.example.DTO;
 
+import javax.validation.constraints.Email;
+
 public class ForgotPasswordRequest {
-    private String email;
+
+    @Email(message = "Invalid email format")
+    public  String email;
 
     public ForgotPasswordRequest() {
         // no-arg constructor for Jackson
