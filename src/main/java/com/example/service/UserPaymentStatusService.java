@@ -3,13 +3,13 @@ package com.example.service;
 import com.example.DTO.UserPaymentStatusDTO;
 import com.example.Enum.PaidStatus;
 import com.example.entity.UserPaymentStatus;
+import com.example.exception.UserPaymentStatusNotFoundException;
 import com.example.repository.UserPaymentStatusRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -50,37 +50,73 @@ public class UserPaymentStatusService {
     public UserPaymentStatusDTO save(UserPaymentStatusDTO dto) {
         UserPaymentStatus entity = convertToEntity(dto);
         UserPaymentStatus saved = userPaymentStatusRepository.save(entity);
-        return convertToDTO(saved);   // ✅ FIXED: pass entity, not dto
+        return convertToDTO(saved);
     }
 
     // ✅ Get by userId
-    public Optional<UserPaymentStatusDTO> getByUserId(Long userId) {
-        return userPaymentStatusRepository.findByUserId(userId).map(this::convertToDTO);
+    public UserPaymentStatusDTO getByUserId(Long userId) {
+        return userPaymentStatusRepository.findByUserId(userId)
+                .map(this::convertToDTO)
+                .orElseThrow(() -> new UserPaymentStatusNotFoundException(
+                        "No payment status found for userId: " + userId
+                ));
     }
 
     // ✅ Active subscriptions
     public List<UserPaymentStatusDTO> getActiveSubscriptions() {
-        return userPaymentStatusRepository.findBySubscriptionEndAfter(LocalDate.now())
-                .stream().map(this::convertToDTO).collect(Collectors.toList());
+        List<UserPaymentStatusDTO> subscriptions = userPaymentStatusRepository
+                .findBySubscriptionEndAfter(LocalDate.now())
+                .stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+
+        if (subscriptions.isEmpty()) {
+            throw new UserPaymentStatusNotFoundException("No active subscriptions found");
+        }
+        return subscriptions;
     }
 
     // ✅ Expired subscriptions
     public List<UserPaymentStatusDTO> getExpiredSubscriptions() {
-        return userPaymentStatusRepository.findBySubscriptionEndBefore(LocalDate.now())
-                .stream().map(this::convertToDTO).collect(Collectors.toList());
+        List<UserPaymentStatusDTO> subscriptions = userPaymentStatusRepository
+                .findBySubscriptionEndBefore(LocalDate.now())
+                .stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+
+        if (subscriptions.isEmpty()) {
+            throw new UserPaymentStatusNotFoundException("No expired subscriptions found");
+        }
+        return subscriptions;
     }
 
     // ✅ By planId
     public List<UserPaymentStatusDTO> getByPlanId(Long planId) {
-        return userPaymentStatusRepository.findByPlanId(planId)
+        List<UserPaymentStatusDTO> plans = userPaymentStatusRepository.findByPlanId(planId)
                 .stream().map(this::convertToDTO).collect(Collectors.toList());
+
+        if (plans.isEmpty()) {
+            throw new UserPaymentStatusNotFoundException("No subscriptions found for planId: " + planId);
+        }
+        return plans;
     }
 
     // ✅ Delete by userId
     public void deleteByUserId(Long userId) {
+        if (!userPaymentStatusRepository.existsByUserId(userId)) {
+            throw new UserPaymentStatusNotFoundException("No payment record found for userId: " + userId);
+        }
         userPaymentStatusRepository.deleteByUserId(userId);
     }
+
+    // ✅ By paid status
     public List<UserPaymentStatusDTO> getByPaidStatus(PaidStatus paidStatus) {
-        return   userPaymentStatusRepository.findByPaidStatus(paidStatus).stream().map(this::convertToDTO).collect(Collectors.toList());
+        List<UserPaymentStatusDTO> payments = userPaymentStatusRepository.findByPaidStatus(paidStatus)
+                .stream().map(this::convertToDTO).collect(Collectors.toList());
+
+        if (payments.isEmpty()) {
+            throw new UserPaymentStatusNotFoundException("No payments found with status: " + paidStatus);
+        }
+        return payments;
     }
 }
