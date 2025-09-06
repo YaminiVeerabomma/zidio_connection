@@ -180,6 +180,8 @@ public class JobPost {
 	public void setNumberOfVacancies(Integer numberOfVacancies) {
 		this.numberOfVacancies = numberOfVacancies;
 	}
+
+	
 	
 
 

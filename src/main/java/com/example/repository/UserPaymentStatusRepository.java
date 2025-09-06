@@ -35,5 +35,7 @@ public interface UserPaymentStatusRepository extends JpaRepository<UserPaymentSt
 
     List<UserPaymentStatus> findBySubscriptionEndAfter(LocalDate date);
 
+    boolean existsByUserId(Long userId);
+
 
 }

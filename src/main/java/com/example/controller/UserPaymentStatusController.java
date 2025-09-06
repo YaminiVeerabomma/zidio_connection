@@ -21,14 +21,13 @@ public class UserPaymentStatusController {
     public ResponseEntity<UserPaymentStatusDTO> savePayment(@RequestBody UserPaymentStatusDTO dto) {
         return ResponseEntity.ok(userPaymentStatusService.save(dto));
     }
-
-    // ✅ Get by User ID
+ // ✅ Get by User ID
     @GetMapping("/user/{userId}")
     public ResponseEntity<UserPaymentStatusDTO> getByUserId(@PathVariable Long userId) {
-        return userPaymentStatusService.getByUserId(userId)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        UserPaymentStatusDTO dto = userPaymentStatusService.getByUserId(userId);
+        return ResponseEntity.ok(dto);
     }
+
 
     // ✅ Active Subscriptions
     @GetMapping("/active")
