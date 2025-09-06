@@ -32,16 +32,19 @@ public class UserPaymentStatusDTO {
     public String transactionId;
 
 	public UserPaymentStatusDTO() {}
-	public UserPaymentStatusDTO(Long id,Long planId,Long userId,LocalDate subscriptionStart,LocalDate subscriptionEnd,PaidStatus paidstatus,   String transactionId) {
-		this.id=id;
-		this.planId=planId;
-		this.userId=userId;
-		this.subscriptionStart=subscriptionStart;
-		this.subscriptionEnd=subscriptionEnd;
-		this.paidStatus=paidStatus;
-		this.transactionId=transactionId;
-		
+	public UserPaymentStatusDTO(Long id, Long planId, Long userId,
+	        LocalDate subscriptionStart, LocalDate subscriptionEnd, 
+	        PaidStatus paidStatus, String transactionId) {  
+
+	    this.id = id;
+	    this.planId = planId;
+	    this.userId = userId;
+	    this.subscriptionStart = subscriptionStart;
+	    this.subscriptionEnd = subscriptionEnd;
+	    this.paidStatus = paidStatus; 
+	    this.transactionId = transactionId;
 	}
+
 	public Long getId() {
 		return id;
 	}
