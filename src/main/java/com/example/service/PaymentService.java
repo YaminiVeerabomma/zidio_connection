@@ -6,6 +6,8 @@ import com.example.Enum.PaymentStatus;
 import com.example.Enum.PaymentType;
 import com.example.entity.Payment;
 import com.example.entity.UserPaymentStatus;
+import com.example.exception.PaymentNotFoundException;
+import com.example.exception.PaymentProcessingException;
 import com.example.repository.PaymentRepository;
 import com.example.repository.UserPaymentStatusRepository;
 import org.slf4j.Logger;
@@ -32,37 +34,42 @@ public class PaymentService {
     public PaymentDTO makePayment(PaymentDTO dto) {
         log.info("💳 makePayment called for userId={} planId={} amount={}", dto.getUserId(), dto.getPlanId(), dto.getAmount());
 
-        Payment pay = new Payment();
-        pay.setUserId(dto.getUserId());
-        pay.setPlanId(dto.getPlanId());
-        pay.setAmount(dto.getAmount());
-        pay.setCurrency(dto.getCurrency());
-        pay.setPaymentType(dto.getPaymentType());
-        pay.setPaymentStatus(dto.getPaymentStatus());
-        pay.setPaymentDate(dto.getPaymentDate());
-        pay.setTransactionId(dto.getTransactionId());
+        try {
+            Payment pay = new Payment();
+            pay.setUserId(dto.getUserId());
+            pay.setPlanId(dto.getPlanId());
+            pay.setAmount(dto.getAmount());
+            pay.setCurrency(dto.getCurrency());
+            pay.setPaymentType(dto.getPaymentType());
+            pay.setPaymentStatus(dto.getPaymentStatus());
+            pay.setPaymentDate(dto.getPaymentDate());
+            pay.setTransactionId(dto.getTransactionId());
 
-        Payment saved = paymentRepository.save(pay);
-        log.info("✅ Payment saved successfully with transactionId={}", saved.getTransactionId());
+            Payment saved = paymentRepository.save(pay);
+            log.info("✅ Payment saved successfully with transactionId={}", saved.getTransactionId());
 
-        if (saved.getPaymentStatus() == PaymentStatus.PAYMENTSUCCESSFUL) {
-            UserPaymentStatus subscription = new UserPaymentStatus();
-            subscription.setUserId(saved.getUserId());
-            subscription.setPlanId(saved.getPlanId());
-            subscription.setTransactionId(saved.getTransactionId());
-            subscription.setSubscriptionStart(LocalDate.now());
-            subscription.setSubscriptionEnd(LocalDate.now().plusDays(30)); // Example: 30 days validity
-            subscription.setPaidStatus(PaidStatus.PENDING);
+            if (saved.getPaymentStatus() == PaymentStatus.PAYMENTSUCCESSFUL) {
+                UserPaymentStatus subscription = new UserPaymentStatus();
+                subscription.setUserId(saved.getUserId());
+                subscription.setPlanId(saved.getPlanId());
+                subscription.setTransactionId(saved.getTransactionId());
+                subscription.setSubscriptionStart(LocalDate.now());
+                subscription.setSubscriptionEnd(LocalDate.now().plusDays(30)); // Example: 30 days validity
+                subscription.setPaidStatus(PaidStatus.PENDING);
 
-            userPaymentStatusRepository.save(subscription);
-            log.info("📅 User subscription updated for userId={} planId={}", saved.getUserId(), saved.getPlanId());
+                userPaymentStatusRepository.save(subscription);
+                log.info("📅 User subscription updated for userId={} planId={}", saved.getUserId(), saved.getPlanId());
+            }
+
+            dto.setId(saved.getId());
+            dto.setPaymentDate(saved.getPaymentDate());
+            dto.setPaymentStatus(saved.getPaymentStatus());
+
+            return dto;
+        } catch (Exception e) {
+            log.error("❌ Error processing payment for userId={} planId={}", dto.getUserId(), dto.getPlanId(), e);
+            throw new PaymentProcessingException("Error occurred while processing payment: " + e.getMessage());
         }
-
-        dto.setId(saved.getId());
-        dto.setPaymentDate(saved.getPaymentDate());
-        dto.setPaymentStatus(saved.getPaymentStatus());
-
-        return dto;
     }
 
     // ---------------- GET ALL PAYMENTS ----------------
@@ -87,9 +94,9 @@ public class PaymentService {
                     log.info("✅ Payment found with transactionId={}", p.getTransactionId());
                     return mapToDTO(p);
                 })
-                .orElseGet(() -> {
+                .orElseThrow(() -> {
                     log.warn("⚠️ Payment not found with id={}", id);
-                    return null;
+                    return new PaymentNotFoundException("Payment not found with id: " + id);
                 });
     }
 
@@ -102,9 +109,9 @@ public class PaymentService {
                     log.info("✅ Payment found for transactionId={}", transactionId);
                     return mapToDTO(p);
                 })
-                .orElseGet(() -> {
-                    log.warn("⚠️ Payment not found for transactionId={}", transactionId);
-                    return null;
+                .orElseThrow(() -> {
+                    log.warn("⚠️ Payment not found with transactionId={}", transactionId);
+                    return new PaymentNotFoundException("Payment not found with transactionId: " + transactionId);
                 });
     }
 
@@ -116,6 +123,11 @@ public class PaymentService {
                 .stream()
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
+
+        if (payments.isEmpty()) {
+            log.warn("⚠️ No payments found for userId={}", userId);
+            throw new PaymentNotFoundException("No payments found for userId: " + userId);
+        }
 
         log.info("✅ {} payment(s) found for userId={}", payments.size(), userId);
         return payments;
@@ -130,6 +142,11 @@ public class PaymentService {
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
 
+        if (payments.isEmpty()) {
+            log.warn("⚠️ No payments found for planId={}", planId);
+            throw new PaymentNotFoundException("No payments found for planId: " + planId);
+        }
+
         log.info("✅ {} payment(s) found for planId={}", payments.size(), planId);
         return payments;
     }
@@ -143,6 +160,11 @@ public class PaymentService {
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
 
+        if (payments.isEmpty()) {
+            log.warn("⚠️ No payments found for planId={} with status={}", planId, status);
+            throw new PaymentNotFoundException("No payments found for planId " + planId + " with status: " + status);
+        }
+
         log.info("✅ {} payment(s) found for planId={} with status={}", payments.size(), planId, status);
         return payments;
     }
@@ -155,6 +177,11 @@ public class PaymentService {
                 .stream()
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
+
+        if (payments.isEmpty()) {
+            log.warn("⚠️ No payments found for userId={} and type={}", userId, type);
+            throw new PaymentNotFoundException("No payments found for userId " + userId + " with type: " + type);
+        }
 
         log.info("✅ {} payment(s) found for userId={} and type={}", payments.size(), userId, type);
         return payments;
@@ -171,7 +198,7 @@ public class PaymentService {
         }
 
         log.warn("⚠️ Payment not found for deletion with id={}", id);
-        return false;
+        throw new PaymentNotFoundException("Payment not found for deletion with id: " + id);
     }
 
     // ---------------- MAP ENTITY TO DTO ----------------
