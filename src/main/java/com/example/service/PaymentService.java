@@ -1,12 +1,5 @@
 package com.example.service;
 
-import java.time.LocalDate;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.example.DTO.PaymentDTO;
 import com.example.Enum.PaidStatus;
 import com.example.Enum.PaymentStatus;
@@ -15,9 +8,19 @@ import com.example.entity.Payment;
 import com.example.entity.UserPaymentStatus;
 import com.example.repository.PaymentRepository;
 import com.example.repository.UserPaymentStatusRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PaymentService {
+
+    private static final Logger log = LoggerFactory.getLogger(PaymentService.class);
 
     @Autowired
     private PaymentRepository paymentRepository;
@@ -25,8 +28,10 @@ public class PaymentService {
     @Autowired
     private UserPaymentStatusRepository userPaymentStatusRepository;
 
-    // ✅ Create or make payment (and update subscription)
+    // ---------------- MAKE PAYMENT ----------------
     public PaymentDTO makePayment(PaymentDTO dto) {
+        log.info("💳 makePayment called for userId={} planId={} amount={}", dto.getUserId(), dto.getPlanId(), dto.getAmount());
+
         Payment pay = new Payment();
         pay.setUserId(dto.getUserId());
         pay.setPlanId(dto.getPlanId());
@@ -37,10 +42,9 @@ public class PaymentService {
         pay.setPaymentDate(dto.getPaymentDate());
         pay.setTransactionId(dto.getTransactionId());
 
-        // Save Payment
         Payment saved = paymentRepository.save(pay);
+        log.info("✅ Payment saved successfully with transactionId={}", saved.getTransactionId());
 
-        // Update UserPaymentStatus if COMPLETED
         if (saved.getPaymentStatus() == PaymentStatus.PAYMENTSUCCESSFUL) {
             UserPaymentStatus subscription = new UserPaymentStatus();
             subscription.setUserId(saved.getUserId());
@@ -48,74 +52,132 @@ public class PaymentService {
             subscription.setTransactionId(saved.getTransactionId());
             subscription.setSubscriptionStart(LocalDate.now());
             subscription.setSubscriptionEnd(LocalDate.now().plusDays(30)); // Example: 30 days validity
-            subscription.setPaidStatus(PaidStatus.	PENDING);
+            subscription.setPaidStatus(PaidStatus.PENDING);
 
             userPaymentStatusRepository.save(subscription);
+            log.info("📅 User subscription updated for userId={} planId={}", saved.getUserId(), saved.getPlanId());
         }
 
-        // Map back to DTO
         dto.setId(saved.getId());
         dto.setPaymentDate(saved.getPaymentDate());
         dto.setPaymentStatus(saved.getPaymentStatus());
+
         return dto;
     }
 
-    // ✅ Get all payments
+    // ---------------- GET ALL PAYMENTS ----------------
     public List<PaymentDTO> getAllPayments() {
-        return paymentRepository.findAll().stream()
+        log.info("📚 getAllPayments called");
+
+        List<PaymentDTO> payments = paymentRepository.findAll()
+                .stream()
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
+
+        log.info("✅ Total payments fetched: {}", payments.size());
+        return payments;
     }
 
-    // ✅ Get payment by ID
+    // ---------------- GET PAYMENT BY ID ----------------
     public PaymentDTO getPaymentById(Long id) {
-        return paymentRepository.findById(id).map(this::mapToDTO).orElse(null);
+        log.info("🔍 getPaymentById called for id={}", id);
+
+        return paymentRepository.findById(id)
+                .map(p -> {
+                    log.info("✅ Payment found with transactionId={}", p.getTransactionId());
+                    return mapToDTO(p);
+                })
+                .orElseGet(() -> {
+                    log.warn("⚠️ Payment not found with id={}", id);
+                    return null;
+                });
     }
 
-    // ✅ Get payment by transaction ID
+    // ---------------- GET PAYMENT BY TRANSACTION ID ----------------
     public PaymentDTO getPaymentByTransactionId(String transactionId) {
-        return paymentRepository.findByTransactionId(transactionId).map(this::mapToDTO).orElse(null);
+        log.info("🔎 getPaymentByTransactionId called for transactionId={}", transactionId);
+
+        return paymentRepository.findByTransactionId(transactionId)
+                .map(p -> {
+                    log.info("✅ Payment found for transactionId={}", transactionId);
+                    return mapToDTO(p);
+                })
+                .orElseGet(() -> {
+                    log.warn("⚠️ Payment not found for transactionId={}", transactionId);
+                    return null;
+                });
     }
 
-    // ✅ Get payments by user
+    // ---------------- GET PAYMENTS BY USER ----------------
     public List<PaymentDTO> getPaymentsByUserId(Long userId) {
-        return paymentRepository.findByUserId(userId).stream()
+        log.info("👤 getPaymentsByUserId called for userId={}", userId);
+
+        List<PaymentDTO> payments = paymentRepository.findByUserId(userId)
+                .stream()
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
+
+        log.info("✅ {} payment(s) found for userId={}", payments.size(), userId);
+        return payments;
     }
 
-    // ✅ Get payments by plan
+    // ---------------- GET PAYMENTS BY PLAN ----------------
     public List<PaymentDTO> getPaymentsByPlanId(Long planId) {
-        return paymentRepository.findByPlanId(planId).stream()
+        log.info("📦 getPaymentsByPlanId called for planId={}", planId);
+
+        List<PaymentDTO> payments = paymentRepository.findByPlanId(planId)
+                .stream()
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
+
+        log.info("✅ {} payment(s) found for planId={}", payments.size(), planId);
+        return payments;
     }
 
-    // ✅ Get payments by plan and status
+    // ---------------- GET PAYMENTS BY PLAN AND STATUS ----------------
     public List<PaymentDTO> getPaymentsByPlanIdAndStatus(Long planId, PaymentStatus status) {
-        return paymentRepository.findByPlanIdAndPaymentStatus(planId, status).stream()
+        log.info("📊 getPaymentsByPlanIdAndStatus called for planId={} status={}", planId, status);
+
+        List<PaymentDTO> payments = paymentRepository.findByPlanIdAndPaymentStatus(planId, status)
+                .stream()
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
+
+        log.info("✅ {} payment(s) found for planId={} with status={}", payments.size(), planId, status);
+        return payments;
     }
 
-    // ✅ Get payments by user and type
+    // ---------------- GET PAYMENTS BY USER AND TYPE ----------------
     public List<PaymentDTO> getPaymentsByUserAndType(Long userId, PaymentType type) {
-        return paymentRepository.findByUserIdAndPaymentType(userId, type).stream()
+        log.info("💳 getPaymentsByUserAndType called for userId={} type={}", userId, type);
+
+        List<PaymentDTO> payments = paymentRepository.findByUserIdAndPaymentType(userId, type)
+                .stream()
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
+
+        log.info("✅ {} payment(s) found for userId={} and type={}", payments.size(), userId, type);
+        return payments;
     }
 
-    // ✅ Delete payment
+    // ---------------- DELETE PAYMENT ----------------
     public boolean deletePayment(Long id) {
+        log.info("🗑️ deletePayment called for id={}", id);
+
         if (paymentRepository.existsById(id)) {
             paymentRepository.deleteById(id);
+            log.info("✅ Payment deleted successfully with id={}", id);
             return true;
         }
+
+        log.warn("⚠️ Payment not found for deletion with id={}", id);
         return false;
     }
 
-    // Helper method to map entity → DTO
+    // ---------------- MAP ENTITY TO DTO ----------------
     private PaymentDTO mapToDTO(Payment p) {
+        log.debug("🔧 mapToDTO called for paymentId={}", p.getId());
+
         PaymentDTO dto = new PaymentDTO();
         dto.setId(p.getId());
         dto.setUserId(p.getUserId());
