@@ -21,6 +21,8 @@ import com.example.exception.ResourceNotFoundException;
 import com.example.exception.TokenExpiredException;
 import com.example.exception.UserNotFoundException;
 import com.example.exception.UserPaymentStatusNotFoundException;
+import com.example.exception. PaymentProcessingException;
+import com.example.exception.PaymentNotFoundException;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -32,7 +34,10 @@ public class GlobalExceptionHandler {
         InvalidResetTokenException.class, HttpStatus.BAD_REQUEST,
         TokenExpiredException.class, HttpStatus.GONE,
         JobPostNotFoundException.class ,HttpStatus.NOT_FOUND,
-        UserPaymentStatusNotFoundException.class,HttpStatus.NOT_FOUND
+        UserPaymentStatusNotFoundException.class,HttpStatus.NOT_FOUND,
+        PaymentNotFoundException.class, HttpStatus.NOT_FOUND,   
+        PaymentProcessingException.class, HttpStatus.INTERNAL_SERVER_ERROR 
+        
     );
 
     @ExceptionHandler({
@@ -43,7 +48,9 @@ public class GlobalExceptionHandler {
         InvalidResetTokenException.class,
         TokenExpiredException.class,
         JobPostNotFoundException.class,
-        UserPaymentStatusNotFoundException.class
+        UserPaymentStatusNotFoundException.class,
+        PaymentNotFoundException.class,
+        PaymentProcessingException.class
         
     })
     public ResponseEntity<ApiError> handleKnownExceptions(Exception ex, WebRequest request) {
