@@ -1,0 +1,36 @@
+version: "3.8"   # optional in new Compose, but fine to keep for clarity
+
+services:
+  app:
+    image: zidio-app                 # uses the image you already built (Spring Boot JAR)
+    container_name: zidio-container
+    ports:
+      - "9090:8889"                  # maps host:container → host 9090 → container 8889
+    environment:
+      # JDBC URL with extra params to avoid SSL + public key issues
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-container:3306/zidio_connection?useSSL=false&allowPublicKeyRetrieval=true&connectTimeout=60000&socketTimeout=60000
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=Yamini9573
+    depends_on:
+      mysql:
+        condition: service_healthy   # ✅ ensures app starts only after MySQL passes healthcheck
+
+  mysql:
+    image: mysql:8
+    container_name: mysql-container
+    environment:
+      - MYSQL_ROOT_PASSWORD=Yamini9573   # root password
+      - MYSQL_DATABASE=zidio_connection  # database created on first run (ignored if volume has data)
+    ports:
+      - "3307:3306"                      # host 3307 → container 3306
+    volumes:
+      - mysql_data:/var/lib/mysql        # mount volume → persistent data
+    healthcheck:                         # ✅ waits until MySQL is actually ready
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-pYamini9573"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  mysql_data:
+    external: true   # ✅ ensures it uses your OLD mysql_data volume instead of creating a new one
