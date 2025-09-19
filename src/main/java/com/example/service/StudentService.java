@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.cache.annotation.Cacheable;
+
 @Service
 public class StudentService {
 
@@ -114,8 +116,7 @@ public class StudentService {
         studentRepository.deleteById(id);
         log.info("✅ Student deleted successfully with studentId={}", id);
     }
-
-    // ----------------- GET BY ID -----------------
+    @Cacheable(value = "students", key = "#id")
     public StudentDTO getStudentById(Long id) {
         log.info("🔍 getStudentById called for studentId={}", id);
 
@@ -129,6 +130,21 @@ public class StudentService {
         log.info("✅ Student fetched successfully with studentId={}", id);
         return dto;
     }
+
+//    // ----------------- GET BY ID -----------------
+//    public StudentDTO getStudentById(Long id) {
+//        log.info("🔍 getStudentById called for studentId={}", id);
+//
+//        StudentDTO dto = studentRepository.findById(id)
+//                .map(this::convertToDTO)
+//                .orElseThrow(() -> {
+//                    log.warn("⚠️ Student not found with id={}", id);
+//                    return new UserNotFoundException("Student not found with id " + id);
+//                });
+//
+//        log.info("✅ Student fetched successfully with studentId={}", id);
+//        return dto;
+//    }
 
     // ----------------- GET ALL -----------------
     public List<StudentDTO> getAllStudents() {
