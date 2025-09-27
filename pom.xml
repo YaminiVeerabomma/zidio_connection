@@ -171,8 +171,18 @@
 <dependency>
     <groupId>org.apache.commons</groupId>
     <artifactId>commons-pool2</artifactId>
+    
 </dependency>
-
+<dependency>
+        <groupId>io.lettuce</groupId>
+        <artifactId>lettuce-core</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>it.ozimov</groupId>
+        <artifactId>embedded-redis</artifactId>
+        <version>0.7.3</version>
+        <scope>test</scope>
+    </dependency>
         
         
         
@@ -182,7 +192,7 @@
 
     <build>
         <plugins>
-            <!-- Maven Surefire Plugin -->
+<!-- Maven Surefire Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
