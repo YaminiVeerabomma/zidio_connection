@@ -1,12 +1,15 @@
 package com.example.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.*;
 
 import com.example.Enum.Role;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements Serializable {
+	   private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

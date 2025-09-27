@@ -1,3 +1,4 @@
+
 package com.example.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +54,7 @@ public class SecurityConfig {
             .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Allow CORS preflight    
             .antMatchers("/api/auth/**", "/swagger-ui/**", "/v3/api-docs/**",   "/swagger-resources/**", 
-                    "/webjars/**","/actuator/**"
+                    "/webjars/**","/actuator/**","/redis/**"
                    ).permitAll() 
          
 

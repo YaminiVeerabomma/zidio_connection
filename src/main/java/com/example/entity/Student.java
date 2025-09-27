@@ -21,10 +21,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import java.io.Serial;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "students")
-public class Student {
+public class Student   implements Serializable{
+	private static final long serialVersionUID = 1L;
 
     @Id
     private Long id;  // same as User ID (@MapsId)

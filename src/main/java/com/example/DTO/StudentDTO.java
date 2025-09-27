@@ -7,7 +7,7 @@ import com.example.Enum.NoticePeriod;
 import com.example.Enum.PreferredJobLocations;
 import com.example.entity.User;
 
-import java.util.List;
+import java.io.Serializable;
 import java.util.Set;
 
 import javax.validation.constraints.Email;
@@ -17,7 +17,8 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
 
-public class StudentDTO {
+public class StudentDTO implements Serializable {
+    private static final long serialVersionUID = 1L;
 
 	public  Long id;
     @NotBlank(message = "Name is required")
