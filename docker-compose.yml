@@ -2,12 +2,12 @@ version: "3.8"
 
 services:
   app:
-    image: zidio-app
+    image: zidio-app                        # Your Spring Boot app image
     container_name: zidio-container
     ports:
-      - "9090:8889"
+      - "9090:8889"                         # Host 9090 → Container 8889 (Spring Boot port)
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-container:3306/zidio_connection?useSSL=false&allowPublicKeyRetrieval=true&connectTimeout=60000&socketTimeout=60000
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-container:3306/zidio_connection?useSSL=false&allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=Yamini9573
       - SPRING_REDIS_HOST=redis-container
@@ -16,7 +16,8 @@ services:
       mysql:
         condition: service_healthy
       redis:
-        condition: service_started   # ✅ ensures Redis starts before app
+        condition: service_healthy
+    restart: unless-stopped
 
   mysql:
     image: mysql:8
@@ -25,25 +26,32 @@ services:
       - MYSQL_ROOT_PASSWORD=Yamini9573
       - MYSQL_DATABASE=zidio_connection
     ports:
-      - "3307:3306"
+      - "3307:3306"                          # Host 3307 → Container 3306 (MySQL)
     volumes:
-      - mysql_data:/var/lib/mysql
+      - mysql_data:/var/lib/mysql            # Persistent MySQL data
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-pYamini9573"]
       interval: 10s
       timeout: 5s
       retries: 5
+    restart: unless-stopped
 
   redis:
     image: redis:7
     container_name: redis-container
     ports:
-      - "6379:6379"              # host 6379 → container 6379
+      - "6379:6379"                          # Expose Redis
     volumes:
-      - redis_data:/data         # ✅ persist Redis data
-    command: ["redis-server", "--appendonly", "yes"]  # AOF persistence
+      - redis_data:/data                     # Persistent Redis data
+    command: ["redis-server", "--appendonly", "yes"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
 
 volumes:
-  mysql_data:
-    external: true
-  redis_data:                     # creates a volume for Redis
+  mysql_data:                               # Persistent MySQL volume
+    external: true                           # Ensure it exists: docker volume create mysql_data
+  redis_data:                                # Persistent Redis volume
